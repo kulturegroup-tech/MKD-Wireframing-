@@ -1,0 +1,16 @@
+{
+  "name": "mkd-fragrances-website",
+  "private": true,
+  "type": "module",
+  "description": "Maa Kamakhya Darbar Fragrances corporate site, with a Git-based admin at /admin.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/build.mjs && npx --yes serve dist",
+    "import:woocommerce": "node scripts/import-woocommerce.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "marked": "^14.1.4"
+  },
+  "engines": { "node": ">=20" }
+}

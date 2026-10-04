@@ -1,0 +1,185 @@
+# Admin for the Maa Kamakhya Darbar Fragrances website.
+# Open https://<your-site>/admin, sign in with GitHub, edit, and press Save.
+# Every save is a commit to the repo; Netlify then rebuilds the site in about a minute.
+
+backend:
+  name: github
+  repo: shobhitsharma007ss-cpu/mkd-fragrances-website
+  branch: main
+  commit_messages:
+    create: "Add {{collection}}: {{slug}}"
+    update: "Update {{collection}}: {{slug}}"
+    delete: "Remove {{collection}}: {{slug}}"
+    uploadMedia: "Upload {{path}}"
+    deleteMedia: "Delete {{path}}"
+
+site_url: https://www.mkdtiranga.com
+display_url: https://www.mkdtiranga.com
+logo_url: /favicon.svg
+
+# Uploaded photos go here and are resized and converted to WebP in the browser before upload,
+# so phone photos are fine.
+media_folder: /uploads
+public_folder: /uploads
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2000
+          height: 2000
+
+collections:
+  # ---------------------------------------------------------------- products
+  - name: products
+    label: Products
+    label_singular: Product
+    description: Everything on the products page. The first photo is the one shown on the card.
+    folder: content/products
+    format: json
+    extension: json
+    create: true
+    delete: true
+    identifier_field: name
+    slug: "{{slug}}"
+    summary: "{{name}} · {{brand}} · {{category}}"
+    sortable_fields: [name, brand, category, order]
+    view_groups:
+      - { label: Brand, field: brand }
+      - { label: Category, field: category }
+    media_folder: /uploads/products
+    public_folder: /uploads/products
+    fields:
+      - { label: Product name, name: name, widget: string }
+      - label: Brand
+        name: brand
+        widget: select
+        options: [Tiranga, Sacred, Sacred Selections]
+        default: Tiranga
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: Agarbatti, value: agarbatti }
+          - { label: Dhoopbatti, value: dhoopbatti }
+          - { label: Havan cup dhoop, value: havan-cup }
+          - { label: Jar packs, value: jar }
+          - { label: Poojan kits, value: kits }
+        default: agarbatti
+      - label: Photos
+        name: images
+        widget: image
+        multiple: true
+        required: false
+        hint: The first photo is shown on the card; the rest appear in the product view. Phone photos are fine.
+      - label: Packshot on a white background
+        name: packshot
+        widget: boolean
+        default: false
+        required: false
+        hint: Turn on for product-on-white photos so the whole pack is shown, not cropped.
+      - label: Hindi name
+        name: hindi
+        widget: string
+        required: false
+        hint: Shown as the big word on the card when there is no photo, for example मोगरा.
+      - { label: Pack and size, name: format, widget: string, required: false, hint: "For example: Premium agarbatti, box of 100 g" }
+      - { label: Description, name: description, widget: text, required: false }
+      - { label: Price (₹), name: price, widget: number, value_type: float, required: false }
+      - { label: MRP (₹), name: mrp, widget: number, value_type: float, required: false, hint: Shown struck through when it is higher than the price. }
+      - { label: Show the price as "From", name: price_from, widget: boolean, default: false, required: false, hint: For products sold in several sizes. }
+      - { label: Buy link, name: buy_url, widget: string, required: false, hint: "Where people can buy it, for example the product page on tirangaagarbatti.com." }
+      - { label: Buy button text, name: buy_label, widget: string, required: false, hint: "Leave empty for “Buy on tirangaagarbatti.com” (or “Buy now” for other shops)." }
+      - { label: Featured, name: featured, widget: boolean, default: false, required: false, hint: Featured products are shown first. }
+      - { label: Sort order, name: order, widget: number, value_type: int, default: 100, required: false, hint: Lower numbers are shown first. }
+      - { label: Show on the website, name: published, widget: boolean, default: true }
+
+  # ---------------------------------------------------------------- stories
+  - name: stories
+    label: The Sacred Thought
+    label_singular: Story
+    description: People stories, journal posts, Minutes with the MD episodes and press coverage.
+    folder: content/stories
+    format: frontmatter
+    extension: md
+    create: true
+    delete: true
+    identifier_field: title
+    slug: "{{slug}}"
+    summary: "{{title}} · {{category}}"
+    sortable_fields: [date, title, category]
+    view_groups:
+      - { label: Kind, field: category }
+    media_folder: /uploads/stories
+    public_folder: /uploads/stories
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - label: Kind
+        name: category
+        widget: select
+        options:
+          - { label: "People: a person's story", value: people }
+          - { label: Journal, value: journal }
+          - { label: "Minutes with the MD: an episode", value: md }
+          - { label: "In the media: a press article", value: press }
+        default: people
+      - { label: One-line summary, name: excerpt, widget: text, hint: Shown on the card and in link previews. }
+      - { label: Person, name: person, widget: string, required: false }
+      - { label: Their role, name: role, widget: string, required: false, hint: "For example: Floor supervisor, Kanpur" }
+      - { label: Cover photo, name: cover, widget: image, required: false }
+      - { label: What the photo shows, name: cover_alt, widget: string, required: false, hint: For people who cannot see the photo. }
+      - { label: Photo caption, name: cover_caption, widget: string, required: false }
+      - { label: Video link, name: video, widget: string, required: false, hint: "A YouTube link plays inside the page. Any other link (Instagram, Facebook) shows a “Watch the video” button." }
+      - { label: Article link, name: link, widget: string, required: false, hint: "Press only: the card opens this article instead of a page." }
+      - { label: Publication, name: source, widget: string, required: false, hint: "Press only, for example: Sugandh India" }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false, hint: Drafts stay off the website. }
+      - { label: Story, name: body, widget: markdown, required: false }
+
+  # ---------------------------------------------------------------- home page
+  - name: site
+    label: Home page
+    description: Leadership, awards and the Diwali kit offer.
+    files:
+      - name: leaders
+        label: Leadership
+        file: content/site/leaders.json
+        format: json
+        media_folder: /uploads/people
+        public_folder: /uploads/people
+        fields:
+          - label: People
+            name: leaders
+            widget: list
+            summary: "{{fields.name}}, {{fields.role}}"
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string }
+              - { label: Photo, name: photo, widget: image, required: false, hint: A portrait works best (taller than wide). }
+              - { label: What the photo shows, name: photo_alt, widget: string, required: false }
+              - { label: Short bio, name: bio, widget: text, required: false }
+              - { label: Link text, name: link_label, widget: string, required: false }
+              - { label: Link, name: link_url, widget: string, required: false }
+      - name: awards
+        label: Awards
+        file: content/site/awards.json
+        format: json
+        fields:
+          - label: Awards
+            name: awards
+            widget: list
+            summary: "{{fields.year}}: {{fields.title}}"
+            fields:
+              - { label: Year (or a word like Partner), name: year, widget: string }
+              - { label: Award, name: title, widget: string }
+              - { label: Details, name: text, widget: text, required: false }
+      - name: diwali
+        label: Diwali kit offer
+        file: content/site/diwali.json
+        format: json
+        fields:
+          - { label: Show the offer bar and floating button, name: show_offer, widget: boolean, default: true }
+          - { label: Lakshmi Puja date and time, name: puja_time, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ", hint: Drives the countdown. }
+          - { label: Order link, name: kit_url, widget: string }

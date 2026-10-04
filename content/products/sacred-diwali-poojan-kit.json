@@ -1,0 +1,20 @@
+{
+  "name": "Sacred Diwali Poojan Kit",
+  "hindi": "दीपावली पूजन किट",
+  "brand": "Sacred",
+  "category": "kits",
+  "format": "Poojan kit, 121 samagri",
+  "description": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box for Diwali.",
+  "images": [
+    "/brand/diwali-kits-editorial.webp"
+  ],
+  "packshot": false,
+  "price": null,
+  "mrp": null,
+  "price_from": false,
+  "buy_url": "https://tirangaagarbatti.com/product/sacred-diwali-poojan-kit-laxmi-pooja-kit-with-laxmi-ganesh-kuber-idols-and-other-121-poojan-samagri/",
+  "buy_label": "",
+  "featured": true,
+  "order": 120,
+  "published": true
+}

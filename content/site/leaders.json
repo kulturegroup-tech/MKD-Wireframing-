@@ -1,0 +1,22 @@
+{
+  "leaders": [
+    {
+      "name": "Siddhartha Sharma",
+      "role": "Chairman",
+      "photo": "/brand/leader-siddhartha.webp",
+      "photo_alt": "Siddhartha Sharma, Chairman of Maa Kamakhya Darbar Fragrances",
+      "bio": "Leads Maa Kamakhya Darbar Fragrances and its three houses: Tiranga, Sacred and the new Sacred Selections.",
+      "link_label": "",
+      "link_url": ""
+    },
+    {
+      "name": "Pandit Narendra Sharma",
+      "role": "Managing Director",
+      "photo": "/brand/leader-narendra.webp",
+      "photo_alt": "Pandit Narendra Sharma, Managing Director, holding the India's No. 1 Brands award",
+      "bio": "Head of the Tiranga Agarbatti Group and one of the best-known voices in India's agarbatti trade.",
+      "link_label": "Minutes with the MD",
+      "link_url": "#md"
+    }
+  ]
+}
