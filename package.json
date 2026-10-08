@@ -9,8 +9,11 @@
     "import:woocommerce": "node scripts/import-woocommerce.mjs"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "js-yaml": "^4.1.0",
     "marked": "^14.1.4"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

@@ -141,8 +141,234 @@ collections:
   # ---------------------------------------------------------------- home page
   - name: site
     label: Home page
-    description: Leadership, awards and the Diwali kit offer.
+    description: Every headline, paragraph and photo on the home page, plus leadership, awards and the Diwali offer.
     files:
+      # every headline, paragraph and photo on the home page (and the products page header)
+      - name: home
+        label: Page text and images
+        file: content/site/home.json
+        format: json
+        media_folder: /uploads/site
+        public_folder: /uploads/site
+        fields:
+          - label: Hero (top of the home page)
+            name: hero
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Small line above the headline, name: intro, widget: string, required: false }
+              - { label: Headline in Hindi, name: headline_hi, widget: string, required: false }
+              - { label: Headline in English, name: headline_en, widget: string, required: false }
+              - { label: Paragraph, name: text, widget: text, required: false }
+              - label: Slideshow photos
+                name: slides
+                widget: list
+                summary: "{{fields.caption}}"
+                hint: The photos rotate every few seconds. Drag to reorder; the first one shows first.
+                fields:
+                  - { label: Photo, name: image, widget: image }
+                  - { label: Caption on the photo, name: caption, widget: string, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+                  - label: Keep this part in view on wide screens
+                    name: focus
+                    widget: select
+                    default: center
+                    options:
+                      - { label: Centre, value: center }
+                      - { label: Upper part, value: upper }
+                      - { label: Lower part, value: lower }
+          - label: Numbers band
+            name: numbers
+            widget: list
+            collapsed: true
+            summary: "{{fields.value}}{{fields.suffix}} {{fields.label}}"
+            fields:
+              - { label: Number, name: value, widget: number, value_type: int }
+              - { label: After the number, name: suffix, widget: string, required: false, hint: "For example M or +" }
+              - { label: Label, name: label, widget: string }
+          - label: Our story
+            name: story
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+              - label: Timeline
+                name: panels
+                widget: list
+                summary: "{{fields.year}}: {{fields.title}}"
+                fields:
+                  - { label: Year or label, name: year, widget: string }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Text, name: text, widget: text, required: false }
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+          - label: Leadership section
+            name: leadership
+            widget: object
+            collapsed: true
+            hint: The people themselves are edited under Leadership.
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Brands
+            name: brands
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+              -
+                label: Tiranga card
+                name: tiranga
+                widget: object
+                collapsed: true
+                fields:
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+                  - { label: Tagline, name: tagline, widget: string, required: false }
+                  - { label: Text, name: text, widget: text, required: false }
+                  - { label: Made for, name: made_for, widget: string, required: false }
+                  - { label: Found at, name: found_at, widget: string, required: false }
+                  - { label: Button text, name: button_label, widget: string, required: false }
+                  - { label: Button link, name: button_link, widget: string, required: false }
+              -
+                label: Sacred card
+                name: sacred
+                widget: object
+                collapsed: true
+                fields:
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+                  - { label: Tagline, name: tagline, widget: string, required: false }
+                  - { label: Text, name: text, widget: text, required: false }
+                  - { label: Made for, name: made_for, widget: string, required: false }
+                  - { label: Found at, name: found_at, widget: string, required: false }
+                  - { label: Button text, name: button_label, widget: string, required: false }
+                  - { label: Button link, name: button_link, widget: string, required: false }
+              -
+                label: Sacred Selections card
+                name: selections
+                widget: object
+                collapsed: true
+                fields:
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+                  - { label: Tagline, name: tagline, widget: string, required: false }
+                  - { label: Text, name: text, widget: text, required: false }
+                  - { label: Made for, name: made_for, widget: string, required: false }
+                  - { label: Found at, name: found_at, widget: string, required: false }
+                  - { label: Button text, name: button_label, widget: string, required: false }
+                  - { label: Button link, name: button_link, widget: string, required: false }
+          - label: What we make
+            name: products
+            widget: object
+            collapsed: true
+            hint: The products themselves are edited under Products.
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Diwali kit section
+            name: diwali
+            widget: object
+            collapsed: true
+            hint: The countdown date and order link are under Diwali kit offer.
+            fields:
+              - { label: Line in Hindi, name: hindi, widget: string, required: false }
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: text, widget: text, required: false }
+              - { label: Inside the kit, name: inside, widget: string, required: false }
+              - { label: Idols, name: idols, widget: string, required: false }
+              - { label: Photo, name: image, widget: image, required: false }
+              - { label: What the photo shows, name: alt, widget: string, required: false }
+          - label: How it's made
+            name: making
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+              - label: Steps
+                name: steps
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Step name, name: title, widget: string }
+                  - { label: Text, name: text, widget: text, required: false }
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: What the photo shows, name: alt, widget: string, required: false }
+          - label: The Sacred Thought section
+            name: thought
+            widget: object
+            collapsed: true
+            hint: The stories themselves are under The Sacred Thought.
+            fields:
+              - { label: Small label, name: kicker, widget: string, required: false }
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Minutes with the MD
+            name: md
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Small label, name: kicker, widget: string, required: false }
+              - { label: Name, name: name, widget: string, required: false }
+              - { label: Role, name: role, widget: string, required: false }
+              - { label: Text, name: text, widget: text, required: false }
+              - { label: Photo, name: photo, widget: image, required: false }
+              - { label: What the photo shows, name: alt, widget: string, required: false }
+              - { label: Photo caption, name: caption, widget: string, required: false }
+          - label: Awards and media section
+            name: awards
+            widget: object
+            collapsed: true
+            hint: The awards themselves are under Awards; press links are stories of the kind In the media.
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Pushkar Mahayagya band
+            name: pushkar
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: text, widget: text, required: false }
+              - label: Figures
+                name: figures
+                widget: list
+                summary: "{{fields.value}} {{fields.label}}"
+                fields:
+                  - { label: Number, name: value, widget: number, value_type: int }
+                  - { label: Label, name: label, widget: string }
+          - label: Find a fragrance
+            name: library
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Built across India band
+            name: global
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Text, name: text, widget: text, required: false }
+              - { label: Background photo, name: image, widget: image, required: false }
+          - label: Partner with us
+            name: partner
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
+          - label: Products page header
+            name: products_page
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string, required: false }
+              - { label: Intro, name: lede, widget: text, required: false }
       - name: leaders
         label: Leadership
         file: content/site/leaders.json

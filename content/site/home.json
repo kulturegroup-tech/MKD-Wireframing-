@@ -1,0 +1,218 @@
+{
+  "hero": {
+    "intro": "Maa Kamakhya Darbar Fragrances, Kanpur. Since 1965.",
+    "headline_hi": "देश की खुशबू",
+    "headline_en": "The fragrance of India, made by hand.",
+    "text": "Since 1965 our family has made the incense India lights every morning. Tiranga, Sacred and Sacred Selections come from ten plants, six of them in Kanpur, for homes across India and now the world.",
+    "slides": [
+      {
+        "image": "/brand/plant-hero.webp",
+        "caption": "Thirteen million sticks leave our plants every day.",
+        "alt": "Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond",
+        "focus": "center"
+      },
+      {
+        "image": "/brand/plant-two.webp",
+        "caption": "Ten plants, six of them in Kanpur.",
+        "alt": "The second plant from above, with solar panels on the terrace and a truck being loaded at the gate",
+        "focus": "center"
+      },
+      {
+        "image": "/brand/sacred-women.webp",
+        "caption": "More than a thousand women make what we sell.",
+        "alt": "The women of Sacred standing together on the steps of the plant entrance",
+        "focus": "lower"
+      }
+    ]
+  },
+  "story": {
+    "heading": "Six decades, one family business",
+    "lede": "It began with printed cartons in Kanpur. It grew into one of north India's best-loved incense houses.",
+    "panels": [
+      {
+        "year": "1965",
+        "title": "A print and box unit",
+        "text": "The family learns how products are made, packed and moved across north India, one printed carton at a time.",
+        "image": "/brand/story-1965.webp",
+        "alt": "A printer feeding card into a hand-fed platen press, with stacks of printed cartons on the table"
+      },
+      {
+        "year": "1995",
+        "title": "Tiranga is born",
+        "text": "Thirty years of packaging know-how becomes an incense house. The first Tiranga agarbatti leaves Kanpur.",
+        "image": "/brand/story-1995.webp",
+        "alt": "Two women rolling incense paste onto bamboo sticks in a small agarbatti unit"
+      },
+      {
+        "year": "Today",
+        "title": "Ten plants, 500+ cities",
+        "text": "Over a thousand women artisans, thirteen million sticks a day, and a distribution network across India.",
+        "image": "/brand/plant-today.webp",
+        "alt": "The Prakash Industries admin block and factory buildings, seen from above"
+      },
+      {
+        "year": "Next",
+        "title": "Beyond India",
+        "text": "Sacred Selections takes the house abroad for the first time, with small-batch incense made for homes around the world.",
+        "image": "/brand/selections-wood.webp",
+        "alt": "Sacred Selections incense with natural wood and paper"
+      }
+    ]
+  },
+  "leadership": {
+    "heading": "The people at the helm",
+    "lede": "Six decades on, the family business is led from Kanpur by its Chairman and its Managing Director."
+  },
+  "brands": {
+    "heading": "One house, three brands",
+    "lede": "Each made for a different moment of worship, and a different shelf. All three come out of the same plants and the same standards.",
+    "tiranga": {
+      "tagline": "Desh ki khushboo. The everyday agarbatti of north India.",
+      "text": "Familiar fragrances at honest prices, on the shelf of the neighbourhood shop in 500+ cities. Loved by rural and middle-income India for three decades.",
+      "made_for": "Daily puja",
+      "found_at": "Local retail",
+      "button_label": "Shop Tiranga",
+      "image": "/brand/tiranga-daily-editorial.webp",
+      "alt": "Three generations of a family lighting incense at a home mandir",
+      "button_link": "https://tirangaagarbatti.com/"
+    },
+    "sacred": {
+      "tagline": "Dedicated to God.",
+      "text": "Premium incense, dhoop, havan cups and poojan samagri, developed together for the full ritual. Home of the Diwali Poojan Kit.",
+      "made_for": "The complete puja",
+      "found_at": "Retail and online",
+      "button_label": "See the Diwali kit",
+      "image": "/brand/sacred-ritual-editorial.webp",
+      "alt": "Hands arranging incense, flowers and a brass thali for puja",
+      "button_link": "#diwali"
+    },
+    "selections": {
+      "tagline": "Small-batch incense for homes around the world.",
+      "text": "Charcoal-free sticks, hand-packed in Kanpur in keepsake boxes. Our first collection made for international shelves, and the only one we sell directly online.",
+      "made_for": "Room and ritual",
+      "found_at": "Online and export",
+      "button_label": "Visit Sacred Selections",
+      "image": "/brand/selections-box-green.webp",
+      "alt": "Sacred Selections incense in a green keepsake box",
+      "button_link": "selections.html"
+    }
+  },
+  "products": {
+    "heading": "What we make",
+    "lede": "Four everyday formats from our own plants, sold under Tiranga and Sacred through local shops and on tirangaagarbatti.com."
+  },
+  "diwali": {
+    "hindi": "शुभ दीपावली",
+    "heading": "The Sacred Diwali Poojan Kit",
+    "text": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box so nothing is missing when the first diya is lit.",
+    "inside": "121 poojan samagri",
+    "idols": "Laxmi, Ganesh, Kuber",
+    "image": "/brand/diwali-kits-editorial.webp",
+    "alt": "The Sacred Diwali Poojan Kit open on a red cloth with diyas, marigolds and brass lamps"
+  },
+  "making": {
+    "heading": "How a stick is made",
+    "lede": "Every stick passes through four stages and many pairs of hands before the carton closes.",
+    "steps": [
+      {
+        "title": "Roll",
+        "text": "Women artisans roll the masala onto bamboo by hand. Over a thousand of them work with us across our units.",
+        "image": "/brand/make-roll.webp",
+        "alt": "Hands rolling incense masala onto bamboo"
+      },
+      {
+        "title": "Rest",
+        "text": "Sticks dry on racks batch by batch, until each one burns evenly from tip to end.",
+        "image": "/brand/make-rest.webp",
+        "alt": "Rolled incense sticks drying on trays in a rack room"
+      },
+      {
+        "title": "Fragrance",
+        "text": "Each batch is perfumed in Kanpur to the house formula, the way it has been since 1995.",
+        "image": "/brand/make-fragrance.webp",
+        "alt": "A perfumer pouring fragrance oil over a tray of incense sticks"
+      },
+      {
+        "title": "Pack",
+        "text": "Sticks are checked, counted and packed in our own units, then sent to distributors in 500+ cities.",
+        "image": "/brand/make-pack.webp",
+        "alt": "Women counting incense sticks into cartons at a packing table"
+      }
+    ]
+  },
+  "thought": {
+    "kicker": "The Sacred Thought",
+    "heading": "Tiranga is all about the people",
+    "lede": "Stories from our floors, our families and the people who carry Desh ki Khushboo across India."
+  },
+  "md": {
+    "caption": "IBC Corporate Awards, The Leela Mumbai, 2017",
+    "kicker": "Minutes with the MD",
+    "name": "Pandit Narendra Sharma",
+    "role": "Managing Director, Tiranga Agarbatti Group",
+    "text": "Short conversations with Panditji on faith, fragrance and building an Indian brand that is sold in 500+ cities, from the factory floor to the puja room.",
+    "photo": "/brand/md-award.webp",
+    "alt": "Pandit Narendra Sharma holding the India's No. 1 Brands award for Tiranga Agarbatti at the IBC Corporate Awards 2017, The Leela Mumbai"
+  },
+  "awards": {
+    "heading": "Awards and media",
+    "lede": "Recognition for the house, and the conversations its people are part of."
+  },
+  "pushkar": {
+    "heading": "Official agarbatti partner of the Pushkar Mahayagya",
+    "text": "One of the largest yagyas of its kind, held across a 10.5-acre yagya shala.",
+    "figures": [
+      {
+        "value": 43,
+        "label": "days"
+      },
+      {
+        "value": 2000,
+        "label": "Brahmins"
+      },
+      {
+        "value": 200,
+        "label": "havan kunds"
+      }
+    ]
+  },
+  "library": {
+    "heading": "Find a fragrance",
+    "lede": "Pick a note to see which of our brands carry it, and where to buy it."
+  },
+  "global": {
+    "heading": "Built across India. Now leaving home.",
+    "text": "Sacred Selections carries six decades of making into our first international collection.",
+    "image": "/brand/plant-road.webp"
+  },
+  "partner": {
+    "heading": "Partner with us",
+    "lede": "Distribution, export or private label. Tell us what you need and we'll reply with a range, samples and a production slot."
+  },
+  "numbers": [
+    {
+      "value": 10,
+      "suffix": "",
+      "label": "manufacturing plants"
+    },
+    {
+      "value": 13,
+      "suffix": "M",
+      "label": "incense sticks made every day"
+    },
+    {
+      "value": 1000,
+      "suffix": "+",
+      "label": "women artisans rolling by hand"
+    },
+    {
+      "value": 500,
+      "suffix": "+",
+      "label": "cities reached by our distributors"
+    }
+  ],
+  "products_page": {
+    "heading": "Our products",
+    "lede": "Agarbatti, dhoop, havan cups and poojan kits from Tiranga and Sacred, made in our own plants in Kanpur. Open any product to see the details, then buy it on our store or ask about bulk supply."
+  }
+}

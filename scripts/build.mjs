@@ -6,6 +6,7 @@ import { rmSync, mkdirSync, cpSync, existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT, DIST, DOMAIN } from "./lib.mjs";
 import { buildProducts } from "./build-products.mjs";
+import { buildPages } from "./build-pages.mjs";
 import { buildStories } from "./build-stories.mjs";
 import { buildSite } from "./build-site.mjs";
 
@@ -22,6 +23,7 @@ for (const item of COPY) {
   if (existsSync(join(ROOT, item))) cpSync(join(ROOT, item), join(DIST, item), { recursive: true, filter: (src) => !src.endsWith(".gitkeep") });
 }
 
+const fields = buildPages();      // page text and images first, so later steps work on the final pages
 const products = buildProducts();
 const stories = buildStories();
 const site = buildSite();          // last, so it also reaches the story pages
@@ -34,4 +36,4 @@ ${urls.map((u) => `  <url><loc>${DOMAIN}${u}</loc></url>`).join("\n")}
 </urlset>
 `);
 
-console.log(`Built dist/: ${products} products, ${stories.length} stories, ${site.leaders} leaders, ${site.awards} awards.`);
+console.log(`Built dist/: ${fields} editable text and image spots, ${products} products, ${stories.length} stories, ${site.leaders} leaders, ${site.awards} awards.`);

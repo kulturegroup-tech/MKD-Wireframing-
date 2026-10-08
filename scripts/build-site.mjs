@@ -29,8 +29,9 @@ export function buildSite() {
                                    .replace(/(<a [^>]*href=")[^"]*("[^>]*data-kit-link)/g, `$1${esc(diwali.kit_url)}$2`);
   const t = new Date(diwali.puja_time || "");
   if (!isNaN(t)) {
-    const label = t.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Kolkata" });
-    index = index.replace(/(<p data-puja-label>)[^<]*(<\/p>)/, `$1until Lakshmi Puja, ${label}$2`);
+    const part = (o) => t.toLocaleDateString("en-IN", { ...o, timeZone: "Asia/Kolkata" });
+    const label = `${part({ weekday: "long" })} ${part({ day: "numeric" })} ${part({ month: "long" })}`;   // "Sunday 8 November"
+    index = index.replace(/(<p data-puja-label(?:="")?>)[^<]*(<\/p>)/, `$1until Lakshmi Puja, ${label}$2`);
   }
   writeFileSync(join(DIST, "index.html"), index);
 

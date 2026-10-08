@@ -15,7 +15,8 @@ Open `https://<your-site>/admin` and sign in. You will see three sections:
 | --- | --- |
 | **Products** | The products page. Name, brand, category, photos, price and MRP, pack size, buy link, featured, sort order, show or hide. |
 | **The Sacred Thought** | People stories, journal posts, *Minutes with the MD* episodes (paste a YouTube link) and press coverage (paste the article link). |
-| **Home page** | Leadership (names, roles, photos, bios), Awards, and the Diwali kit offer (countdown date, order link, offer bar on or off). |
+| **Home page → Page text and images** | Every headline, paragraph and photo on the home page, section by section: hero headline and slideshow, numbers, story timeline, brand cards, How it's made steps, MD feature, Pushkar band, the Built across India band, and the products page header. Leave a field empty to keep the current text. |
+| **Home page → Leadership, Awards, Diwali kit offer** | Names, roles, photos and bios; the awards list; the countdown date, order link and offer bar on or off. |
 
 **Adding a product:** Products → New Product → fill it in → add photos → Save. The first photo is the one on the card; phone photos are fine because they are resized and converted to WebP as they upload. Turn on *Packshot on a white background* for product-on-white photos so the whole pack shows.
 
@@ -55,6 +56,7 @@ Anyone with write access to this GitHub repo (GitHub → the repo → Settings �
 | `uploads/` | Photos uploaded from the admin. |
 | `content/products/*.json` | One file per product (written by the admin). |
 | `content/stories/*.md` | One file per story, Markdown with a YAML header. Files starting with `_` are templates and never published. |
+| `content/site/home.json` | Page text and images. In the HTML, editable spots carry `data-cms="section.field"` (text), `data-cms-src` (image), `data-cms-alt` and `data-cms-href`; lists such as the hero slides are rebuilt by `scripts/build-pages.mjs`. |
 | `content/site/*.json` | Leadership, awards, Diwali offer. |
 | `admin/` | The admin ([Sveltia CMS](https://github.com/sveltia/sveltia-cms)) and its `config.yml`. |
 | `scripts/build.mjs` | Builds everything into `dist/`. Source files are never modified. |
