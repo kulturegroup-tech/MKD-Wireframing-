@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: shobhitsharma007ss-cpu/mkd-fragrances-website
+  repo: kulturegroup-tech/MKD-Wireframing-
   branch: main
   commit_messages:
     create: "Add {{collection}}: {{slug}}"
