@@ -129,7 +129,14 @@
   window.addEventListener("hashchange", function () {
     var h = location.hash.slice(1);
     if (data.categories.some(function (c) { return c.slug === h; })) setCat(h, false);
+    else openFromHash(h);
   });
+  // products.html#<product file name> opens that product
+  function openFromHash(h) {
+    var p = h && data && data.products.filter(function (x) { return x.id === h; })[0];
+    if (!p) return;
+    state.cat = p.category; renderTabs(); render(); openQuick(p);
+  }
 
   fetch("products.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -138,6 +145,7 @@
       var h = location.hash.slice(1);
       if (data.categories.some(function (c) { return c.slug === h; })) state.cat = h;
       renderTabs(); render();
+      openFromHash(h);
       source.innerHTML = 'Buying for a shop or a region? <a class="link" href="index.html#partner">Talk to our trade desk</a>.';
     })
     .catch(function () {

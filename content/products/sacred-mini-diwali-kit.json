@@ -1,10 +1,10 @@
 {
-  "name": "Sacred Mini Diwali Kit",
+  "name": "Sacred Mini Diwali Poojan Kit",
   "hindi": "दीपावली पूजन सामग्री",
   "brand": "Sacred",
   "category": "kits",
-  "format": "Poojan kit, 32 samagri",
-  "description": "Everything for Lakshmi Puja in one Sacred box: roli, chandan, akshat, haldi and haldi gaanth, gulal, sindoor, abir, kamal gatta, dhaniya, kauri, laung, elaichi, supari, honey, diya and cotton wicks, gulab jal, Ganga jal, kalawa, khil, batasha, janeu, a red cloth, the pujan vidhi booklet, agarbatti, dhoop cones, itra, kapur, and Ganesh ji, Lakshmi ji and Kuber ji for the puja.",
+  "format": "Poojan kit, 32 samagri with 3 yantras",
+  "description": "The compact version of our Diwali Poojan Kit: all 32 essentials for Lakshmi Pujan in one box. Roli, chandan, akshat, haldi and haldi gaanth; gulal, sindoor, abeer, kamal gatta; dhaniya, kauri, laung, elaichi, supari; shahad (honey), deepak, rui baati; gulab jal, Ganga jal, kalawa, kheel, batasha, janeu; lal vastra (red cloth) and the pujan vidhi booklet; agarbatti, dhoop cone, itra and kapoor; and Ganesh ji, Lakshmi ji and Kuber ji yantras.",
   "images": [
     "/uploads/products/sacred-mini-diwali-kit-front.webp",
     "/uploads/products/sacred-mini-diwali-kit-angle.webp",
@@ -16,10 +16,10 @@
     "/uploads/products/sacred-mini-diwali-kit-agarbatti.webp"
   ],
   "packshot": true,
-  "price": 501,
-  "mrp": null,
+  "price": 449,
+  "mrp": 501,
   "price_from": false,
-  "buy_url": "https://tirangaagarbatti.com/?s=diwali+kit&post_type=product",
+  "buy_url": "https://tirangaagarbatti.com/product/sacred-mini-diwali-poojan-kit/",
   "buy_label": "",
   "badge": "Diwali",
   "featured": true,

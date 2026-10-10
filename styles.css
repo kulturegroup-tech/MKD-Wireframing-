@@ -243,7 +243,7 @@ h3 { font-size: clamp(21px, 1.7vw, 26px); line-height: 1.2; }
 .diwali-hindi { font-family: var(--display-hi); font-size: clamp(20px, 1.8vw, 26px); color: var(--marigold); line-height: 1.2; }
 .diwali-copy h2 { color: #fff; }
 .diwali-copy > p { color: var(--on-dark-muted); max-width: 32em; }
-.kit-facts { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(246,239,230,.2); }
+.kit-facts { display: grid; grid-template-columns: 1.1fr 1.1fr .8fr; border-top: 1px solid rgba(246,239,230,.2); }
 .kit-facts div { padding: 16px 16px 16px 0; border-bottom: 1px solid rgba(246,239,230,.2); }
 .kit-facts dt { font-size: 14px; color: var(--on-dark-muted); }
 .kit-facts dd { font-family: var(--display); font-size: 17px; color: #fff; }
@@ -254,6 +254,14 @@ h3 { font-size: clamp(21px, 1.7vw, 26px); line-height: 1.2; }
 .countdown p { font-size: 14px; color: var(--on-dark-muted); max-width: 14em; padding-left: 6px; }
 .diwali-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .diwali-actions .btn-ghost { color: var(--on-dark); }
+.kit-alt { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center; padding: 12px 18px 12px 12px; border-radius: 16px; border: 1px solid rgba(246,239,230,.16); background: rgba(246,239,230,.05); color: var(--on-dark); text-decoration: none; transition: background .2s, border-color .2s; }
+.kit-alt:hover { background: rgba(246,239,230,.1); border-color: rgba(240,160,32,.5); }
+.kit-alt img { width: 64px; height: 64px; border-radius: 10px; object-fit: contain; background: #fff; padding: 4px; }
+.kit-alt-copy { display: grid; gap: 2px; min-width: 0; }
+.kit-alt-label { font-size: 13px; color: var(--marigold); }
+.kit-alt b { font-family: var(--display); font-weight: 500; font-size: 17px; color: #fff; }
+.kit-alt-copy span:last-child { font-size: 14px; color: var(--on-dark-muted); }
+.kit-alt-price { font-family: var(--display); font-size: 20px; color: #fff; }
 
 /* ---------- making ---------- */
 .making { padding-block: clamp(96px, 11vw, 168px); }

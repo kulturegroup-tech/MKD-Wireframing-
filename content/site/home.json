@@ -107,8 +107,17 @@
     "text": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box so nothing is missing when the first diya is lit.",
     "inside": "121 poojan samagri",
     "idols": "Laxmi, Ganesh, Kuber",
+    "price": "₹1,500",
     "image": "/uploads/site/sacred-diwali-poojan-kit.webp",
-    "alt": "The Sacred Diwali Poojan Kit open under marigold garlands, with Laxmi, Ganesh and Kuber idols, the Shri Yantra and diyas"
+    "alt": "The Sacred Diwali Poojan Kit open under marigold garlands, with Laxmi, Ganesh and Kuber idols, the Shri Yantra and diyas",
+    "mini": {
+      "label": "Or the smaller kit",
+      "name": "Sacred Mini Diwali Poojan Kit",
+      "text": "32 samagri with Laxmi, Ganesh and Kuber yantras",
+      "price": "₹449",
+      "image": "/uploads/products/sacred-mini-diwali-kit-front.webp",
+      "link": "/products.html#sacred-mini-diwali-kit"
+    }
   },
   "making": {
     "heading": "How a stick is made",

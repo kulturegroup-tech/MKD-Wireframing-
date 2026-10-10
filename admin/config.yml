@@ -280,8 +280,21 @@ collections:
               - { label: Text, name: text, widget: text, required: false }
               - { label: Inside the kit, name: inside, widget: string, required: false }
               - { label: Idols, name: idols, widget: string, required: false }
+              - { label: Price, name: price, widget: string, required: false, hint: "As it should read, for example ₹1,500" }
               - { label: Photo, name: image, widget: image, required: false }
               - { label: What the photo shows, name: alt, widget: string, required: false }
+              - label: Smaller kit
+                name: mini
+                widget: object
+                collapsed: true
+                hint: The second kit shown under the order buttons.
+                fields:
+                  - { label: Small line above, name: label, widget: string, required: false }
+                  - { label: Kit name, name: name, widget: string, required: false }
+                  - { label: Short line, name: text, widget: string, required: false }
+                  - { label: Price, name: price, widget: string, required: false }
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: Link, name: link, widget: string, required: false, hint: "/products.html#product-file-name opens that product on the products page; a store link works too." }
           - label: How it's made
             name: making
             widget: object
