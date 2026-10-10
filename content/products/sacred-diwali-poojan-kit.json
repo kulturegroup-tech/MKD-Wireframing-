@@ -4,16 +4,19 @@
   "brand": "Sacred",
   "category": "kits",
   "format": "Poojan kit, 121 samagri",
-  "description": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box for Diwali.",
+  "description": "Laxmi, Ganesh and Kuber idols with 121 poojan samagri for the full Lakshmi Puja, in one Sacred box: a Shri Yantra, Rajnigandha premium dhoopbatti, agarbatti, samagri sachets, batashe, supari, janeu, kalawa, kapur, diyas, Ganga jal and gulab jal, and the Deepawali pujan vidhi booklet to follow step by step.",
   "images": [
-    "/brand/diwali-kits-editorial.webp"
+    "/uploads/products/sacred-diwali-poojan-kit-flatlay.webp",
+    "/uploads/products/sacred-diwali-poojan-kit-marigold.webp",
+    "/uploads/products/sacred-diwali-poojan-kit-lights.webp"
   ],
   "packshot": false,
-  "price": null,
-  "mrp": null,
+  "price": 1500,
+  "mrp": 2100,
   "price_from": false,
   "buy_url": "https://tirangaagarbatti.com/product/sacred-diwali-poojan-kit-laxmi-pooja-kit-with-laxmi-ganesh-kuber-idols-and-other-121-poojan-samagri/",
   "buy_label": "",
+  "badge": "Diwali",
   "featured": true,
   "order": 120,
   "published": true

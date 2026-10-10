@@ -34,6 +34,7 @@ export function buildProducts() {
       image: images[0] || null,
       images,
       pack: !!p.packshot,
+      badge: (p.badge || "").trim(),
       url: p.buy_url || "",
       buyLabel: p.buy_label || "",
       featured: !!p.featured,

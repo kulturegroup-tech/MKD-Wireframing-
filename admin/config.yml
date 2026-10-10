@@ -92,6 +92,7 @@ collections:
       - { label: Show the price as "From", name: price_from, widget: boolean, default: false, required: false, hint: For products sold in several sizes. }
       - { label: Buy link, name: buy_url, widget: string, required: false, hint: "Where people can buy it, for example the product page on tirangaagarbatti.com." }
       - { label: Buy button text, name: buy_label, widget: string, required: false, hint: "Leave empty for “Buy on tirangaagarbatti.com” (or “Buy now” for other shops)." }
+      - { label: Card badge, name: badge, widget: string, required: false, hint: "A short label on the product card, for example Diwali, Holi or New. Leave empty for none." }
       - { label: Featured, name: featured, widget: boolean, default: false, required: false, hint: Featured products are shown first. }
       - { label: Sort order, name: order, widget: number, value_type: int, default: 100, required: false, hint: Lower numbers are shown first. }
       - { label: Show on the website, name: published, widget: boolean, default: true }

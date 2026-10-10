@@ -61,7 +61,7 @@
     var list = filtered();
     grid.innerHTML = list.map(function (p, i) {
       return '<button type="button" class="pcard" data-i="' + data.products.indexOf(p) + '" aria-haspopup="dialog">' +
-        visual(p, "pcard-visual", "span", p.category === "kits" ? '<span class="pcard-tag">Diwali</span>' : "") +
+        visual(p, "pcard-visual", "span", p.badge ? '<span class="pcard-tag">' + esc(p.badge) + "</span>" : "") +
         '<span class="pcard-meta"><span class="pcard-brand">' + esc(p.brand) + "</span>" +
         '<span class="pcard-name">' + esc(p.name) + "</span>" +
         '<span class="pcard-format">' + esc(p.format || catName(p.category)) + "</span>" +
