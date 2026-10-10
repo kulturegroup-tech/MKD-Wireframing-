@@ -4,11 +4,18 @@
   "brand": "Sacred",
   "category": "kits",
   "format": "Poojan kit, 121 samagri",
-  "description": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box for Diwali.",
+  "description": "Everything for Lakshmi Puja in one Sacred box: roli, chandan, akshat, haldi and haldi gaanth, gulal, sindoor, abir, kamal gatta, dhaniya, kauri, laung, elaichi, supari, honey, diya and cotton wicks, gulab jal, Ganga jal, kalawa, khil, batasha, janeu, a red cloth, the pujan vidhi booklet, agarbatti, dhoop cones, itra, kapur, and Ganesh ji, Lakshmi ji and Kuber ji for the puja.",
   "images": [
-    "/brand/diwali-kits-editorial.webp"
+    "/uploads/products/sacred-diwali-kit-front.webp",
+    "/uploads/products/sacred-diwali-kit-angle.webp",
+    "/uploads/products/sacred-diwali-kit-back.webp",
+    "/uploads/products/sacred-diwali-kit-laung-elaichi-supari.webp",
+    "/uploads/products/sacred-diwali-kit-pujan-vidhi.webp",
+    "/uploads/products/sacred-diwali-kit-yantra.webp",
+    "/uploads/products/sacred-diwali-kit-red-cloth.webp",
+    "/uploads/products/sacred-diwali-kit-agarbatti.webp"
   ],
-  "packshot": false,
+  "packshot": true,
   "price": null,
   "mrp": null,
   "price_from": false,
