@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Orders | Tiranga Agarbatti</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+  :root { --ink: #2a1d15; --muted: #6e625a; --ash: #f3f1ed; --rule: #dcd7cf; --kumkum: #b3202a; --green: #1f7a43; --amber: #a86400; --display: "Anek Latin", Arial, sans-serif; --text: "Hanken Grotesk", Arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 var(--text); color: var(--ink); background: var(--ash); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  .top { display: flex; align-items: center; gap: 16px; padding: 14px 24px; background: #fff; border-bottom: 1px solid var(--rule); position: sticky; top: 0; z-index: 5; }
+  .top h1 { font-size: 22px; margin-right: auto; }
+  .top a { color: var(--muted); font-size: 14px; }
+  .btn { min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--ink); background: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
+  a.btn { color: var(--ink); }
+  .btn.primary { background: var(--kumkum); border-color: var(--kumkum); color: #fff; }
+  .btn:disabled { opacity: .5; cursor: progress; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .login { max-width: 380px; margin: 12vh auto; background: #fff; padding: 32px; border-radius: 20px; display: grid; gap: 14px; }
+  .login input { min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--rule); border-radius: 12px; }
+  .msg { padding: 10px 14px; border-radius: 12px; background: #fbe9ea; color: #8e1820; }
+  .notes { display: grid; gap: 8px; margin-bottom: 16px; }
+  .note { padding: 10px 14px; border-radius: 12px; background: #fff3dc; font-size: 14px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-right: auto; }
+  .tabs button { padding: 8px 14px; border-radius: 999px; border: 0; background: transparent; font-weight: 500; color: var(--muted); cursor: pointer; }
+  .tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .tabs small { margin-left: 6px; opacity: .75; }
+  .bar input[type=search] { min-height: 40px; width: 260px; padding: 8px 14px; border: 1.5px solid var(--rule); border-radius: 999px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; background: #faf9f7; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: #fcfaf6; }
+  td small { display: block; color: var(--muted); font-size: 13px; }
+  .num { text-align: right; white-space: nowrap; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--ash); white-space: nowrap; }
+  .pill.paid, .pill.delivered { background: #e3f3e8; color: var(--green); }
+  .pill.cod, .pill.new { background: #fff1d6; color: var(--amber); }
+  .pill.packed, .pill.shipped { background: #e6eefc; color: #1f4fa8; }
+  .pill.failed, .pill.cancelled, .pill.review, .pill.returned { background: #fbe9ea; color: #8e1820; }
+  .pill.pending, .pill.awaiting_payment { background: var(--ash); color: var(--muted); }
+  .empty { padding: 48px; text-align: center; color: var(--muted); background: #fff; border-radius: 16px; }
+  dialog { width: min(760px, calc(100% - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 0; border-radius: 20px; }
+  dialog::backdrop { background: rgba(36,23,15,.5); }
+  .d-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; padding: 22px 26px; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: #fff; }
+  .d-head h2 { font-size: 26px; }
+  .d-body { padding: 22px 26px; display: grid; gap: 22px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .d-body h3 { font-size: 13px; font-family: var(--text); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); margin-bottom: 6px; }
+  .items td { padding: 6px 0; border: 0; }
+  .form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .form label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+  .form input, .form select, .form textarea { min-height: 42px; padding: 8px 12px; border: 1.5px solid var(--rule); border-radius: 10px; background: #fff; font-weight: 400; }
+  .form .wide { grid-column: 1 / -1; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .history { font-size: 13.5px; color: var(--muted); display: grid; gap: 4px; }
+  .close { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--ash); font-size: 22px; cursor: pointer; }
+  @media (max-width: 860px) { .hide-sm { display: none; } .cols, .form { grid-template-columns: 1fr; } main { padding: 12px; } }
+  @media print {
+    body { background: #fff; } .top, main, .d-head .close, .actions, .form, .history-wrap { display: none !important; }
+    dialog { position: static; width: 100%; max-height: none; border-radius: 0; } dialog::backdrop { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top"><h1>Orders</h1><a href="./">Edit the website</a><button class="btn" type="button" data-refresh hidden>Refresh</button><button class="btn" type="button" data-logout hidden>Sign out</button></header>
+
+<form class="login" data-login>
+  <h2>Sign in to orders</h2>
+  <p>Use the orders password set in Netlify (ORDERS_PASSWORD).</p>
+  <input type="password" name="pw" autocomplete="current-password" placeholder="Password" required>
+  <p class="msg" data-login-msg hidden></p>
+  <button class="btn primary" type="submit">Open orders</button>
+</form>
+
+<main data-app hidden>
+  <div class="notes" data-notes></div>
+  <div class="bar">
+    <div class="tabs" data-tabs></div>
+    <input type="search" placeholder="Order no, name, phone, city" data-q>
+    <button class="btn" type="button" data-csv>Download CSV</button>
+  </div>
+  <table data-table>
+    <thead><tr><th>Order</th><th>Customer</th><th class="hide-sm">Items</th><th class="num">Total</th><th>Payment</th><th>Status</th></tr></thead>
+    <tbody data-rows></tbody>
+  </table>
+  <p class="empty" data-empty hidden>No orders here.</p>
+</main>
+
+<dialog data-detail></dialog>
+
+<script>
+(function () {
+  "use strict";
+  var API = "../api/admin/orders", KEY = "tiranga-orders-pw";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var inr = function (n) { return "₹" + Number(n || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 }); };
+  var when = function (iso) { return new Date(iso).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }); };
+  var pw = ""; try { pw = sessionStorage.getItem(KEY) || ""; } catch (e) {}
+  var orders = [], tab = "toship", q = "";
+
+  var PAY = { paid: "Paid", cod: "COD", pending: "Not paid yet", failed: "Payment failed", review: "Check amount" };
+  var STATUS = { new: "New", packed: "Packed", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled", returned: "Returned", awaiting_payment: "Awaiting payment", failed: "Failed" };
+  var TABS = [
+    ["toship", "To ship", function (o) { return (o.status === "new" || o.status === "packed") && o.payment.state !== "review"; }],
+    ["shipped", "Shipped", function (o) { return o.status === "shipped"; }],
+    ["delivered", "Delivered", function (o) { return o.status === "delivered"; }],
+    ["check", "Needs a look", function (o) { return o.payment.state === "review"; }],
+    ["unpaid", "Unpaid or failed", function (o) { return o.status === "awaiting_payment" || o.status === "failed"; }],
+    ["closed", "Cancelled or returned", function (o) { return o.status === "cancelled" || o.status === "returned"; }],
+    ["all", "All", function () { return true; }],
+  ];
+
+  function call(method, body) {
+    return fetch(API, { method: method, headers: { Authorization: "Bearer " + pw, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: "The orders service isn't reachable. Is the site deployed on Netlify?" }; }).then(function (j) { j.status = r.status; return j; }); });
+  }
+
+  function load() {
+    $("[data-refresh]").disabled = true;
+    return call("GET").then(function (j) {
+      $("[data-refresh]").disabled = false;
+      if (!j.ok) { if (j.status === 401) logout(j.error); else showLogin(j.error); return; }
+      orders = j.orders;
+      $("[data-login]").hidden = true; $("[data-app]").hidden = false; $("[data-refresh]").hidden = false; $("[data-logout]").hidden = false;
+      var n = [];
+      if (!j.setup.phonepe) n.push("Online payment is off: add the PhonePe keys in Netlify (see the README). Cash on delivery still works.");
+      else if (j.setup.phonepeEnv !== "production") n.push("PhonePe is in test mode (sandbox). No real money is taken. Set PHONEPE_ENV to production to go live.");
+      if (!j.setup.email) n.push("Order emails are off: add RESEND_API_KEY and MAIL_FROM in Netlify to email new orders to you and confirmations to customers.");
+      $("[data-notes]").innerHTML = n.map(function (t) { return '<p class="note">' + esc(t) + "</p>"; }).join("");
+      render();
+    });
+  }
+  function showLogin(msg) { $("[data-login]").hidden = false; $("[data-app]").hidden = true; var m = $("[data-login-msg]"); m.textContent = msg || ""; m.hidden = !msg; }
+  function logout(msg) { pw = ""; try { sessionStorage.removeItem(KEY); } catch (e) {} $("[data-refresh]").hidden = true; $("[data-logout]").hidden = true; showLogin(msg); }
+
+  function visible() {
+    var t = TABS.filter(function (x) { return x[0] === tab; })[0], s = q.toLowerCase();
+    return orders.filter(t[2]).filter(function (o) {
+      return !s || [o.id, o.customer.name, o.customer.phone, o.customer.city, o.customer.pincode].join(" ").toLowerCase().indexOf(s) >= 0;
+    });
+  }
+  function render() {
+    $("[data-tabs]").innerHTML = TABS.map(function (t) {
+      return '<button type="button" data-tab="' + t[0] + '" aria-pressed="' + (t[0] === tab) + '">' + t[1] + "<small>" + orders.filter(t[2]).length + "</small></button>";
+    }).join("");
+    var list = visible();
+    $("[data-rows]").innerHTML = list.map(function (o) {
+      var items = o.lines.reduce(function (a, l) { return a + l.qty; }, 0);
+      return '<tr data-id="' + esc(o.id) + '"><td><b>' + esc(o.id) + "</b><small>" + when(o.createdAt) + "</small></td>" +
+        "<td>" + esc(o.customer.name) + "<small>" + esc(o.customer.phone) + " · " + esc(o.customer.city) + " " + esc(o.customer.pincode) + "</small></td>" +
+        '<td class="hide-sm">' + items + (items === 1 ? " item" : " items") + "<small>" + esc(o.lines.map(function (l) { return l.name; }).join(", ")).slice(0, 80) + "</small></td>" +
+        '<td class="num">' + inr(o.total) + "</td>" +
+        '<td><span class="pill ' + o.payment.state + '">' + (PAY[o.payment.state] || o.payment.state) + "</span></td>" +
+        '<td><span class="pill ' + o.status + '">' + (STATUS[o.status] || o.status) + "</span></td></tr>";
+    }).join("");
+    $("[data-table]").hidden = !list.length; $("[data-empty]").hidden = !!list.length;
+  }
+
+  function detail(o) {
+    var d = $("[data-detail]"), c = o.customer, t = o.tracking || {};
+    var canShip = o.payment.state === "paid" || o.payment.method === "cod";
+    d.innerHTML = '<div class="d-head"><div><h2>' + esc(o.id) + "</h2><p>" + when(o.createdAt) + ' · <span class="pill ' + o.payment.state + '">' + (PAY[o.payment.state] || o.payment.state) + "</span> " +
+      '<span class="pill ' + o.status + '">' + (STATUS[o.status] || o.status) + '</span></p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>' +
+      '<div class="d-body"><div class="cols"><section><h3>Deliver to</h3><p>' + [c.name, c.address1, c.address2, c.city + " " + c.pincode, c.state].filter(Boolean).map(esc).join("<br>") +
+      "</p><p>+91 " + esc(c.phone) + (c.email ? "<br>" + esc(c.email) : "") + "</p></section>" +
+      "<section><h3>Order</h3><table class=\"items\">" + o.lines.map(function (l) { return "<tr><td>" + esc(l.name) + (l.variant ? " (" + esc(l.variant) + ")" : "") + " × " + l.qty + '</td><td class="num">' + inr(l.total) + "</td></tr>"; }).join("") +
+      "<tr><td>Delivery</td><td class=\"num\">" + (o.delivery ? inr(o.delivery) : "Free") + "</td></tr>" + (o.codFee ? "<tr><td>COD charge</td><td class=\"num\">" + inr(o.codFee) + "</td></tr>" : "") +
+      "<tr><td><b>Total" + (o.payment.method === "cod" ? " to collect" : "") + '</b></td><td class="num"><b>' + inr(o.total) + "</b></td></tr></table>" +
+      "<p><small>" + (o.payment.method === "cod" ? "Cash on delivery" : "PhonePe " + esc(o.payment.mode || "") + " " + esc(o.payment.transactionId || "")) + "</small></p></section></div>" +
+      (canShip ? '<form class="form" data-save><label>Status<select name="status">' + ["new", "packed", "shipped", "delivered", "cancelled", "returned"].map(function (s) { return "<option value=\"" + s + "\"" + (s === o.status ? " selected" : "") + ">" + STATUS[s] + "</option>"; }).join("") + "</select></label>" +
+        '<label>Courier<input name="courier" value="' + esc(t.courier || "") + '" placeholder="Delhivery, DTDC…"></label>' +
+        '<label>Tracking number<input name="number" value="' + esc(t.number || "") + '"></label>' +
+        '<label class="wide">Tracking link<input name="url" value="' + esc(t.url || "") + '" placeholder="https://…"></label>' +
+        '<label class="wide">Note (only you see this)<input name="note" maxlength="300"></label>' +
+        '<div class="actions wide"><button class="btn primary" type="submit">Save</button><button class="btn" type="button" data-print>Print packing slip</button>' +
+        '<a class="btn" style="display:inline-grid;place-items:center;text-decoration:none" href="https://wa.me/91' + esc(c.phone) + "?text=" + encodeURIComponent("Namaste " + c.name.split(" ")[0] + ", about your Tiranga order " + o.id + ": ") + '" target="_blank" rel="noopener">WhatsApp customer</a></div></form>'
+       : '<div class="actions">' + (o.payment.state === "pending" ? '<button class="btn primary" type="button" data-recheck>Check payment with PhonePe</button>' : "") +
+         (o.status !== "cancelled" ? '<button class="btn" type="button" data-cancel>Mark cancelled</button>' : "") + "</div>") +
+      '<div class="history-wrap"><h3>History</h3><div class="history">' + (o.history || []).map(function (h) { return "<span>" + when(h.at) + " · " + esc(STATUS[h.status] || h.status) + (h.note ? ": " + esc(h.note) : "") + "</span>"; }).join("") + "</div></div></div>";
+    if (!d.open) d.showModal();
+    d.onclick = function (e) {
+      if (e.target === d || e.target.closest("[data-close]")) d.close();
+      if (e.target.closest("[data-print]")) window.print();
+      if (e.target.closest("[data-recheck]")) post({ id: o.id, action: "recheck" });
+      if (e.target.closest("[data-cancel]")) post({ id: o.id, status: "cancelled", note: "Cancelled from the orders screen" });
+    };
+    var f = $("[data-save]", d);
+    if (f) f.onsubmit = function (e) {
+      e.preventDefault();
+      post({ id: o.id, status: f.status.value, tracking: { courier: f.courier.value, number: f.number.value, url: f.url.value }, note: f.note.value });
+    };
+  }
+  function post(body) {
+    var b = $("[data-detail] .btn.primary"); if (b) b.disabled = true;
+    call("POST", body).then(function (j) {
+      if (b) b.disabled = false;
+      if (!j.ok) { alert(j.error || "Couldn't save."); return; }
+      orders = orders.map(function (o) { return o.id === j.order.id ? j.order : o; });
+      render(); detail(j.order);
+    });
+  }
+
+  function csv() {
+    var rows = [["Order", "Date", "Name", "Phone", "Email", "Address", "City", "Pincode", "State", "Items", "Subtotal", "Delivery", "COD charge", "Total", "Payment", "Status", "Courier", "Tracking"]];
+    visible().forEach(function (o) {
+      var c = o.customer, t = o.tracking || {};
+      rows.push([o.id, new Date(o.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }), c.name, c.phone, c.email, [c.address1, c.address2].filter(Boolean).join(", "), c.city, c.pincode, c.state,
+        o.lines.map(function (l) { return l.name + (l.variant ? " (" + l.variant + ")" : "") + " x" + l.qty; }).join("; "), o.subtotal, o.delivery, o.codFee, o.total, PAY[o.payment.state] || o.payment.state, STATUS[o.status] || o.status, t.courier || "", t.number || ""]);
+    });
+    var text = rows.map(function (r) { return r.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv" }));
+    a.download = "tiranga-orders-" + tab + "-" + new Date().toISOString().slice(0, 10) + ".csv";
+    a.click();
+  }
+
+  $("[data-login]").addEventListener("submit", function (e) {
+    e.preventDefault(); pw = e.target.pw.value; try { sessionStorage.setItem(KEY, pw); } catch (x) {} load();
+  });
+  $("[data-tabs]").addEventListener("click", function (e) { var b = e.target.closest("[data-tab]"); if (b) { tab = b.getAttribute("data-tab"); render(); } });
+  $("[data-rows]").addEventListener("click", function (e) {
+    var r = e.target.closest("[data-id]"); if (!r) return;
+    detail(orders.filter(function (o) { return o.id === r.getAttribute("data-id"); })[0]);
+  });
+  $("[data-q]").addEventListener("input", function (e) { q = e.target.value.trim(); render(); });
+  $("[data-csv]").addEventListener("click", csv);
+  $("[data-refresh]").addEventListener("click", load);
+  $("[data-logout]").addEventListener("click", function () { logout(""); });
+  if (pw) load(); else showLogin("");
+})();
+</script>
+</body>
+</html>

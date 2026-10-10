@@ -9,7 +9,7 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const DIST = join(ROOT, "dist");
 export const CONTENT = join(ROOT, "content");
 /** Change this one line if the site moves to another address. */
-export const DOMAIN = "https://www.mkdtiranga.com";
+export const DOMAIN = "https://tirangaagarbatti.com";
 
 export const esc = (s = "") => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -55,8 +55,8 @@ export function readFront(file) {
 }
 
 /** Markdown to HTML, with relative image/link paths re-pointed for pages in sub-folders. */
-export function markdown(md, prefix = "") {
-  const html = marked.parse(String(md || ""), { gfm: true, breaks: false });
+export function markdown(md, prefix = "", { breaks = false } = {}) {
+  const html = marked.parse(String(md || ""), { gfm: true, breaks });
   return html
     .replace(/(src|href)="(?!https?:|mailto:|tel:|#|data:)\/?([^"]+)"/g, (_, a, p) => `${a}="${prefix}${p}"`)
     .replace(/<a href="(https?:[^"]+)"/g, '<a class="link" href="$1" target="_blank" rel="noopener"')

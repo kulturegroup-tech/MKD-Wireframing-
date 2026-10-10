@@ -14,10 +14,10 @@
   "price": 1500,
   "mrp": 2100,
   "price_from": false,
-  "buy_url": "https://tirangaagarbatti.com/product/sacred-diwali-poojan-kit-laxmi-pooja-kit-with-laxmi-ganesh-kuber-idols-and-other-121-poojan-samagri/",
-  "buy_label": "",
   "badge": "Diwali",
   "featured": true,
   "order": 120,
-  "published": true
+  "published": true,
+  "in_stock": true,
+  "old_url": "https://tirangaagarbatti.com/product/sacred-diwali-poojan-kit-laxmi-pooja-kit-with-laxmi-ganesh-kuber-idols-and-other-121-poojan-samagri/"
 }

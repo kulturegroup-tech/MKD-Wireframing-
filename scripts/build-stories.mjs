@@ -88,6 +88,7 @@ ${body}
 ${deep ? deeper(footer) : footer}
 
 <script src="${p}site.js"></script>
+<script src="${p}cart.js"></script>
 </body>
 </html>
 `;

@@ -163,7 +163,7 @@
       var shop = $("[data-note-shop]");
       if (n[3][0] || n[3][1]) {
         shop.hidden = false;
-        shop.href = "https://tirangaagarbatti.com/?s=" + encodeURIComponent(n[0]) + "&post_type=product";
+        shop.href = "products.html?q=" + encodeURIComponent(n[0]);
         shop.textContent = "Shop " + n[0];
       } else {
         shop.hidden = false;

@@ -25,8 +25,8 @@ export function buildSite() {
           </article>`).join("\n"));
 
   // Diwali kit: order link and countdown text on the home page
-  if (diwali.kit_url) index = index.replace(/(<a [^>]*data-kit-link[^>]*href=")[^"]*(")/g, `$1${esc(diwali.kit_url)}$2`)
-                                   .replace(/(<a [^>]*href=")[^"]*("[^>]*data-kit-link)/g, `$1${esc(diwali.kit_url)}$2`);
+  if (diwali.kit_url) index = index.replace(/(<a [^>]*data-kit-link[^>]*href=")[^"]*(")/g, `$1${esc(rel(diwali.kit_url))}$2`)
+                                   .replace(/(<a [^>]*href=")[^"]*("[^>]*data-kit-link)/g, `$1${esc(rel(diwali.kit_url))}$2`);
   const t = new Date(diwali.puja_time || "");
   if (!isNaN(t)) {
     const part = (o) => t.toLocaleDateString("en-IN", { ...o, timeZone: "Asia/Kolkata" });
@@ -36,7 +36,7 @@ export function buildSite() {
   writeFileSync(join(DIST, "index.html"), index);
 
   // every page: the countdown date, and the offer bar + floating pill switched on or off
-  const pages = [DIST, join(DIST, "stories")].filter((d) => existsSync(d))
+  const pages = [DIST, join(DIST, "stories"), join(DIST, "product")].filter((d) => existsSync(d))
     .flatMap((d) => readdirSync(d).filter((f) => f.endsWith(".html")).map((f) => join(d, f)));
   for (const file of pages) {
     let html = readFileSync(file, "utf8");

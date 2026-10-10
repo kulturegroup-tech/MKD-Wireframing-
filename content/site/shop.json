@@ -1,0 +1,14 @@
+{
+  "online_enabled": true,
+  "cod_enabled": true,
+  "delivery_fee": 49,
+  "free_delivery_above": 499,
+  "cod_fee": 40,
+  "cod_max": 3000,
+  "order_email": "contact@mkdtiranga.com",
+  "phone": "+91 63890 04433",
+  "whatsapp": "916389004433",
+  "dispatch_note": "Ships from Kanpur in 1 to 2 working days",
+  "delivery_note": "Delivered in 2 to 5 working days across India",
+  "manufacturer": "Maa Kamakhya Darbar Fragrances (India) Pvt. Ltd., 368, Harris Ganj, Cantt, Kanpur 208004, Uttar Pradesh"
+}

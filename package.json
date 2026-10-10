@@ -9,6 +9,7 @@
     "import:woocommerce": "node scripts/import-woocommerce.mjs"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.1.4",
     "cheerio": "^1.2.0",
     "js-yaml": "^4.1.0",
     "marked": "^14.1.4"

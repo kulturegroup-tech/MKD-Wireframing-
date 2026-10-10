@@ -74,7 +74,7 @@
       "button_label": "Shop Tiranga",
       "image": "/brand/tiranga-daily-editorial.webp",
       "alt": "Three generations of a family lighting incense at a home mandir",
-      "button_link": "https://tirangaagarbatti.com/"
+      "button_link": "/products.html?brand=Tiranga"
     },
     "sacred": {
       "tagline": "Dedicated to God.",
@@ -99,7 +99,7 @@
   },
   "products": {
     "heading": "What we make",
-    "lede": "Four everyday formats from our own plants, sold under Tiranga and Sacred through local shops and on tirangaagarbatti.com."
+    "lede": "Four everyday formats from our own plants, sold under Tiranga and Sacred in shops across India, and right here online."
   },
   "diwali": {
     "hindi": "शुभ दीपावली",
@@ -116,7 +116,7 @@
       "text": "32 samagri with Laxmi, Ganesh and Kuber yantras",
       "price": "₹449",
       "image": "/uploads/products/sacred-mini-diwali-kit-front.webp",
-      "link": "/products.html#sacred-mini-diwali-kit"
+      "link": "/product/sacred-mini-diwali-kit.html"
     }
   },
   "making": {
@@ -221,7 +221,7 @@
     }
   ],
   "products_page": {
-    "heading": "Our products",
-    "lede": "Agarbatti, dhoop, havan cups and poojan kits from Tiranga and Sacred, made in our own plants in Kanpur. Open any product to see the details, then buy it on our store or ask about bulk supply."
+    "heading": "Shop",
+    "lede": "Agarbatti, dhoop, havan cups and poojan kits from Tiranga and Sacred, made in our own plants in Kanpur. Order online with delivery across India, or ask us about bulk supply."
   }
 }

@@ -1,0 +1,16 @@
+# Links from the old WooCommerce store. Product links are added above this by the build.
+/shop/*                       /products.html            301
+/product-category/*           /products.html            301
+/cart/*                       /checkout.html            301
+/cart                         /checkout.html            301
+/checkout/*                   /checkout.html            301
+/my-account/*                 /contact.html             302
+/contact-us/*                 /contact.html             301
+/shipping-delivery-policy/*   /shipping.html            301
+/refund_returns/*             /refunds.html             301
+/terms-conditions/*           /terms.html               301
+/privacy-policy/*             /privacy.html             301
+/about-us/*                   /#story                   301
+/about-director/*             /#md                      301
+/media-coverage/*             /#awards                  301
+/blog/*                       /stories.html             301

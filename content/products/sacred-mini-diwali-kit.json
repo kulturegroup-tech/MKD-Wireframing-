@@ -19,10 +19,10 @@
   "price": 449,
   "mrp": 501,
   "price_from": false,
-  "buy_url": "https://tirangaagarbatti.com/product/sacred-mini-diwali-poojan-kit/",
-  "buy_label": "",
   "badge": "Diwali",
   "featured": true,
   "order": 125,
-  "published": true
+  "published": true,
+  "in_stock": true,
+  "old_url": "https://tirangaagarbatti.com/product/sacred-mini-diwali-poojan-kit/"
 }

@@ -1,4 +1,5 @@
-# Admin for the Maa Kamakhya Darbar Fragrances website.
+# Admin for the Tiranga Agarbatti shop and the Maa Kamakhya Darbar Fragrances website.
+# Orders are not here: they are at /admin/orders.html.
 # Open https://<your-site>/admin, sign in with GitHub, edit, and press Save.
 # Every save is a commit to the repo; Netlify then rebuilds the site in about a minute.
 
@@ -13,8 +14,8 @@ backend:
     uploadMedia: "Upload {{path}}"
     deleteMedia: "Delete {{path}}"
 
-site_url: https://www.mkdtiranga.com
-display_url: https://www.mkdtiranga.com
+site_url: https://tirangaagarbatti.com
+display_url: https://tirangaagarbatti.com
 logo_url: /favicon.svg
 
 # Uploaded photos go here and are resized and converted to WebP in the browser before upload,
@@ -36,7 +37,7 @@ collections:
   - name: products
     label: Products
     label_singular: Product
-    description: Everything on the products page. The first photo is the one shown on the card.
+    description: Everything in the shop. Each product gets its own page with Add to cart. The first photo is the one shown on the card.
     folder: content/products
     format: json
     extension: json
@@ -63,9 +64,13 @@ collections:
         widget: select
         options:
           - { label: Agarbatti, value: agarbatti }
+          - { label: Bambooless sticks, value: bambooless }
           - { label: Dhoopbatti, value: dhoopbatti }
+          - { label: Dhoop cones, value: dhoop-cone }
+          - { label: Wet dhoop, value: wet-dhoop }
           - { label: Havan cup dhoop, value: havan-cup }
           - { label: Jar packs, value: jar }
+          - { label: Gulab jal, value: gulab-jal }
           - { label: Poojan kits, value: kits }
         default: agarbatti
       - label: Photos
@@ -87,11 +92,22 @@ collections:
         hint: Shown as the big word on the card when there is no photo, for example मोगरा.
       - { label: Pack and size, name: format, widget: string, required: false, hint: "For example: Premium agarbatti, box of 100 g" }
       - { label: Description, name: description, widget: text, required: false }
-      - { label: Price (₹), name: price, widget: number, value_type: float, required: false }
+      - { label: Price (₹), name: price, widget: number, value_type: float, required: false, hint: "The selling price, GST included. A product without a price shows on the site but can't be added to the cart. If it comes in several packs, leave this empty and fill in Packs and sizes below." }
       - { label: MRP (₹), name: mrp, widget: number, value_type: float, required: false, hint: Shown struck through when it is higher than the price. }
-      - { label: Show the price as "From", name: price_from, widget: boolean, default: false, required: false, hint: For products sold in several sizes. }
-      - { label: Buy link, name: buy_url, widget: string, required: false, hint: "Where people can buy it, for example the product page on tirangaagarbatti.com." }
-      - { label: Buy button text, name: buy_label, widget: string, required: false, hint: "Leave empty for “Buy on tirangaagarbatti.com” (or “Buy now” for other shops)." }
+      - label: Packs and sizes
+        name: variants
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.label}}: ₹{{fields.price}}"
+        hint: "Only for products sold in more than one pack, for example 50 g box and 100 g box. Each pack has its own price."
+        fields:
+          - { label: Pack name, name: label, widget: string, hint: "For example: 100 g box, or Pack of 12" }
+          - { label: Price (₹), name: price, widget: number, value_type: float }
+          - { label: MRP (₹), name: mrp, widget: number, value_type: float, required: false }
+          - { label: In stock, name: in_stock, widget: boolean, default: true, required: false }
+      - { label: In stock, name: in_stock, widget: boolean, default: true, required: false, hint: Turn off to show the product as Sold out. }
+      - { label: Old store link, name: old_url, widget: string, required: false, hint: "The product's address on the old WooCommerce store, so that link (and its Google ranking) forwards here. For example: https://tirangaagarbatti.com/product/…/" }
       - { label: Card badge, name: badge, widget: string, required: false, hint: "A short label on the product card, for example Diwali, Holi or New. Leave empty for none." }
       - { label: Featured, name: featured, widget: boolean, default: false, required: false, hint: Featured products are shown first. }
       - { label: Sort order, name: order, widget: number, value_type: int, default: 100, required: false, hint: Lower numbers are shown first. }
@@ -422,4 +438,37 @@ collections:
         fields:
           - { label: Show the offer bar and floating button, name: show_offer, widget: boolean, default: true }
           - { label: Lakshmi Puja date and time, name: puja_time, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ", hint: Drives the countdown. }
-          - { label: Order link, name: kit_url, widget: string }
+          - { label: Order link, name: kit_url, widget: string, hint: "The kit's page in the shop, for example /product/sacred-diwali-poojan-kit.html" }
+      - name: shop
+        label: Shop settings
+        file: content/site/shop.json
+        format: json
+        fields:
+          - { label: Online payment (PhonePe), name: online_enabled, widget: boolean, default: true, hint: "Needs the PhonePe keys set in Netlify (see the README)." }
+          - { label: Cash on delivery, name: cod_enabled, widget: boolean, default: true }
+          - { label: Delivery charge (₹), name: delivery_fee, widget: number, value_type: float, default: 49 }
+          - { label: Free delivery from (₹), name: free_delivery_above, widget: number, value_type: float, default: 499, hint: Orders at or above this amount ship free. }
+          - { label: Cash on delivery charge (₹), name: cod_fee, widget: number, value_type: float, default: 40 }
+          - { label: Cash on delivery up to (₹), name: cod_max, widget: number, value_type: float, default: 3000, hint: Bigger orders must be paid online. }
+          - { label: Send new orders to (email), name: order_email, widget: string }
+          - { label: Phone shown to customers, name: phone, widget: string }
+          - { label: WhatsApp number, name: whatsapp, widget: string, hint: "Country code and number, no spaces or +, for example 916389004433" }
+          - { label: Dispatch line, name: dispatch_note, widget: string }
+          - { label: Delivery line, name: delivery_note, widget: string }
+          - { label: Made by (on product pages), name: manufacturer, widget: string }
+
+  # ---------------------------------------------------------------- help pages
+  - name: pages
+    label: Help pages
+    label_singular: Help page
+    description: "Shipping, returns, terms, privacy and contact. If you change delivery charges in Shop settings, update the Shipping page too."
+    folder: content/pages
+    format: frontmatter
+    extension: md
+    create: false
+    delete: false
+    identifier_field: title
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Short description, name: description, widget: string, required: false }
+      - { label: Text, name: body, widget: markdown }

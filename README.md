@@ -1,7 +1,8 @@
-# Maa Kamakhya Darbar Fragrances: website
+# Tiranga Agarbatti: shop and company website
 
-The corporate site for Tiranga, Sacred and Sacred Selections, with its own admin at **/admin**.
-No WordPress, no database and no monthly fees: everything lives in this GitHub repo, and Netlify publishes it.
+The new **tirangaagarbatti.com**: the online shop for Tiranga and Sacred, and the company site for Maa Kamakhya Darbar Fragrances,
+with its own admin at **/admin** and an orders screen at **/admin/orders.html**.
+No WordPress and no monthly fees: products and pages live in this GitHub repo, orders live in Netlify, payments go through PhonePe.
 
 ```
 You edit in /admin  →  the admin saves to GitHub  →  Netlify rebuilds  →  live in 1 to 2 minutes
@@ -22,6 +23,40 @@ Open `https://<your-site>/admin` and sign in. You will see three sections:
 
 **Adding a story:** The Sacred Thought → New Story → choose the kind (People, Journal, Minutes with the MD, In the media) → write → Save. Tick *Draft* to keep it off the site until it is ready. The home page always shows the newest three stories, the newest MD episodes and the latest press.
 
+## The shop
+
+Customers add products to the cart (kept in their browser), check out with their address, and pay online through **PhonePe**
+(UPI, cards, netbanking, wallets) or choose **cash on delivery**. Every price is checked again on the server, so nobody can change what they pay.
+
+| Where | What |
+| --- | --- |
+| `/product/<name>.html` | One page per product, with photos, packs, Add to cart and Buy now. Built from the admin. |
+| `/checkout.html` | Address, pincode, payment choice. |
+| `/order.html` | The confirmation page the customer comes back to after paying. |
+| `/admin/orders.html` | **Your orders.** New orders to pack and ship, payment status, add the courier and tracking number (the customer is emailed), print a packing slip, download a CSV for Shiprocket or accounts. |
+| Admin → Home page → **Shop settings** | Delivery charge, free delivery amount, cash on delivery on/off, COD charge and limit, contact numbers. |
+| Admin → **Help pages** | Shipping, returns, terms, privacy, contact. |
+
+### Switching the shop on (Netlify → Site configuration → Environment variables)
+
+| Variable | What to put |
+| --- | --- |
+| `ORDERS_PASSWORD` | A strong password for `/admin/orders.html`. **Needed for the orders screen.** |
+| `PHONEPE_CLIENT_ID`, `PHONEPE_CLIENT_SECRET`, `PHONEPE_CLIENT_VERSION` | From the PhonePe Business dashboard → Developer settings → API keys (Standard Checkout, v2). |
+| `PHONEPE_ENV` | `sandbox` to test with PhonePe's test keys, `production` to take real money. |
+| `PHONEPE_WEBHOOK_USER`, `PHONEPE_WEBHOOK_PASSWORD` | In the PhonePe dashboard, add a webhook to `https://tirangaagarbatti.com/api/phonepe-webhook` with a username and password of your choice, and put the same two here. It confirms payments even if the customer closes the tab. |
+| `RESEND_API_KEY`, `MAIL_FROM` | Optional, for emails: sign up at resend.com (it has a free plan), verify the domain, and set `MAIL_FROM` to e.g. `Tiranga Agarbatti <orders@tirangaagarbatti.com>`. New orders are emailed to the address in Shop settings, customers get a confirmation and a shipped email. |
+| `ORDER_EMAIL` | Optional: send new-order emails somewhere other than the Shop settings address. |
+
+Without the PhonePe keys the checkout offers cash on delivery only. Orders are stored in Netlify Blobs (comes with the site; nothing to set up).
+
+### Before taking real orders
+
+1. Place a test order with `PHONEPE_ENV=sandbox`, and one cash-on-delivery order. Check both on `/admin/orders.html`.
+2. Read the Help pages and adjust the delivery times, charges and returns window to what you actually do.
+3. Switch `PHONEPE_ENV` to `production` and redeploy.
+4. Point the domain `tirangaagarbatti.com` at Netlify (Domain management). Old store links (`/product/...`, `/shop`, `/cart`, the policy pages) forward to the new pages through `_redirects`.
+
 ## Who can sign in
 
 Anyone with write access to this GitHub repo (GitHub → the repo → Settings → Collaborators). There are two ways to sign in:
@@ -36,15 +71,15 @@ Anyone with write access to this GitHub repo (GitHub → the repo → Settings �
 ## Going live (first time)
 
 1. **Netlify** → Add new site → Import an existing project → GitHub → choose this repo. The build settings are read from `netlify.toml` (`npm run build`, publish `dist`), so just press Deploy.
-2. **Domain:** the site is set up for `https://www.mkdtiranga.com`. If it lives elsewhere, change that address in `scripts/lib.mjs` (one line), `robots.txt`, `admin/config.yml` and the `canonical` / `og:` tags at the top of `index.html`, `products.html` and `selections.html`. Then add the domain in Netlify under Domain management.
+2. **Domain:** the site is set up for `https://tirangaagarbatti.com`. If it lives elsewhere, change that address in `scripts/lib.mjs` (one line), `robots.txt`, `admin/config.yml` and the `canonical` / `og:` tags at the top of `index.html`, `products.html` and `selections.html`. Then add the domain in Netlify under Domain management.
 3. **Sign-in:** set up one of the options above.
-4. **Bring over the old products (optional, one time):** on a computer with Node 20+:
+4. **Bring over the old store's products (one time):** on a computer with Node 20+, while the old store is still online:
    ```
    npm install
    npm run import:woocommerce                       # reads the live tirangaagarbatti.com store
    npm run import:woocommerce -- --csv export.csv   # or a WooCommerce "Products > Export" CSV
    ```
-   This writes one file per product into `content/products/` and downloads the photos into `uploads/products/`. Check them, then commit and push. From then on, edit products in the admin.
+   This writes one file per product into `content/products/` with prices, MRPs, packs, stock and the old link, and downloads all the photos into `uploads/products/`. Check them, then commit and push. From then on, edit products in the admin.
 
 ## For developers
 
@@ -61,10 +96,15 @@ Anyone with write access to this GitHub repo (GitHub → the repo → Settings �
 | `admin/` | The admin ([Sveltia CMS](https://github.com/sveltia/sveltia-cms)) and its `config.yml`. |
 | `scripts/build.mjs` | Builds everything into `dist/`. Source files are never modified. |
 | `scripts/import-woocommerce.mjs` | One-time product import from WooCommerce. |
+| `cart.js`, `checkout.js` | The cart drawer, product pages, checkout and order confirmation. |
+| `netlify/functions/` | Server code: `checkout` (prices the order, starts PhonePe), `order` (confirmation page), `phonepe-webhook`, `admin-orders`. Shared code in `netlify/lib/`. |
+| `content/site/shop.json`, `content/pages/*.md` | Shop settings and help pages. |
+| `redirects.txt` | Old store links → new pages (the build adds one line per product). |
 
 ```
 npm install
-npm run preview      # builds dist/ and serves it at http://localhost:3000
+npm run preview      # builds dist/ and serves it at http://localhost:3000 (no checkout)
+npx netlify dev      # the full shop locally, with the functions (needs the Netlify CLI)
 ```
 
 The admin needs HTTPS or `localhost`, and it saves to the `main` branch of the repo named in `admin/config.yml`.
