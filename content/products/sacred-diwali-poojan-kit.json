@@ -4,17 +4,11 @@
   "brand": "Sacred",
   "category": "kits",
   "format": "Poojan kit, 121 samagri",
-  "description": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one Sacred box for Diwali, so nothing is missing when the first diya is lit. Includes the pujan vidhi booklet, yantra, red cloth, laung, elaichi and supari, and Sacred agarbatti.",
+  "description": "121 poojan samagri with Laxmi, Ganesh and Kuber idols, packed in one box for Diwali.",
   "images": [
-    "/uploads/products/sacred-diwali-kit-front.webp",
-    "/uploads/products/sacred-diwali-kit-angle.webp",
-    "/uploads/products/sacred-diwali-kit-laung-elaichi-supari.webp",
-    "/uploads/products/sacred-diwali-kit-pujan-vidhi.webp",
-    "/uploads/products/sacred-diwali-kit-yantra.webp",
-    "/uploads/products/sacred-diwali-kit-red-cloth.webp",
-    "/uploads/products/sacred-diwali-kit-agarbatti.webp"
+    "/brand/diwali-kits-editorial.webp"
   ],
-  "packshot": true,
+  "packshot": false,
   "price": null,
   "mrp": null,
   "price_from": false,
