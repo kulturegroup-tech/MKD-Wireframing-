@@ -16,6 +16,7 @@ import { CONTENT, DIST, readJson, esc, rel } from "./lib.mjs";
 const FOCUS = { center: "50% 50%", upper: "50% 28%", lower: "50% 66%" };
 const fmtNum = (n) => Number(n).toLocaleString("en-IN");
 const get = (data, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), data);
+const cls = (s, i) => { const c = [i === 0 && "is-active", s.banner && "is-banner"].filter(Boolean); return c.length ? ` class="${c.join(" ")}"` : ""; };
 const filled = (v) => v !== undefined && v !== null && String(v).trim() !== "";
 
 function apply($, data) {
@@ -26,18 +27,18 @@ function apply($, data) {
 }
 
 function lists($, d) {
-  // launch banner: switched off in the admin -> removed
-  if (d.launch && (d.launch.show === false || d.launch.show === "false" || !d.launch.image)) $("[data-launch]").remove();
-  else if (d.launch && d.launch.image && d.launch.image !== "/uploads/site/tripti-puja-ghee-banner.webp") $("[data-launch] img").removeAttr("srcset").removeAttr("sizes");
   const slides = (d.hero?.slides || []).filter((s) => s && s.image);
   if (slides.length) {
     $("[data-hero-slides]").html("\n" + slides.map((s, i) =>
-      `        <img${i === 0 ? ' class="is-active"' : ""} src="${esc(rel(s.image))}" data-caption="${esc(s.caption || "")}" alt="${esc(s.alt || "")}"` +
-      `${FOCUS[s.focus] && s.focus !== "center" ? ` style="object-position:${FOCUS[s.focus]}"` : ""}${i ? ' loading="lazy"' : ""}>`).join("\n") + "\n      ");
+      `        <img${cls(s, i)} src="${esc(rel(s.image))}" data-caption="${s.banner ? "" : esc(s.caption || "")}"${s.link ? ` data-link="${esc(rel(s.link))}"` : ""} alt="${esc(s.alt || "")}"` +
+      `${!s.banner && FOCUS[s.focus] && s.focus !== "center" ? ` style="object-position:${FOCUS[s.focus]}"` : ""}${i ? ' loading="lazy"' : ' fetchpriority="high"'}>`).join("\n") + "\n      ");
+    // the first slide decides how the slideshow starts (a banner has no caption or shading)
+    $("[data-hero-media]").toggleClass("is-banner", !!slides[0].banner);
+    if (slides[0].link) $("[data-hero-link]").attr("href", rel(slides[0].link)).attr("aria-label", slides[0].alt || "Open"); else $("[data-hero-link]").attr("hidden", "");
     $("[data-hero-dots]").html("\n" + slides.map((s, i) =>
       `        <button type="button" aria-label="Show slide ${i + 1}${s.caption ? `: ${esc(s.caption)}` : ""}" aria-pressed="${i === 0}"><i></i></button>`).join("\n") + "\n      ");
     if (slides.length < 2) $("[data-hero-dots]").attr("hidden", "");
-    $("[data-hero-text] span").text(slides[0].caption || "");
+    $("[data-hero-text] span").text(slides[0].banner ? "" : slides[0].caption || "");
   }
 
   const numbers = (d.numbers || []).filter((n) => n && filled(n.value));

@@ -169,16 +169,6 @@ collections:
         media_folder: /uploads/site
         public_folder: /uploads/site
         fields:
-          - label: Launch banner (top of the home page)
-            name: launch
-            widget: object
-            collapsed: true
-            hint: "A wide banner above the headline, for a new launch or an offer. Best size 2048 × 768 pixels. Turn it off when the launch is over."
-            fields:
-              - { label: Show the banner, name: show, widget: boolean, default: true, required: false }
-              - { label: Banner image, name: image, widget: image, required: false }
-              - { label: What the banner says, name: alt, widget: string, required: false, hint: Read out to blind visitors and used by Google. }
-              - { label: Link, name: link, widget: string, required: false, hint: "Where a click goes, for example /product/sacred-tripti-puja-ghee.html" }
           - label: Hero (top of the home page)
             name: hero
             widget: object
@@ -188,13 +178,15 @@ collections:
               - { label: Headline in Hindi, name: headline_hi, widget: string, required: false }
               - { label: Headline in English, name: headline_en, widget: string, required: false }
               - { label: Paragraph, name: text, widget: text, required: false }
-              - label: Slideshow photos
+              - label: Slideshow (banners and photos)
                 name: slides
                 widget: list
-                summary: "{{fields.caption}}"
-                hint: The photos rotate every few seconds. Drag to reorder; the first one shows first.
+                summary: "{{fields.alt}}"
+                hint: "The slides change every 4 seconds. Drag to reorder; the first one shows first. Best size 2048 × 768 pixels."
                 fields:
-                  - { label: Photo, name: image, widget: image }
+                  - { label: Image, name: image, widget: image }
+                  - { label: Designed banner (it has its own text), name: banner, widget: boolean, default: false, required: false, hint: "Shows the whole image with no caption or shading. Turn on for launch and offer banners." }
+                  - { label: Link, name: link, widget: string, required: false, hint: "Where a click on this slide goes, for example /product/sacred-tripti-puja-ghee.html. Leave empty for no link." }
                   - { label: Caption on the photo, name: caption, widget: string, required: false }
                   - { label: What the photo shows, name: alt, widget: string, required: false }
                   - label: Keep this part in view on wide screens

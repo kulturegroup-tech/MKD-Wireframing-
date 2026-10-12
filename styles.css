@@ -932,10 +932,25 @@ button.pcard-add:hover { background: var(--kumkum-deep); border-color: var(--kum
   .cart[open], .cart-line.is-new, .order-spin { animation: none; }
 }
 
-/* launch banner at the top of the home page */
-.hero-launch { padding-top: clamp(14px, 2vw, 28px); }
-.launch { display: block; overflow: hidden; border-radius: 22px; background: #6b1416; box-shadow: 0 18px 50px rgba(107,20,22,.18); }
-.launch img { width: 100%; height: auto; aspect-ratio: 2048 / 768; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,0,1); }
-.launch:hover img { transform: scale(1.015); }
-@media (max-width: 640px) { .launch { border-radius: 14px; } }
-@media (prefers-reduced-motion: reduce) { .launch img { transition: none; } }
+
+/* hero slideshow: banners and photos in one banner-shaped card at the top, a new slide every 4 seconds */
+.hero-media { width: min(var(--max), 100% - 2 * var(--gutter)); height: auto; min-height: 0; margin: clamp(14px, 2vw, 28px) auto 0; aspect-ratio: 2048 / 768; clip-path: none; border-radius: 22px; background: var(--night); box-shadow: 0 18px 50px rgba(42,29,21,.14); }
+.hero-slides img { transition: opacity 1s ease; }
+.hero-slides img.is-banner { object-position: 50% 50%; }
+.hero-slides img.is-banner.is-active { animation: none; }
+.hero-media::after { transition: opacity .6s ease; }
+.hero-media.is-banner::after { opacity: 0; }
+.hero-media-text { left: clamp(18px, 2.4vw, 36px); right: clamp(18px, 2.4vw, 36px); bottom: clamp(14px, 2.2vw, 32px); transition: opacity .4s ease; }
+.hero-media.is-banner .hero-media-text { opacity: 0; }
+.hero-link { position: absolute; inset: 0; z-index: 2; }
+.hero-link:focus-visible { outline-offset: -4px; }
+.hero-dots { position: static; display: flex; justify-content: center; gap: 6px; margin: 10px auto 0; }
+.hero-dots button { width: 36px; }
+.hero-dots i { background: rgba(42,29,21,.16); }
+.hero-dots i::after { background: var(--ink); }
+@media (max-width: 640px) {
+  .hero-media { height: auto; min-height: 0; border-radius: 14px; }
+  .hero-media-text { font-size: 15px; max-width: 70%; }
+  .hero-dots { top: auto; right: auto; bottom: auto; margin-top: 6px; }
+  .hero-dots button { width: 28px; height: 20px; }
+}

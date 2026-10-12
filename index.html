@@ -70,10 +70,21 @@
 <main>
   <!-- HERO: headline on white, then the photograph opens out to full bleed as you scroll -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero-launch" data-launch>
-      <a class="launch" href="product/sacred-tripti-puja-ghee.html" data-cms-href="launch.link">
-        <img src="uploads/site/tripti-puja-ghee-banner.webp" srcset="uploads/site/tripti-puja-ghee-banner-1000.webp 1000w, uploads/site/tripti-puja-ghee-banner.webp 2048w" sizes="(max-width: 1360px) 94vw, 1320px" data-cms-src="launch.image" data-cms-alt="launch.alt" alt="New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars" width="2048" height="768" fetchpriority="high">
-      </a>
+    <div class="hero-media is-banner" data-hero-media>
+      <div class="hero-slides" data-hero-slides>
+        <img class="is-active is-banner" src="uploads/site/tripti-puja-ghee-banner.webp" data-caption="" data-link="product/sacred-tripti-puja-ghee.html" alt="New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars" fetchpriority="high">
+        <img src="brand/plant-hero.webp" data-caption="Thirteen million sticks leave our plants every day." alt="Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond" loading="lazy">
+        <img src="brand/plant-two.webp" data-caption="Ten plants, six of them in Kanpur." alt="The second plant from above, with solar panels on the terrace and a truck being loaded at the gate" loading="lazy">
+        <img src="brand/sacred-women.webp" class="slide-people" data-caption="More than a thousand women make what we sell." alt="The women of Sacred standing together on the steps of the plant entrance" loading="lazy">
+      </div>
+      <a class="hero-link" data-hero-link href="product/sacred-tripti-puja-ghee.html" aria-label="New launch: Sacred Tripti Puja Ghee"></a>
+      <p class="hero-media-text" data-hero-text><span></span></p>
+    </div>
+    <div class="hero-dots" data-hero-dots>
+      <button type="button" aria-label="Show slide 1" aria-pressed="true"><i></i></button>
+      <button type="button" aria-label="Show slide 2" aria-pressed="false"><i></i></button>
+      <button type="button" aria-label="Show slide 3" aria-pressed="false"><i></i></button>
+      <button type="button" aria-label="Show slide 4" aria-pressed="false"><i></i></button>
     </div>
     <div class="wrap hero-top">
       <div>
@@ -91,19 +102,6 @@
           <a class="btn btn-primary" href="#brands">Explore our brands</a>
           <a class="btn btn-ghost" href="#diwali">Order the Diwali kit</a>
         </div>
-      </div>
-    </div>
-    <div class="hero-media" data-hero-media>
-      <div class="hero-slides" data-hero-slides>
-        <img class="is-active" src="brand/plant-hero.webp" data-caption="Thirteen million sticks leave our plants every day." alt="Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond">
-        <img src="brand/plant-two.webp" data-caption="Ten plants, six of them in Kanpur." alt="The second plant from above, with solar panels on the terrace and a truck being loaded at the gate" loading="lazy">
-        <img src="brand/sacred-women.webp" class="slide-people" data-caption="More than a thousand women make what we sell." alt="The women of Sacred standing together on the steps of the plant entrance" loading="lazy">
-      </div>
-      <p class="hero-media-text" data-hero-text><span>Thirteen million sticks leave our plants every day.</span></p>
-      <div class="hero-dots" data-hero-dots>
-        <button type="button" aria-label="Show the first plant" aria-pressed="true"><i></i></button>
-        <button type="button" aria-label="Show the second plant" aria-pressed="false"><i></i></button>
-        <button type="button" aria-label="Show the women of Sacred" aria-pressed="false"><i></i></button>
       </div>
     </div>
   </section>

@@ -56,19 +56,27 @@
     a.addEventListener("click", function () { var d = a.closest("details"); if (d) d.open = false; });
   });
 
-  /* ---------- hero: crossfade between the plants ---------- */
+  /* ---------- hero: banner and photo slideshow, a new slide every 4 seconds ---------- */
   var slideBox = $("[data-hero-slides]");
   if (slideBox) {
     var slides = $$("img", slideBox), dots = $$("[data-hero-dots] button"), dotBox = $("[data-hero-dots]");
-    var cur = 0, timer = null, SLIDE_MS = 7000, heroVisible = true, swapT = null;
+    var cur = 0, timer = null, SLIDE_MS = 4000, heroVisible = true, swapT = null;
     var caption = $("[data-hero-text] span");
+    var heroMedia = $("[data-hero-media]"), heroLink = $("[data-hero-link]");
     doc.style.setProperty("--slide-ms", SLIDE_MS + "ms");
     var show = function (i) {
       cur = (i + slides.length) % slides.length;
       slides.forEach(function (s, k) { s.classList.toggle("is-active", k === cur); });
+      // designed banners show whole, with no caption or shading; a slide with a link is clickable
+      if (heroMedia) heroMedia.classList.toggle("is-banner", slides[cur].classList.contains("is-banner"));
+      if (heroLink) {
+        var href = slides[cur].getAttribute("data-link");
+        heroLink.hidden = !href;
+        if (href) { heroLink.href = href; heroLink.setAttribute("aria-label", slides[cur].getAttribute("alt") || "Open"); }
+      }
       // each slide carries its own line; fade it out, swap, fade back in
       var line = slides[cur].getAttribute("data-caption");
-      if (caption && line && caption.textContent !== line) {
+      if (caption && caption.textContent !== line) {
         clearTimeout(swapT); caption.classList.add("is-swapping");
         swapT = setTimeout(function () { caption.textContent = line; caption.classList.remove("is-swapping"); }, 380);
       }
@@ -305,17 +313,10 @@
   gsap.from(".hero h1 .line > span", { yPercent: 110, duration: 1.1, ease: "power4.out", stagger: 0.12, delay: 0.1 });
   gsap.from(".hero-side > *", { opacity: 0, y: 18, duration: 0.9, ease: "power3.out", stagger: 0.08, delay: 0.45 });
 
-  // Hero photograph opens from a framed card to full bleed as it rises into view.
+  // Hero slideshow fades in on load.
   var media = $("[data-hero-media]");
   if (media) {
-    // Frame starts aligned with the content column, then opens to the screen edges.
-    var inset = function () { var w = $(".wrap"); return Math.max(16, (window.innerWidth - (w ? w.offsetWidth : window.innerWidth - 80)) / 2); };
-    gsap.fromTo(media, { clipPath: function () { return "inset(0px " + inset() + "px 0px " + inset() + "px round 18px)"; } }, {
-      clipPath: "inset(0px 0px 0px 0px round 0px)", ease: "none",
-      scrollTrigger: { trigger: media, start: "top 80%", end: "top 15%", scrub: true, invalidateOnRefresh: true }
-    });
-    gsap.fromTo($("[data-hero-slides]", media), { scale: 1.08 }, { scale: 1, ease: "none", scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: true } });
-    gsap.fromTo("[data-hero-text]", { y: 40, opacity: 0 }, { y: 0, opacity: 1, ease: "none", scrollTrigger: { trigger: media, start: "top 50%", end: "top 5%", scrub: true } });
+    gsap.from(media, { opacity: 0, y: 16, duration: 0.9, ease: "power3.out", delay: 0.05 });
   }
 
   var mm = gsap.matchMedia();

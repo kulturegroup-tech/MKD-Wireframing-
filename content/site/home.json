@@ -1,10 +1,4 @@
 {
-  "launch": {
-    "show": true,
-    "image": "/uploads/site/tripti-puja-ghee-banner.webp",
-    "alt": "New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars",
-    "link": "/product/sacred-tripti-puja-ghee.html"
-  },
   "hero": {
     "intro": "Maa Kamakhya Darbar Fragrances, Kanpur. Since 1965.",
     "headline_hi": "देश की खुशबू",
@@ -12,22 +6,36 @@
     "text": "Since 1965 our family has made the incense India lights every morning. Tiranga, Sacred and Sacred Selections come from ten plants, six of them in Kanpur, for homes across India and now the world.",
     "slides": [
       {
+        "image": "/uploads/site/tripti-puja-ghee-banner.webp",
+        "caption": "",
+        "alt": "New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars",
+        "focus": "center",
+        "banner": true,
+        "link": "/product/sacred-tripti-puja-ghee.html"
+      },
+      {
         "image": "/brand/plant-hero.webp",
         "caption": "Thirteen million sticks leave our plants every day.",
         "alt": "Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond",
-        "focus": "center"
+        "focus": "center",
+        "banner": false,
+        "link": ""
       },
       {
         "image": "/brand/plant-two.webp",
         "caption": "Ten plants, six of them in Kanpur.",
         "alt": "The second plant from above, with solar panels on the terrace and a truck being loaded at the gate",
-        "focus": "center"
+        "focus": "center",
+        "banner": false,
+        "link": ""
       },
       {
         "image": "/brand/sacred-women.webp",
         "caption": "More than a thousand women make what we sell.",
         "alt": "The women of Sacred standing together on the steps of the plant entrance",
-        "focus": "lower"
+        "focus": "lower",
+        "banner": false,
+        "link": ""
       }
     ]
   },
