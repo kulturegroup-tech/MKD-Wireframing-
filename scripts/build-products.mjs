@@ -17,6 +17,7 @@ export const CATEGORIES = [
   { slug: "havan-cup", name: "Havan cup dhoop", hindi: "हवन कप" },
   { slug: "jar", name: "Jar packs", hindi: "धूप जार" },
   { slug: "gulab-jal", name: "Gulab jal", hindi: "गुलाब जल" },
+  { slug: "puja-essentials", name: "Puja essentials", hindi: "पूजा सामग्री" },
   { slug: "kits", name: "Poojan kits", hindi: "पूजन किट" },
 ];
 

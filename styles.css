@@ -931,3 +931,11 @@ button.pcard-add:hover { background: var(--kumkum-deep); border-color: var(--kum
 @media (prefers-reduced-motion: reduce) {
   .cart[open], .cart-line.is-new, .order-spin { animation: none; }
 }
+
+/* launch banner at the top of the home page */
+.hero-launch { padding-top: clamp(14px, 2vw, 28px); }
+.launch { display: block; overflow: hidden; border-radius: 22px; background: #6b1416; box-shadow: 0 18px 50px rgba(107,20,22,.18); }
+.launch img { width: 100%; height: auto; aspect-ratio: 2048 / 768; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,0,1); }
+.launch:hover img { transform: scale(1.015); }
+@media (max-width: 640px) { .launch { border-radius: 14px; } }
+@media (prefers-reduced-motion: reduce) { .launch img { transition: none; } }

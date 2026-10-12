@@ -26,6 +26,9 @@ function apply($, data) {
 }
 
 function lists($, d) {
+  // launch banner: switched off in the admin -> removed
+  if (d.launch && (d.launch.show === false || d.launch.show === "false" || !d.launch.image)) $("[data-launch]").remove();
+  else if (d.launch && d.launch.image && d.launch.image !== "/uploads/site/tripti-puja-ghee-banner.webp") $("[data-launch] img").removeAttr("srcset").removeAttr("sizes");
   const slides = (d.hero?.slides || []).filter((s) => s && s.image);
   if (slides.length) {
     $("[data-hero-slides]").html("\n" + slides.map((s, i) =>

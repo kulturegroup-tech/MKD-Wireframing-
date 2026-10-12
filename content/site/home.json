@@ -1,4 +1,10 @@
 {
+  "launch": {
+    "show": true,
+    "image": "/uploads/site/tripti-puja-ghee-banner.webp",
+    "alt": "New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars",
+    "link": "/product/sacred-tripti-puja-ghee.html"
+  },
   "hero": {
     "intro": "Maa Kamakhya Darbar Fragrances, Kanpur. Since 1965.",
     "headline_hi": "देश की खुशबू",

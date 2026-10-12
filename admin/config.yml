@@ -71,6 +71,7 @@ collections:
           - { label: Havan cup dhoop, value: havan-cup }
           - { label: Jar packs, value: jar }
           - { label: Gulab jal, value: gulab-jal }
+          - { label: Puja essentials (ghee and more), value: puja-essentials }
           - { label: Poojan kits, value: kits }
         default: agarbatti
       - label: Photos
@@ -168,6 +169,16 @@ collections:
         media_folder: /uploads/site
         public_folder: /uploads/site
         fields:
+          - label: Launch banner (top of the home page)
+            name: launch
+            widget: object
+            collapsed: true
+            hint: "A wide banner above the headline, for a new launch or an offer. Best size 2048 × 768 pixels. Turn it off when the launch is over."
+            fields:
+              - { label: Show the banner, name: show, widget: boolean, default: true, required: false }
+              - { label: Banner image, name: image, widget: image, required: false }
+              - { label: What the banner says, name: alt, widget: string, required: false, hint: Read out to blind visitors and used by Google. }
+              - { label: Link, name: link, widget: string, required: false, hint: "Where a click goes, for example /product/sacred-tripti-puja-ghee.html" }
           - label: Hero (top of the home page)
             name: hero
             widget: object

@@ -26,6 +26,7 @@ const GROUPS = [
   { slug: "kits",       name: "Poojan kits",       hindi: "पूजन किट", match: ["kit"] },
   { slug: "havan-cup",  name: "Havan cup dhoop",   hindi: "हवन कप",   match: ["havan"] },
   { slug: "gulab-jal",  name: "Gulab jal",         hindi: "गुलाब जल", match: ["gulab-jal", "gulab jal", "rose water"] },
+  { slug: "puja-essentials", name: "Puja essentials", hindi: "पूजा सामग्री", match: ["ghee", "puja-essential", "samagri"] },
   { slug: "wet-dhoop",  name: "Wet dhoop",         hindi: "गीली धूप", match: ["wet-dhoop", "wet dhoop"] },
   { slug: "dhoop-cone", name: "Dhoop cones",       hindi: "धूप कोन",  match: ["dhoop-cone", "dhoop cone", "cone"] },
   { slug: "bambooless", name: "Bambooless sticks", hindi: "बिना बाँस", match: ["bambooless", "bamboo-less", "bamboo less"] },
