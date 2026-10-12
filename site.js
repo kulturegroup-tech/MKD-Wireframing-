@@ -343,7 +343,7 @@
     cards.forEach(function (card, i) {
       var next = cards[i + 1];
       if (!next) return;
-      gsap.fromTo(card, { scale: 1, filter: "brightness(1)" }, { scale: 0.95, filter: "brightness(0.88)", ease: "none", scrollTrigger: { trigger: next, start: "top bottom", end: "top " + (72 + 20) + "px", scrub: true } });
+      gsap.fromTo(card, { scale: 1, filter: "brightness(1)" }, { scale: 0.97, filter: "brightness(0.9)", ease: "none", scrollTrigger: { trigger: next, start: "top bottom", end: "top " + (72 + 40) + "px", scrub: true } });
     });
   });
 
