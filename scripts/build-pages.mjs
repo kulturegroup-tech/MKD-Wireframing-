@@ -16,7 +16,7 @@ import { CONTENT, DIST, readJson, esc, rel } from "./lib.mjs";
 const FOCUS = { center: "50% 50%", upper: "50% 28%", lower: "50% 66%" };
 const fmtNum = (n) => Number(n).toLocaleString("en-IN");
 const get = (data, path) => path.split(".").reduce((o, k) => (o == null ? undefined : o[k]), data);
-const cls = (s, i) => { const c = [i === 0 && "is-active", s.banner && "is-banner"].filter(Boolean); return c.length ? ` class="${c.join(" ")}"` : ""; };
+const cls = (s, i) => { const c = [i === 0 && "is-active", s.banner && "is-banner", s.image_mobile && "has-mobile"].filter(Boolean); return c.length ? ` class="${c.join(" ")}"` : ""; };
 const filled = (v) => v !== undefined && v !== null && String(v).trim() !== "";
 
 function apply($, data) {
@@ -30,8 +30,9 @@ function lists($, d) {
   const slides = (d.hero?.slides || []).filter((s) => s && s.image);
   if (slides.length) {
     $("[data-hero-slides]").html("\n" + slides.map((s, i) =>
+      (s.image_mobile ? `        <picture><source media="(max-width: 640px)" srcset="${esc(rel(s.image_mobile))}">\n  ` : "") +
       `        <img${cls(s, i)} src="${esc(rel(s.image))}" data-caption="${s.banner ? "" : esc(s.caption || "")}"${s.link ? ` data-link="${esc(rel(s.link))}"` : ""} alt="${esc(s.alt || "")}"` +
-      `${!s.banner && FOCUS[s.focus] && s.focus !== "center" ? ` style="object-position:${FOCUS[s.focus]}"` : ""}${i ? ' loading="lazy"' : ' fetchpriority="high"'}>`).join("\n") + "\n      ");
+      `${!s.banner && FOCUS[s.focus] && s.focus !== "center" ? ` style="object-position:${FOCUS[s.focus]}"` : ""}${i ? ' loading="lazy"' : ' fetchpriority="high"'}>` + (s.image_mobile ? "</picture>" : "")).join("\n") + "\n      ");
     // the first slide decides how the slideshow starts (a banner has no caption or shading)
     $("[data-hero-media]").toggleClass("is-banner", !!slides[0].banner);
     if (slides[0].link) $("[data-hero-link]").attr("href", rel(slides[0].link)).attr("aria-label", slides[0].alt || "Open"); else $("[data-hero-link]").attr("hidden", "");

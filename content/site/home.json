@@ -6,36 +6,49 @@
     "text": "Since 1965 our family has made the incense India lights every morning. Tiranga, Sacred and Sacred Selections come from ten plants, six of them in Kanpur, for homes across India and now the world.",
     "slides": [
       {
+        "image": "/uploads/site/diwali-kit-banner.webp",
+        "image_mobile": "/uploads/site/diwali-kit-banner-mobile.webp",
+        "banner": true,
+        "link": "/product/sacred-diwali-poojan-kit.html",
+        "caption": "",
+        "alt": "Illuminate your Diwali with our Sacred Diwali Poojan Kit: Laxmi-Ganesh-Kuber idols and 121 poojan essentials. Order now.",
+        "focus": "center"
+      },
+      {
         "image": "/uploads/site/tripti-puja-ghee-banner.webp",
+        "image_mobile": "/uploads/site/tripti-puja-ghee-banner-mobile.webp",
+        "banner": true,
+        "link": "/product/sacred-tripti-puja-ghee.html",
         "caption": "",
         "alt": "New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars",
-        "focus": "center",
-        "banner": true,
-        "link": "/product/sacred-tripti-puja-ghee.html"
+        "focus": "center"
       },
       {
         "image": "/brand/plant-hero.webp",
+        "image_mobile": "",
+        "banner": false,
+        "link": "",
         "caption": "Thirteen million sticks leave our plants every day.",
         "alt": "Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond",
-        "focus": "center",
-        "banner": false,
-        "link": ""
+        "focus": "center"
       },
       {
         "image": "/brand/plant-two.webp",
+        "image_mobile": "",
+        "banner": false,
+        "link": "",
         "caption": "Ten plants, six of them in Kanpur.",
         "alt": "The second plant from above, with solar panels on the terrace and a truck being loaded at the gate",
-        "focus": "center",
-        "banner": false,
-        "link": ""
+        "focus": "center"
       },
       {
         "image": "/brand/sacred-women.webp",
+        "image_mobile": "",
+        "banner": false,
+        "link": "",
         "caption": "More than a thousand women make what we sell.",
         "alt": "The women of Sacred standing together on the steps of the plant entrance",
-        "focus": "lower",
-        "banner": false,
-        "link": ""
+        "focus": "lower"
       }
     ]
   },

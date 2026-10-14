@@ -182,9 +182,10 @@ collections:
                 name: slides
                 widget: list
                 summary: "{{fields.alt}}"
-                hint: "The slides change every 4 seconds. Drag to reorder; the first one shows first. Best size 2048 × 768 pixels."
+                hint: "The slides change every 4 seconds. Drag to reorder; the first one shows first."
                 fields:
-                  - { label: Image, name: image, widget: image }
+                  - { label: Image, name: image, widget: image, hint: "For computers. Best size 2048 × 768." }
+                  - { label: Phone image (optional), name: image_mobile, widget: image, required: false, hint: "The version for phones. Best size 1080 × 1350 (portrait). If empty, phones show the main image." }
                   - { label: Designed banner (it has its own text), name: banner, widget: boolean, default: false, required: false, hint: "Shows the whole image with no caption or shading. Turn on for launch and offer banners." }
                   - { label: Link, name: link, widget: string, required: false, hint: "Where a click on this slide goes, for example /product/sacred-tripti-puja-ghee.html. Leave empty for no link." }
                   - { label: Caption on the photo, name: caption, widget: string, required: false }

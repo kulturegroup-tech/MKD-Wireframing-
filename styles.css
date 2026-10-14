@@ -978,7 +978,9 @@ button.pcard-add:hover { background: var(--kumkum-deep); border-color: var(--kum
 .hero-dots i { background: rgba(42,29,21,.16); }
 .hero-dots i::after { background: var(--ink); }
 @media (max-width: 640px) {
-  .hero-media { height: auto; min-height: 0; border-radius: 14px; }
+  .hero-media { height: auto; min-height: 0; border-radius: 14px; aspect-ratio: 4 / 5; }
+  /* a banner with no phone version shows whole on phones */
+  .hero-slides img.is-banner:not(.has-mobile) { object-fit: contain; background: var(--night); }
   .hero-media-text { font-size: 15px; max-width: 70%; }
   .hero-dots { top: auto; right: auto; bottom: auto; margin-top: 6px; }
   .hero-dots button { width: 28px; height: 20px; }
