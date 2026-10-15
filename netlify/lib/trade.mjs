@@ -86,9 +86,27 @@ export async function newCode(id) {
   return dealer;
 }
 
+/** A ready-made demo dealer, when DEMO_DEALER_CODE is set in Netlify (for showing the portal).
+ *  Created once; the team can edit it, give it a new code or switch it off like any other dealer. */
+export async function ensureDemoDealer() {
+  const demo = normCode(process.env.DEMO_DEALER_CODE);
+  if (demo.length < 6) return null;
+  const id = "DDEMO1";
+  let d = await getDealer(id);
+  if (d) return d;
+  const now = new Date().toISOString();
+  d = { id, name: process.env.DEMO_DEALER_NAME || "Demo Traders", contact: "Demo Dealer", phone: "", email: "", city: "Kanpur", state: "Uttar Pradesh",
+    ref: "DEMO-001", address: "", gstin: "", notes: "Demo dealer for trying the portal. Switch it off or delete its orders when you go live.", active: true,
+    code: prettyCode(demo), codeVersion: 1, createdAt: now, updatedAt: now };
+  await codes().set(demo, id);
+  await dealers().setJSON(id, d);
+  return d;
+}
+
 export async function dealerByCode(code) {
   const n = normCode(code);
   if (n.length < 6 || n.length > 16) return null;
+  if (n === normCode(process.env.DEMO_DEALER_CODE)) await ensureDemoDealer();
   const id = await codes().get(n);
   if (!id) return null;
   const d = await getDealer(id);

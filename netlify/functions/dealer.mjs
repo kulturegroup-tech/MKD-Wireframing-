@@ -6,7 +6,7 @@
  * Dealers get their access code from the team (/admin/trade.html). */
 import { json, fail, originOf } from "../lib/http.mjs";
 import {
-  portalReady, dealerByCode, dealerFromRequest, makeToken, publicDealer, tooManyTries, failedTry, clearTries,
+  portalReady, dealerByCode, ensureDemoDealer, dealerFromRequest, makeToken, publicDealer, tooManyTries, failedTry, clearTries,
   loadTradeCatalog, checkLines, createTradeOrder, saveTradeOrder, getTradeOrder, listDealerOrders, dealerView, addTradeHistory,
 } from "../lib/trade.mjs";
 import { loadCatalog } from "../lib/shop.mjs";
@@ -19,9 +19,12 @@ export default async (req, context) => {
 
   // GET /api/dealer/login: a status check (is the portal set up, can it reach its storage)
   if (path.endsWith("/login") && req.method === "GET") {
-    let storage = "ok";
+    let storage = "ok", demo = "off";
     try { await tooManyTries("status-check"); } catch (e) { storage = "error: " + e.message; }
-    return json({ ok: portalReady() && storage === "ok", ready: portalReady(), storage });
+    if (storage === "ok" && process.env.DEMO_DEALER_CODE) {
+      try { const d = await ensureDemoDealer(); demo = d && d.active !== false ? "ready" : "switched off"; } catch (e) { demo = "error: " + e.message; }
+    }
+    return json({ ok: portalReady() && storage === "ok", ready: portalReady(), storage, demo });
   }
   if (!portalReady()) return fail("The dealer portal is being set up. Please call us to place your order for now.", 500, { setup: true });
 
