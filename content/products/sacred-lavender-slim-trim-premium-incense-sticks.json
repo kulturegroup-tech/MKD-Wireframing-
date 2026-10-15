@@ -1,0 +1,33 @@
+{
+  "name": "Sacred Lavender Slim Trim Premium Incense Sticks",
+  "hindi": "लैवेंडर",
+  "brand": "Sacred",
+  "category": "agarbatti",
+  "format": "Slim Trim agarbatti, 15 g or 30 g",
+  "description": "",
+  "images": [],
+  "packshot": true,
+  "price": null,
+  "mrp": null,
+  "variants": [
+    {
+      "label": "15 g",
+      "price": 15,
+      "mrp": null,
+      "in_stock": false
+    },
+    {
+      "label": "30 g",
+      "price": 30,
+      "mrp": null,
+      "in_stock": false
+    }
+  ],
+  "in_stock": false,
+  "old_url": "https://tirangaagarbatti.com/product/sacred-lavender-slim-trim-premium-incense-sticks/",
+  "price_from": false,
+  "badge": "",
+  "featured": false,
+  "order": 100,
+  "published": true
+}

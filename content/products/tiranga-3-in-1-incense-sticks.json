@@ -1,0 +1,33 @@
+{
+  "name": "Tiranga 3 in 1 Incense Sticks",
+  "hindi": "तिरंगा 3 इन 1",
+  "brand": "Tiranga",
+  "category": "agarbatti",
+  "format": "Agarbatti, 27 g or 27 g Flat",
+  "description": "",
+  "images": [],
+  "packshot": true,
+  "price": null,
+  "mrp": null,
+  "variants": [
+    {
+      "label": "27 g",
+      "price": 10,
+      "mrp": null,
+      "in_stock": false
+    },
+    {
+      "label": "27 g Flat",
+      "price": 12,
+      "mrp": null,
+      "in_stock": false
+    }
+  ],
+  "in_stock": false,
+  "old_url": "https://tirangaagarbatti.com/product/tiranga-3-in1-incense-sticks/",
+  "price_from": false,
+  "badge": "",
+  "featured": false,
+  "order": 100,
+  "published": true
+}

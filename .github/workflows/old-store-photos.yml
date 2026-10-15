@@ -1,0 +1,46 @@
+# Copies the product photos from the old WooCommerce store onto the new shop's products,
+# then commits them (which publishes the site). Runs when this file or the script changes,
+# and can be run again any time from the Actions tab ("Run workflow").
+name: Copy photos from the old store
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/fetch-old-store.mjs
+      - .github/workflows/old-store-photos.yml
+permissions:
+  contents: write
+concurrency:
+  group: old-store-photos
+  cancel-in-progress: false
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install --no-save --no-audit --no-fund sharp@0.33.5
+      - name: Copy photos
+        id: copy
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p content/import
+          node scripts/fetch-old-store.mjs 2>&1 | tee content/import/old-store-sync.log
+      - name: Commit
+        shell: bash
+        run: |
+          echo "Run ${{ github.run_id }} on $(date -u +%FT%TZ), copy step: ${{ steps.copy.outcome }}" >> content/import/old-store-sync.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898729+github-actions[bot]@users.noreply.github.com"
+          git add content/products content/import uploads/products
+          git diff --cached --quiet && exit 0
+          git commit -m "Product photos copied from the old store"
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 5; done
+          exit 1

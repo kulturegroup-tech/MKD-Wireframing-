@@ -73,6 +73,7 @@ collections:
           - { label: Gulab jal, value: gulab-jal }
           - { label: Puja essentials (ghee and more), value: puja-essentials }
           - { label: Poojan kits, value: kits }
+          - { label: Bulk packs (wholesale), value: bulk }
         default: agarbatti
       - label: Photos
         name: images

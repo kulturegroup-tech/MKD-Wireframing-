@@ -12,9 +12,22 @@
   "price": null,
   "mrp": null,
   "price_from": false,
-  "variants": [],
+  "variants": [
+    {
+      "label": "180 ml",
+      "price": 85,
+      "mrp": null,
+      "in_stock": true
+    },
+    {
+      "label": "450 ml",
+      "price": 195,
+      "mrp": null,
+      "in_stock": true
+    }
+  ],
   "in_stock": true,
-  "old_url": "",
+  "old_url": "https://tirangaagarbatti.com/product/sacred-tripti-puja-ghee/",
   "badge": "New launch",
   "featured": true,
   "order": 5,

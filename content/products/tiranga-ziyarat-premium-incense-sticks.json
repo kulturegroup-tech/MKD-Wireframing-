@@ -1,0 +1,33 @@
+{
+  "name": "Tiranga Ziyarat Premium Incense Sticks",
+  "hindi": "ज़ियारत",
+  "brand": "Tiranga",
+  "category": "agarbatti",
+  "format": "Agarbatti, 12 sticks or 27 sticks",
+  "description": "",
+  "images": [],
+  "packshot": true,
+  "price": null,
+  "mrp": null,
+  "variants": [
+    {
+      "label": "12 sticks",
+      "price": 10,
+      "mrp": null,
+      "in_stock": true
+    },
+    {
+      "label": "27 sticks",
+      "price": 20,
+      "mrp": null,
+      "in_stock": true
+    }
+  ],
+  "in_stock": true,
+  "old_url": "https://tirangaagarbatti.com/product/tiranga-ziyarat-premium-incense-sticks/",
+  "price_from": false,
+  "badge": "",
+  "featured": false,
+  "order": 100,
+  "published": true
+}

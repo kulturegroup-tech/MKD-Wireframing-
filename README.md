@@ -73,13 +73,9 @@ Anyone with write access to this GitHub repo (GitHub → the repo → Settings �
 1. **Netlify** → Add new site → Import an existing project → GitHub → choose this repo. The build settings are read from `netlify.toml` (`npm run build`, publish `dist`), so just press Deploy.
 2. **Domain:** the site is set up for `https://tirangaagarbatti.com`. If it lives elsewhere, change that address in `scripts/lib.mjs` (one line), `robots.txt`, `admin/config.yml` and the `canonical` / `og:` tags at the top of `index.html`, `products.html` and `selections.html`. Then add the domain in Netlify under Domain management.
 3. **Sign-in:** set up one of the options above.
-4. **Bring over the old store's products (one time):** on a computer with Node 20+, while the old store is still online:
-   ```
-   npm install
-   npm run import:woocommerce                       # reads the live tirangaagarbatti.com store
-   npm run import:woocommerce -- --csv export.csv   # or a WooCommerce "Products > Export" CSV
-   ```
-   This writes one file per product into `content/products/` with prices, MRPs, packs, stock and the old link, and downloads all the photos into `uploads/products/`. Check them, then commit and push. From then on, edit products in the admin.
+4. **The old store's products are already here.** All 217 published products from the old store (detergent left out) were imported in October 2026 from `content/import/old-store-products.csv` by `scripts/import-old-store-csv.mjs`, with their prices, MRPs, packs, stock and old links (which forward to the new pages). The photos are copied from the old store by the GitHub Action **Copy photos from the old store** (`scripts/fetch-old-store.mjs`); it only fills products that have no photos, so it is safe to run again from the Actions tab while the old store is still online. From now on, edit products in the admin.
+
+   The older importer still works if the catalogue ever needs to be read again from scratch: `npm run import:woocommerce` (live store) or `npm run import:woocommerce -- --csv export.csv` (a WooCommerce "Products > Export" CSV).
 
 ## For developers
 

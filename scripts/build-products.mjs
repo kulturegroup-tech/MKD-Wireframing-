@@ -19,6 +19,7 @@ export const CATEGORIES = [
   { slug: "gulab-jal", name: "Gulab jal", hindi: "गुलाब जल" },
   { slug: "puja-essentials", name: "Puja essentials", hindi: "पूजा सामग्री" },
   { slug: "kits", name: "Poojan kits", hindi: "पूजन किट" },
+  { slug: "bulk", name: "Bulk packs", hindi: "थोक पैक" },
 ];
 
 export const SHOP_DEFAULTS = {
@@ -85,9 +86,12 @@ export function readProducts() {
     if (!p || !p.name || p.published === false) continue;
     products.push(normalise(p, file.replace(/\.json$/, "")));
   }
-  // featured first, then the order number set in the admin, then category, then name
+  // featured first, then the order number set in the admin, then category; within a category,
+  // what can be bought before what is sold out, Tiranga before Sacred, then by name
   const catIndex = (s) => CATEGORIES.findIndex((c) => c.slug === s);
-  products.sort((a, b) => (b.featured - a.featured) || (a.order - b.order) || (catIndex(a.category) - catIndex(b.category)) || a.name.localeCompare(b.name));
+  const brandIndex = (b) => (b === "Tiranga" ? 0 : 1);
+  products.sort((a, b) => (b.featured - a.featured) || (a.order - b.order) || (catIndex(a.category) - catIndex(b.category))
+    || (b.inStock - a.inStock) || (brandIndex(a.brand) - brandIndex(b.brand)) || a.name.localeCompare(b.name));
   return products;
 }
 
