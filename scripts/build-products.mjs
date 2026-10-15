@@ -75,17 +75,27 @@ function normalise(p, id) {
     featured: !!p.featured,
     order: num(p.order) ?? 999,
     oldUrl: (p.old_url || "").trim(),
+    // dealer portal: on unless switched off (bulk packs are for the online shop); trade-only items are hidden from the shop
+    published: p.published !== false,
+    trade: p.trade === undefined || p.trade === null || p.trade === "" ? category !== "bulk" : yes(p.trade),
+    carton: String(p.carton || "").trim(),
   };
 }
 
-export function readProducts() {
+/** Every product file, including trade-only items that are not in the online shop. */
+export function readAllProducts() {
   const dir = join(CONTENT, "products");
   const products = [];
   for (const file of listFiles(dir, ".json")) {
     const p = readJson(join(dir, file));
-    if (!p || !p.name || p.published === false) continue;
+    if (!p || !p.name) continue;
     products.push(normalise(p, file.replace(/\.json$/, "")));
   }
+  return products;
+}
+
+export function readProducts() {
+  const products = readAllProducts().filter((p) => p.published);
   // featured first, then the order number set in the admin, then category; within a category,
   // what can be bought before what is sold out, Tiranga before Sacred, then by name
   const catIndex = (s) => CATEGORIES.findIndex((c) => c.slug === s);
@@ -214,9 +224,17 @@ export function buildProducts() {
     phone: shop.phone, whatsapp: shop.whatsapp, dispatch_note: shop.dispatch_note, delivery_note: shop.delivery_note,
     order_email: shop.order_email,
   };
-  const out = products.map(({ oldUrl, order, ...p }) => p);
+  const out = products.map(({ oldUrl, order, published, trade, carton, ...p }) => p);
   writeFileSync(join(DIST, "products.json"), JSON.stringify({ source: "cms", updated: new Date().toISOString(), categories: CATEGORIES, products: out }, null, 2));
   writeFileSync(join(DIST, "shop.json"), JSON.stringify(publicShop, null, 2));
+
+  // the dealer portal's list (dealers.html): no prices, ordered by the carton
+  const catIndex = (s) => CATEGORIES.findIndex((c) => c.slug === s);
+  const trade = readAllProducts().filter((p) => p.trade)
+    .sort((a, b) => (catIndex(a.category) - catIndex(b.category)) || ((a.brand === "Tiranga" ? 0 : 1) - (b.brand === "Tiranga" ? 0 : 1)) || a.name.localeCompare(b.name))
+    .map((p) => ({ id: p.id, name: p.name, hindi: p.hindi, brand: p.brand, category: p.category, format: p.format, carton: p.carton, image: p.image }));
+  const usedCats = new Set(trade.map((t) => t.category));
+  writeFileSync(join(DIST, "trade.json"), JSON.stringify({ updated: new Date().toISOString(), categories: CATEGORIES.filter((c) => usedCats.has(c.slug)), items: trade }));
 
   // one page per product
   const shell = pageShell();

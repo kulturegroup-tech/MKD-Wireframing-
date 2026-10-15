@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dealer orders | Maa Kamakhya Darbar Fragrances</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+  :root { --ink: #2a1d15; --muted: #6e625a; --ash: #f3f1ed; --ash2: #e9e5df; --rule: #dcd7cf; --kumkum: #b3202a; --green: #1f7a43; --amber: #8a5a00; --blue: #1f4fa8; --violet: #5b2ea6; --display: "Anek Latin", Arial, sans-serif; --text: "Hanken Grotesk", Arial, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 var(--text); color: var(--ink); background: var(--ash); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; }
+  p { margin: 0; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  .top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 24px; background: #fff; border-bottom: 1px solid var(--rule); position: sticky; top: 0; z-index: 5; }
+  .top img { height: 34px; }
+  .top h1 { font-size: 22px; margin-right: auto; }
+  .top a { color: var(--muted); font-size: 14px; }
+  .btn { min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--ink); background: #fff; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; }
+  a.btn { color: var(--ink); }
+  .btn.primary { background: var(--kumkum); border-color: var(--kumkum); color: #fff; }
+  .btn.quiet { border-color: var(--rule); }
+  .btn:disabled { opacity: .5; cursor: progress; }
+  main { padding: 20px 24px 60px; }
+  .login { max-width: 380px; margin: 12vh auto; background: #fff; padding: 32px; border-radius: 20px; display: grid; gap: 14px; }
+  .login input { min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--rule); border-radius: 12px; }
+  .msg { padding: 10px 14px; border-radius: 12px; background: #fbe9ea; color: #8e1820; }
+  .notes { display: grid; gap: 8px; margin-bottom: 14px; }
+  .note { padding: 10px 14px; border-radius: 12px; background: #fff3dc; font-size: 14px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 4px; padding: 3px; border-radius: 999px; background: var(--ash2); margin-right: auto; }
+  .tabs button { padding: 7px 16px; border-radius: 999px; border: 0; background: transparent; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .tabs button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .tabs small { margin-left: 6px; opacity: .7; }
+  .bar input[type=search] { min-height: 40px; width: 280px; max-width: 100%; padding: 8px 14px; border: 1.5px solid var(--rule); border-radius: 999px; background: #fff; }
+  .chk { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); cursor: pointer; }
+
+  /* board */
+  .board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(208px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 12px; align-items: start; }
+  .col { display: flex; flex-direction: column; min-height: 60vh; border-radius: 16px; background: var(--ash2); transition: background .15s, box-shadow .15s; }
+  .col.is-over { background: #f7e4d2; box-shadow: inset 0 0 0 2px var(--kumkum); }
+  .col-head { display: flex; align-items: baseline; gap: 8px; padding: 12px 14px 8px; position: sticky; top: 0; }
+  .col-head h2 { font-size: 16px; font-family: var(--text); font-weight: 600; }
+  .col-head .n { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 99px; background: #fff; font-size: 12.5px; font-weight: 600; }
+  .col-head small { margin-left: auto; font-size: 12.5px; color: var(--muted); }
+  .col-body { display: grid; gap: 8px; padding: 4px 10px 12px; align-content: start; flex: 1; }
+  .col[data-stage="new"] .col-head h2::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%; background: #e0a100; vertical-align: 1px; }
+  .card { display: grid; gap: 4px; padding: 12px 13px; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(42,29,21,.08); cursor: grab; border-left: 4px solid transparent; text-align: left; }
+  .card:hover { box-shadow: 0 4px 14px rgba(42,29,21,.12); }
+  .card.is-dragging { opacity: .45; }
+  .card.is-saving { opacity: .6; }
+  .card.s-new { border-left-color: #e0a100; }
+  .card.is-late { border-left-color: var(--kumkum); }
+  .c-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .c-top b { font-size: 15px; line-height: 1.25; }
+  .c-age { flex-shrink: 0; font-size: 12px; color: var(--muted); }
+  .c-sub, .c-meta { font-size: 13px; color: var(--muted); }
+  .c-meta b { color: var(--ink); }
+  .c-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 4px; }
+  .c-eta { padding: 2px 8px; border-radius: 99px; background: var(--ash); font-size: 12px; font-weight: 600; }
+  .c-eta.late { background: #fbe9ea; color: #8e1820; }
+  .c-eta.none { background: #fff3dc; color: var(--amber); }
+  .c-id { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .c-tag { font-size: 11px; font-weight: 600; color: var(--violet); }
+  .col-empty { padding: 18px 8px; text-align: center; color: var(--muted); font-size: 13px; }
+  .board-empty { padding: 48px; text-align: center; color: var(--muted); background: #fff; border-radius: 16px; margin-bottom: 16px; }
+
+  /* dealers */
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; background: #faf9f7; }
+  tbody tr.row { cursor: pointer; }
+  tbody tr.row:hover { background: #fcfaf6; }
+  td small { display: block; color: var(--muted); font-size: 13px; }
+  .code { font: 600 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .06em; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; background: var(--ash); white-space: nowrap; }
+  .pill.off { background: #fbe9ea; color: #8e1820; }
+  .pill.on { background: #e3f3e8; color: var(--green); }
+  .empty { padding: 48px; text-align: center; color: var(--muted); background: #fff; border-radius: 16px; }
+
+  /* dialogs */
+  dialog { width: min(820px, calc(100% - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 0; border-radius: 20px; }
+  dialog::backdrop { background: rgba(36,23,15,.5); }
+  .d-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: #fff; z-index: 2; }
+  .d-head h2 { font-size: 24px; }
+  .d-head p { font-size: 14px; color: var(--muted); }
+  .d-body { padding: 20px 24px 24px; display: grid; gap: 22px; }
+  .d-body h3 { font-size: 12.5px; font-family: var(--text); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; }
+  .close { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--ash); font-size: 22px; cursor: pointer; }
+  .who { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--ash); }
+  .who b { font-size: 17px; }
+  .who a { color: var(--ink); }
+  .stages { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stages button { padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--rule); background: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .stages button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .stages button[data-s="cancelled"][aria-pressed="true"] { background: var(--kumkum); border-color: var(--kumkum); }
+  .form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .form label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; align-content: start; }
+  .form label small { font-weight: 400; color: var(--muted); }
+  .form input, .form select, .form textarea { min-height: 42px; padding: 8px 12px; border: 1.5px solid var(--rule); border-radius: 10px; background: #fff; font-weight: 400; width: 100%; }
+  .form textarea { resize: vertical; }
+  .form .wide { grid-column: 1 / -1; }
+  .form .two { grid-column: span 2; }
+  .form .chkrow { display: flex; gap: 8px; align-items: center; font-weight: 500; }
+  .form .chkrow input { min-height: 0; width: auto; }
+  .bad { border-color: var(--kumkum) !important; }
+  .items { background: #fff; border: 1px solid var(--rule); border-radius: 12px; }
+  .items td, .items th { padding: 8px 12px; }
+  .items input { width: 84px; min-height: 36px; padding: 4px 8px; border: 1.5px solid var(--rule); border-radius: 8px; text-align: right; font-weight: 600; }
+  .items td small { color: var(--amber); }
+  .num { text-align: right; white-space: nowrap; }
+  .plain { white-space: pre-line; padding: 10px 14px; border-radius: 12px; background: #fff8ec; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .actions .spacer { margin-left: auto; }
+  .hint { font-size: 13px; color: var(--muted); }
+  .history { font-size: 13.5px; color: var(--muted); display: grid; gap: 4px; }
+  .codebox { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 16px 18px; border-radius: 14px; background: #fdf3e6; }
+  .codebox .code { font-size: 26px; }
+  .pick { display: grid; gap: 8px; }
+  .pick-list { max-height: 300px; overflow: auto; border: 1px solid var(--rule); border-radius: 12px; }
+  .pick-list li { display: grid; grid-template-columns: minmax(0, 1fr) 90px; gap: 10px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--ash); }
+  .pick-list li.on { background: #fdf3e6; }
+  .pick-list small { display: block; color: var(--muted); font-size: 12.5px; }
+  .pick-list input { width: 100%; min-height: 36px; padding: 4px 8px; border: 1.5px solid var(--rule); border-radius: 8px; text-align: right; font-weight: 600; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; padding: 12px 18px; border-radius: 12px; background: var(--ink); color: #fff; font-size: 14.5px; box-shadow: 0 10px 30px rgba(0,0,0,.25); max-width: calc(100% - 32px); }
+  .toast.err { background: #8e1820; }
+  .print-sheet { display: none; }
+  @media (max-width: 860px) {
+    main { padding: 12px; } .top { padding: 10px 12px; }
+    .form { grid-template-columns: 1fr; } .form .two { grid-column: auto; }
+    .board { grid-auto-columns: 82vw; }
+    .hide-sm { display: none; }
+  }
+  @media print {
+    body { background: #fff; }
+    body > *:not(.print-sheet) { display: none !important; }
+    .print-sheet { display: block; font: 13px/1.45 Arial, sans-serif; color: #000; }
+    .print-sheet h1 { font: 700 22px Arial; margin: 0 0 4px; }
+    .print-sheet table { border-radius: 0; }
+    .print-sheet th, .print-sheet td { border: 1px solid #999; padding: 6px 8px; background: none; }
+    .print-sheet .sig { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px; }
+    .print-sheet .sig div { border-top: 1px solid #000; padding-top: 4px; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="../brand/mkd-mark.svg" alt="MKD">
+  <h1>Dealer orders</h1>
+  <a href="orders.html">Shop orders</a>
+  <a href="./" class="hide-sm">Edit the website</a>
+  <a href="../dealers.html" target="_blank" rel="noopener">Dealer portal</a>
+  <button class="btn quiet" type="button" data-refresh hidden>Refresh</button>
+  <button class="btn quiet" type="button" data-logout hidden>Sign out</button>
+</header>
+
+<main>
+  <form class="login" data-login hidden>
+    <h2>Dealer orders</h2>
+    <p class="hint">Use the same password as the shop orders screen.</p>
+    <p class="msg" data-login-msg hidden></p>
+    <input type="password" name="pw" autocomplete="current-password" placeholder="Password" required>
+    <button class="btn primary" type="submit">Open the board</button>
+  </form>
+
+  <div data-app hidden>
+    <div class="notes" data-notes></div>
+    <div class="bar">
+      <div class="tabs" role="group" aria-label="View">
+        <button type="button" data-view="board" aria-pressed="true">Orders board<small data-count-orders></small></button>
+        <button type="button" data-view="dealers" aria-pressed="false">Dealers<small data-count-dealers></small></button>
+      </div>
+      <input type="search" placeholder="Search dealer, city, order no. or item" data-q>
+      <label class="chk" data-board-only><input type="checkbox" data-closed> Older delivered and cancelled</label>
+      <button class="btn quiet" type="button" data-csv data-board-only>Download CSV</button>
+      <button class="btn primary" type="button" data-place-open data-board-only>Enter a phone order</button>
+      <button class="btn primary" type="button" data-dealer-new data-dealers-only hidden>Add a dealer</button>
+    </div>
+    <div data-board-wrap>
+      <div class="board-empty" data-board-empty hidden></div>
+      <div class="board" data-board></div>
+      <p class="hint">Drag a card to move it to the next stage, or open it to set the delivery date, a message for the dealer and the dispatch details.</p>
+    </div>
+    <div data-dealers hidden></div>
+  </div>
+</main>
+
+<!-- one order -->
+<dialog data-order-dlg>
+  <div class="d-head"><div><h2 data-o-title></h2><p data-o-sub></p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="d-body">
+    <div class="who" data-o-who></div>
+    <section><h3>Stage</h3><div class="stages" data-o-stages></div></section>
+    <div class="form">
+      <label>Expected delivery<input type="date" data-o-eta></label>
+      <label class="two">Message to the dealer <small>they see this on their portal</small><textarea rows="2" maxlength="600" data-o-message placeholder="For example: Confirmed, dispatching by Thursday"></textarea></label>
+      <label class="wide">Internal note <small>only the team sees this</small><textarea rows="2" maxlength="1000" data-o-internal></textarea></label>
+    </div>
+    <section><h3>Dispatch</h3>
+      <div class="form">
+        <label>Transporter<input maxlength="80" data-o-d="transporter"></label>
+        <label>Bilty / LR no.<input maxlength="60" data-o-d="lr"></label>
+        <label>Vehicle no.<input maxlength="30" data-o-d="vehicle"></label>
+        <label>Invoice no.<input maxlength="40" data-o-d="invoice"></label>
+        <label>Dispatched on<input type="date" data-o-d="date"></label>
+      </div>
+    </section>
+    <section><h3>Items <small class="hint" style="text-transform:none;letter-spacing:0;font-weight:400">change a quantity if you're sending a different number</small></h3>
+      <table class="items"><thead><tr><th>Item</th><th class="num">Cartons</th></tr></thead><tbody data-o-lines></tbody></table>
+      <div data-o-extra></div>
+    </section>
+    <p class="msg" data-o-err hidden></p>
+    <div class="actions">
+      <button class="btn primary" type="button" data-o-save>Save</button>
+      <button class="btn quiet" type="button" data-o-print>Print order sheet</button>
+      <a class="btn quiet" data-o-wa target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">WhatsApp the dealer</a>
+      <span class="hint spacer" data-o-saved></span>
+    </div>
+    <section><h3>History</h3><div class="history" data-o-history></div></section>
+  </div>
+</dialog>
+
+<!-- one dealer -->
+<dialog data-dealer-dlg>
+  <div class="d-head"><div><h2 data-dl-title>Add a dealer</h2><p data-dl-sub></p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <form class="d-body" data-dl-form novalidate>
+    <div class="codebox" data-dl-code hidden></div>
+    <div class="form">
+      <label class="two">Firm name<input name="name" maxlength="100" required></label>
+      <label>Dealer no. <small>your own code</small><input name="ref" maxlength="30" placeholder="e.g. KNP-042"></label>
+      <label>Contact person<input name="contact" maxlength="80"></label>
+      <label>Mobile<input name="phone" inputmode="numeric" maxlength="14"></label>
+      <label>Email <small>for order updates</small><input name="email" type="email" maxlength="120"></label>
+      <label>City<input name="city" maxlength="60" required></label>
+      <label>State<input name="state" maxlength="60" list="states"></label>
+      <label>GSTIN<input name="gstin" maxlength="20"></label>
+      <label class="wide">Address<textarea name="address" rows="2" maxlength="300"></textarea></label>
+      <label class="wide">Notes <small>only the team sees this</small><textarea name="notes" rows="2" maxlength="500"></textarea></label>
+      <label class="wide chkrow"><input type="checkbox" name="active" checked> Can sign in and order</label>
+    </div>
+    <p class="msg" data-dl-err hidden></p>
+    <div class="actions">
+      <button class="btn primary" type="submit" data-dl-save>Save dealer</button>
+      <button class="btn quiet" type="button" data-dl-place hidden>Enter a phone order</button>
+      <span class="hint spacer" data-dl-stats></span>
+    </div>
+  </form>
+</dialog>
+<datalist id="states"></datalist>
+
+<!-- phone order -->
+<dialog data-place-dlg>
+  <div class="d-head"><div><h2>Enter a phone order</h2><p>For a dealer who called or messaged. It goes on the board and shows on their portal.</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="d-body">
+    <div class="form"><label class="wide">Dealer<select data-p-dealer></select></label></div>
+    <div class="pick">
+      <input type="search" placeholder="Search products" data-p-q style="min-height:42px;padding:8px 14px;border:1.5px solid var(--rule);border-radius:999px">
+      <ul class="pick-list" data-p-list></ul>
+      <p class="hint" data-p-sum>No items yet.</p>
+    </div>
+    <div class="form">
+      <label class="wide">Other items <small>not on the list</small><textarea rows="2" maxlength="1500" data-p-extra></textarea></label>
+      <label class="wide">Note<textarea rows="2" maxlength="800" data-p-note></textarea></label>
+    </div>
+    <p class="msg" data-p-err hidden></p>
+    <div class="actions"><button class="btn primary" type="button" data-p-save>Put it on the board</button></div>
+  </div>
+</dialog>
+
+<div class="toast" data-toast hidden></div>
+<div class="print-sheet" data-print></div>
+
+<script>
+(function () {
+  "use strict";
+  var API = "../api/admin/trade", KEY = "tiranga-orders-pw";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var STAGES = ["new", "confirmed", "production", "ready", "dispatched", "delivered"];
+  var LABEL = { new: "New", confirmed: "Confirmed", production: "In production", ready: "Ready to dispatch", dispatched: "Dispatched", delivered: "Delivered", cancelled: "Cancelled" };
+  var DEALER_LABEL = { new: "Received", confirmed: "Confirmed", production: "In production", ready: "Ready to dispatch", dispatched: "Dispatched", delivered: "Delivered", cancelled: "Cancelled" };
+  var STATES = ["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Ladakh","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+  $("#states").innerHTML = STATES.map(function (s) { return "<option value=\"" + s + "\">"; }).join("");
+
+  var pw = ""; try { pw = sessionStorage.getItem(KEY) || ""; } catch (e) {}
+  var data = { orders: [], dealers: [] }, view = "board", q = "", showClosed = false, catalog = null;
+
+  function api(body) {
+    return fetch(API, { method: body ? "POST" : "GET", headers: { Authorization: "Bearer " + pw, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { j.status = r.status; return j; }); });
+  }
+  var toastT;
+  function toast(msg, bad) {
+    var t = $("[data-toast]"); t.textContent = msg; t.className = "toast" + (bad ? " err" : ""); t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 3600);
+  }
+  function day(iso) { return iso ? new Date(iso + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : ""; }
+  function longDay(iso) { return iso ? new Date(iso + "T00:00:00").toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" }) : ""; }
+  function when(ts) { var d = new Date(ts); return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) + ", " + d.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" }); }
+  function age(ts) { var h = (Date.now() - new Date(ts)) / 3600000; return h < 1 ? "just now" : h < 24 ? Math.floor(h) + " h" : Math.floor(h / 24) + " d"; }
+  function today() { var t = new Date(); t.setHours(0, 0, 0, 0); return t; }
+  function late(o) { return o.eta && ["delivered", "cancelled"].indexOf(o.status) < 0 && new Date(o.eta + "T00:00:00") < today(); }
+  function cartons(o) { return o.lines.reduce(function (a, l) { return a + l.qty; }, 0); }
+  function keyOf(o) { return o.dealerId + "/" + o.id; }
+  function find(key) { return data.orders.filter(function (o) { return keyOf(o) === key; })[0]; }
+
+  /* ---------- sign in ---------- */
+  function showLogin(msg) {
+    $("[data-login]").hidden = false; $("[data-app]").hidden = true;
+    $("[data-refresh]").hidden = true; $("[data-logout]").hidden = true;
+    var m = $("[data-login-msg]"); m.textContent = msg || ""; m.hidden = !msg;
+  }
+  $("[data-login]").addEventListener("submit", function (e) { e.preventDefault(); pw = e.target.pw.value; try { sessionStorage.setItem(KEY, pw); } catch (x) {} load(); });
+  $("[data-logout]").addEventListener("click", function () { pw = ""; try { sessionStorage.removeItem(KEY); } catch (e) {} showLogin(""); });
+  $("[data-refresh]").addEventListener("click", function () { load(); });
+
+  function load() {
+    return api().then(function (j) {
+      if (!j.ok) { if (j.status === 401) { try { sessionStorage.removeItem(KEY); } catch (e) {} } showLogin(j.error); return; }
+      data.orders = j.orders; data.dealers = j.dealers;
+      $("[data-login]").hidden = true; $("[data-app]").hidden = false; $("[data-refresh]").hidden = false; $("[data-logout]").hidden = false;
+      var n = [];
+      if (!j.setup.email) n.push("Order emails are off. Add RESEND_API_KEY and MAIL_FROM in Netlify to get an email for each dealer order and to email dealers their updates.");
+      $("[data-notes]").innerHTML = n.map(function (x) { return '<p class="note">' + esc(x) + "</p>"; }).join("");
+      render();
+    }).catch(function () { showLogin("Couldn't reach the server. Check your internet and try again."); });
+  }
+
+  /* ---------- views ---------- */
+  $$("[data-view]").forEach(function (b) { b.addEventListener("click", function () { view = b.getAttribute("data-view"); render(); }); });
+  var qT; $("[data-q]").addEventListener("input", function (e) { clearTimeout(qT); qT = setTimeout(function () { q = e.target.value.trim().toLowerCase(); render(); }, 120); });
+  $("[data-closed]").addEventListener("change", function (e) { showClosed = e.target.checked; render(); });
+
+  function render() {
+    $$("[data-view]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-view") === view ? "true" : "false"); });
+    $$("[data-board-only]").forEach(function (el) { el.hidden = view !== "board"; });
+    $$("[data-dealers-only]").forEach(function (el) { el.hidden = view !== "dealers"; });
+    $("[data-board-wrap]").hidden = view !== "board"; $("[data-dealers]").hidden = view !== "dealers";
+    var open = data.orders.filter(function (o) { return ["delivered", "cancelled"].indexOf(o.status) < 0; }).length;
+    $("[data-count-orders]").textContent = open ? open : "";
+    $("[data-count-dealers]").textContent = data.dealers.length ? data.dealers.length : "";
+    if (view === "board") renderBoard(); else renderDealers();
+  }
+
+  function matchOrder(o) {
+    if (!q) return true;
+    var hay = [o.id, o.dealer.name, o.dealer.city, o.dealer.ref, o.dealer.contact, o.poRef, o.extra].concat(o.lines.map(function (l) { return l.name; })).join(" ").toLowerCase();
+    return q.split(/\s+/).every(function (w) { return hay.indexOf(w) > -1; });
+  }
+  function recentEnough(o) {
+    if (showClosed || ["delivered", "cancelled"].indexOf(o.status) < 0) return true;
+    return Date.now() - new Date(o.updatedAt || o.createdAt) < 14 * 86400000;
+  }
+  function card(o) {
+    var eta = o.eta ? '<span class="c-eta' + (late(o) ? " late" : "") + '">' + (late(o) ? "Late · " : "") + day(o.eta) + "</span>"
+      : (["new", "confirmed", "production", "ready"].indexOf(o.status) > -1 ? '<span class="c-eta none">No date</span>' : "<span></span>");
+    return '<article class="card s-' + o.status + (late(o) ? " is-late" : "") + '" draggable="true" tabindex="0" data-key="' + esc(keyOf(o)) + '">' +
+      '<div class="c-top"><b>' + esc(o.dealer.name) + '</b><span class="c-age">' + age(o.createdAt) + "</span></div>" +
+      '<div class="c-sub">' + esc([o.dealer.city, o.dealer.ref].filter(Boolean).join(" · ")) + (o.placedBy === "team" ? ' · <span class="c-tag">phone</span>' : "") + "</div>" +
+      '<div class="c-meta"><b>' + cartons(o).toLocaleString("en-IN") + " ctn</b> · " + o.lines.length + (o.lines.length === 1 ? " item" : " items") + (o.extra ? " + other items" : "") + "</div>" +
+      '<div class="c-foot">' + eta + '<span class="c-id">' + esc(o.id) + "</span></div></article>";
+  }
+  function renderBoard() {
+    var list = data.orders.filter(matchOrder).filter(recentEnough);
+    var cols = STAGES.concat(showClosed ? ["cancelled"] : []);
+    var empty = $("[data-board-empty]");
+    if (!data.orders.length) {
+      empty.innerHTML = data.dealers.length
+        ? "<b>No dealer orders yet.</b><br>When a dealer orders on the portal, or you enter a phone order, it appears here under New."
+        : "<b>Start by adding your dealers.</b><br>Each one gets a code to sign in at the dealer portal and order by the carton. <br><br><button class=\"btn primary\" type=\"button\" data-go-dealers>Add your first dealer</button>";
+      empty.hidden = false;
+    } else empty.hidden = true;
+    $("[data-board]").innerHTML = cols.map(function (s) {
+      var here = list.filter(function (o) { return o.status === s; });
+      if (s === "new") here.sort(function (a, b) { return a.createdAt < b.createdAt ? -1 : 1; });
+      else here.sort(function (a, b) { return (a.eta || "9999") < (b.eta || "9999") ? -1 : 1; });
+      var ctn = here.reduce(function (a, o) { return a + cartons(o); }, 0);
+      return '<section class="col" data-stage="' + s + '"><div class="col-head"><h2>' + LABEL[s] + '</h2><span class="n">' + here.length + "</span>" + (ctn ? "<small>" + ctn.toLocaleString("en-IN") + " ctn</small>" : "") + "</div>" +
+        '<div class="col-body">' + (here.length ? here.map(card).join("") : '<p class="col-empty">' + (s === "new" ? "No new orders" : "Drop orders here") + "</p>") + "</div></section>";
+    }).join("");
+  }
+  document.addEventListener("click", function (e) { if (e.target.closest("[data-go-dealers]")) { view = "dealers"; render(); openDealer(null); } });
+
+  /* drag and drop between stages */
+  var dragKey = null;
+  var board = $("[data-board]");
+  board.addEventListener("dragstart", function (e) {
+    var c = e.target.closest(".card"); if (!c) return;
+    dragKey = c.getAttribute("data-key"); c.classList.add("is-dragging");
+    e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", dragKey); } catch (x) {}
+  });
+  board.addEventListener("dragend", function () { dragKey = null; $$(".is-dragging, .is-over", board).forEach(function (el) { el.classList.remove("is-dragging", "is-over"); }); });
+  board.addEventListener("dragover", function (e) {
+    var col = e.target.closest(".col"); if (!col || !dragKey) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = "move";
+    $$(".col.is-over", board).forEach(function (c) { if (c !== col) c.classList.remove("is-over"); });
+    col.classList.add("is-over");
+  });
+  board.addEventListener("drop", function (e) {
+    var col = e.target.closest(".col"); if (!col || !dragKey) return;
+    e.preventDefault(); col.classList.remove("is-over");
+    move(dragKey, col.getAttribute("data-stage"));
+  });
+  board.addEventListener("click", function (e) { var c = e.target.closest(".card"); if (c) openOrder(c.getAttribute("data-key")); });
+  board.addEventListener("keydown", function (e) { var c = e.target.closest(".card"); if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openOrder(c.getAttribute("data-key")); } });
+
+  function move(key, stage) {
+    var o = find(key); if (!o || o.status === stage) return;
+    var was = o.status; o.status = stage; renderBoard();
+    var el = $('.card[data-key="' + key.replace(/"/g, "") + '"]'); if (el) el.classList.add("is-saving");
+    api({ action: "order", dealerId: o.dealerId, id: o.id, status: stage }).then(function (j) {
+      if (!j.ok) throw new Error(j.error || "Couldn't move it.");
+      replace(j.order); renderBoard();
+      toast(o.id + " moved to " + LABEL[stage] + ".");
+      if (stage === "confirmed" && !j.order.eta) { openOrder(key, "eta"); }
+      if (stage === "dispatched" && !(j.order.dispatch && j.order.dispatch.lr)) { openOrder(key, "lr"); }
+    }).catch(function (err) { o.status = was; renderBoard(); toast(err.message || "Couldn't move it. Try again.", true); });
+  }
+  function replace(order) { data.orders = data.orders.map(function (x) { return keyOf(x) === keyOf(order) ? order : x; }); }
+
+  /* ---------- one order ---------- */
+  var oDlg = $("[data-order-dlg]"), cur = null, pendingStage = null;
+  function openOrder(key, focus) {
+    var o = find(key); if (!o) return;
+    cur = o; pendingStage = o.status;
+    $("[data-o-title]").textContent = "Order " + o.id;
+    $("[data-o-sub]").textContent = "Placed " + when(o.createdAt) + (o.placedBy === "team" ? " by the team (phone order)" : " on the portal") + (o.poRef ? " · Dealer's ref. " + o.poRef : "");
+    var d = o.dealer;
+    $("[data-o-who]").innerHTML = "<div><b>" + esc(d.name) + "</b><br>" + esc([d.contact, d.city, d.state].filter(Boolean).join(", ")) + (d.ref ? "<br>Dealer no. " + esc(d.ref) : "") + "</div>" +
+      "<div>" + (d.phone ? '<a href="tel:+91' + esc(d.phone) + '">+91 ' + esc(d.phone) + "</a><br>" : "") + (d.email ? esc(d.email) : "") + "</div>";
+    renderStages();
+    $("[data-o-eta]").value = o.eta || "";
+    $("[data-o-message]").value = o.message || "";
+    $("[data-o-internal]").value = o.internal || "";
+    $$("[data-o-d]").forEach(function (i) { i.value = (o.dispatch || {})[i.getAttribute("data-o-d")] || ""; });
+    $("[data-o-lines]").innerHTML = o.lines.length ? o.lines.map(function (l) {
+      return "<tr><td>" + esc(l.name) + (l.carton ? "<br><small style=\"color:var(--muted)\">Carton: " + esc(l.carton) + "</small>" : "") + (l.ordered !== undefined && l.ordered !== l.qty ? "<br><small>Dealer ordered " + l.ordered + "</small>" : "") +
+        '</td><td class="num"><input type="number" min="0" max="10000" value="' + l.qty + '" data-line="' + esc(l.id) + '"></td></tr>';
+    }).join("") : '<tr><td colspan="2" class="hint">No items from the list.</td></tr>';
+    $("[data-o-extra]").innerHTML = (o.extra ? '<h3 style="margin-top:14px">Other items</h3><p class="plain">' + esc(o.extra) + "</p>" : "") + (o.note ? '<h3 style="margin-top:14px">Dealer\'s note</h3><p class="plain">' + esc(o.note) + "</p>" : "");
+    $("[data-o-history]").innerHTML = (o.history || []).slice().reverse().map(function (h) { return "<div>" + esc(when(h.at)) + " · " + (h.by === "dealer" ? "Dealer" : "Team") + ": " + esc(h.text) + (h.private ? " (team only)" : "") + "</div>"; }).join("");
+    $("[data-o-err]").hidden = true; $("[data-o-saved]").textContent = "";
+    updateWa();
+    if (!oDlg.open) oDlg.showModal();
+    if (focus === "eta") { $("[data-o-eta]").focus(); $("[data-o-saved]").textContent = "Confirmed. Set the expected delivery date for the dealer."; }
+    if (focus === "lr") { $('[data-o-d="lr"]').focus(); $("[data-o-saved]").textContent = "Dispatched. Add the bilty / LR number so the dealer can track it."; if (!$('[data-o-d="date"]').value) $('[data-o-d="date"]').value = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10); }
+  }
+  function renderStages() {
+    $("[data-o-stages]").innerHTML = STAGES.concat(["cancelled"]).map(function (s) { return '<button type="button" data-s="' + s + '" aria-pressed="' + (pendingStage === s) + '">' + LABEL[s] + "</button>"; }).join("");
+  }
+  $("[data-o-stages]").addEventListener("click", function (e) { var b = e.target.closest("[data-s]"); if (!b) return; pendingStage = b.getAttribute("data-s"); renderStages(); updateWa(); });
+  ["[data-o-eta]", "[data-o-message]"].forEach(function (s) { $(s).addEventListener("input", updateWa); });
+  $$("[data-o-d]").forEach(function (i) { i.addEventListener("input", updateWa); });
+
+  function updateText() {
+    var o = cur, d = o.dealer, st = pendingStage, eta = $("[data-o-eta]").value, msg = $("[data-o-message]").value.trim();
+    var disp = {}; $$("[data-o-d]").forEach(function (i) { disp[i.getAttribute("data-o-d")] = i.value.trim(); });
+    var parts = ["Namaste" + (d.contact ? " " + d.contact.split(" ")[0] : "") + ", an update on your order " + o.id + " from Maa Kamakhya Darbar Fragrances.", "Status: " + DEALER_LABEL[st] + "."];
+    if (eta && ["delivered", "cancelled"].indexOf(st) < 0) parts.push("Expected delivery: " + longDay(eta) + ".");
+    if (disp.lr) parts.push("Dispatched" + (disp.transporter ? " with " + disp.transporter : "") + ", bilty no. " + disp.lr + (disp.vehicle ? ", vehicle " + disp.vehicle.toUpperCase() : "") + ".");
+    if (msg) parts.push(msg);
+    parts.push("See your orders: " + location.origin + "/dealers.html");
+    return parts.join("\n");
+  }
+  function updateWa() {
+    var a = $("[data-o-wa]"), ph = cur && cur.dealer.phone;
+    a.hidden = !ph;
+    if (ph) a.href = "https://wa.me/91" + ph + "?text=" + encodeURIComponent(updateText());
+  }
+
+  $("[data-o-save]").addEventListener("click", function () {
+    var o = cur, btn = $("[data-o-save]"), err = $("[data-o-err]"); err.hidden = true;
+    var disp = {}; $$("[data-o-d]").forEach(function (i) { disp[i.getAttribute("data-o-d")] = i.value.trim(); });
+    var lines = $$("[data-line]").map(function (i) { return { id: i.getAttribute("data-line"), qty: Math.max(0, Math.floor(Number(i.value) || 0)) }; });
+    btn.disabled = true;
+    api({ action: "order", dealerId: o.dealerId, id: o.id, status: pendingStage, eta: $("[data-o-eta]").value, message: $("[data-o-message]").value, internal: $("[data-o-internal]").value, dispatch: disp, lines: lines })
+      .then(function (j) {
+        if (!j.ok) { err.textContent = j.error; err.hidden = false; return; }
+        replace(j.order); renderBoard();
+        if (j.unchanged) { $("[data-o-saved]").textContent = "Nothing to save."; return; }
+        openOrder(keyOf(j.order));
+        $("[data-o-saved]").textContent = "Saved. The dealer sees the update on their portal" + (j.order.dealer.email ? " and by email." : ".");
+      })
+      .catch(function () { err.textContent = "Couldn't save. Check your internet and try again."; err.hidden = false; })
+      .then(function () { btn.disabled = false; });
+  });
+
+  $("[data-o-print]").addEventListener("click", function () {
+    var o = cur, d = o.dealer;
+    $("[data-print]").innerHTML = '<p style="margin:0 0 2px">Maa Kamakhya Darbar Fragrances (India) Pvt. Ltd. · 368, Harris Ganj, Cantt, Kanpur 208004</p>' +
+      "<h1>Dealer order " + esc(o.id) + "</h1><p>Placed " + esc(when(o.createdAt)) + (o.poRef ? " · Dealer's ref. " + esc(o.poRef) : "") + " · Stage: " + LABEL[o.status] + (o.eta ? " · Expected delivery: " + esc(longDay(o.eta)) : "") + "</p>" +
+      '<p style="margin:12px 0"><b>' + esc(d.name) + "</b>" + (d.ref ? " (" + esc(d.ref) + ")" : "") + "<br>" + esc([d.contact, d.city, d.state].filter(Boolean).join(", ")) + (d.phone ? " · +91 " + esc(d.phone) : "") + "</p>" +
+      '<table><thead><tr><th style="width:40px">#</th><th>Item</th><th>Carton</th><th style="width:110px">Cartons</th><th style="width:110px">Packed</th></tr></thead><tbody>' +
+      o.lines.map(function (l, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(l.name) + "</td><td>" + esc(l.carton || "") + '</td><td style="text-align:right"><b>' + l.qty + "</b></td><td></td></tr>"; }).join("") +
+      '<tr><td></td><td colspan="2"><b>Total</b></td><td style="text-align:right"><b>' + cartons(o) + "</b></td><td></td></tr></tbody></table>" +
+      (o.extra ? '<p style="margin-top:12px;white-space:pre-line"><b>Other items:</b><br>' + esc(o.extra) + "</p>" : "") +
+      (o.note ? "<p><b>Dealer's note:</b> " + esc(o.note) + "</p>" : "") +
+      (o.dispatch && o.dispatch.lr ? "<p><b>Dispatch:</b> " + esc([o.dispatch.transporter, "LR " + o.dispatch.lr, o.dispatch.vehicle, o.dispatch.invoice ? "Invoice " + o.dispatch.invoice : ""].filter(Boolean).join(" · ")) + "</p>" : "") +
+      '<div class="sig"><div>Prepared by</div><div>Checked by</div><div>Dispatched by</div></div>';
+    window.print();
+  });
+
+  /* ---------- dealers ---------- */
+  function dealerStats(id) {
+    var mine = data.orders.filter(function (o) { return o.dealerId === id; });
+    var open = mine.filter(function (o) { return ["delivered", "cancelled"].indexOf(o.status) < 0; }).length;
+    return { total: mine.length, open: open, last: mine.length ? mine[0].createdAt : "" };
+  }
+  function renderDealers() {
+    var list = data.dealers.filter(function (d) {
+      if (!q) return true;
+      var hay = [d.name, d.contact, d.city, d.state, d.ref, d.phone, d.code].join(" ").toLowerCase();
+      return q.split(/\s+/).every(function (w) { return hay.indexOf(w) > -1; });
+    });
+    var box = $("[data-dealers]");
+    if (!data.dealers.length) { box.innerHTML = '<div class="empty"><b>No dealers yet.</b><br>Add a dealer to give them a code for the dealer portal.<br><br><button class="btn primary" type="button" data-dealer-new2>Add a dealer</button></div>'; return; }
+    box.innerHTML = '<table><thead><tr><th>Dealer</th><th>City</th><th class="hide-sm">Dealer no.</th><th class="hide-sm">Mobile</th><th>Code</th><th class="num">Orders</th><th class="hide-sm">Last order</th><th></th></tr></thead><tbody>' +
+      list.map(function (d) {
+        var s = dealerStats(d.id);
+        return '<tr class="row" data-dealer="' + esc(d.id) + '"><td><b>' + esc(d.name) + "</b><small>" + esc(d.contact || "") + "</small></td><td>" + esc(d.city) + '</td><td class="hide-sm">' + esc(d.ref || "") + '</td><td class="hide-sm">' + (d.phone ? "+91 " + esc(d.phone) : "") +
+          '</td><td><span class="code">' + esc(d.code) + '</span></td><td class="num">' + s.total + (s.open ? "<small>" + s.open + " open</small>" : "") + '</td><td class="hide-sm">' + (s.last ? esc(new Date(s.last).toLocaleDateString("en-IN", { day: "numeric", month: "short" })) : "–") +
+          "</td><td>" + (d.active === false ? '<span class="pill off">Off</span>' : '<span class="pill on">Active</span>') + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  }
+  $("[data-dealers]").addEventListener("click", function (e) {
+    if (e.target.closest("[data-dealer-new2]")) { openDealer(null); return; }
+    var r = e.target.closest("[data-dealer]"); if (r) openDealer(r.getAttribute("data-dealer"));
+  });
+  $("[data-dealer-new]").addEventListener("click", function () { openDealer(null); });
+
+  var dDlg = $("[data-dealer-dlg]"), dForm = $("[data-dl-form]"), curDealer = null;
+  function invite(d) {
+    return "Namaste" + (d.contact ? " " + d.contact.split(" ")[0] : "") + ", you can now place your Tiranga and Sacred orders online, by the carton.\n" +
+      "Open " + location.origin + "/dealers.html and sign in with your dealer code: " + d.code + "\n" +
+      "You'll see each order's stage and expected delivery date there.\n– Maa Kamakhya Darbar Fragrances";
+  }
+  function codeBox(d, fresh) {
+    var box = $("[data-dl-code]");
+    box.innerHTML = '<div><div class="hint">' + (fresh ? "Their dealer code. Send it to them:" : "Dealer code") + '</div><div class="code">' + esc(d.code) + "</div></div>" +
+      '<button class="btn" type="button" data-copy-code>Copy code</button>' +
+      '<button class="btn" type="button" data-copy-invite>Copy invite message</button>' +
+      (d.phone ? '<a class="btn" style="display:inline-flex;align-items:center;text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/91' + esc(d.phone) + "?text=" + encodeURIComponent(invite(d)) + '">Send on WhatsApp</a>' : "") +
+      '<button class="btn quiet" type="button" data-new-code>Make a new code</button>';
+    box.hidden = false;
+  }
+  function copy(text, what) {
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { toast(what + " copied."); }, function () { window.prompt("Copy this:", text); });
+  }
+  $("[data-dl-code]").addEventListener("click", function (e) {
+    var d = curDealer; if (!d) return;
+    if (e.target.closest("[data-copy-code]")) copy(d.code, "Code");
+    if (e.target.closest("[data-copy-invite]")) copy(invite(d), "Invite message");
+    if (e.target.closest("[data-new-code]")) {
+      if (!window.confirm("Make a new code for " + d.name + "? The old code stops working and they are signed out until they use the new one.")) return;
+      api({ action: "new-code", id: d.id }).then(function (j) {
+        if (!j.ok) { toast(j.error, true); return; }
+        curDealer = j.dealer; data.dealers = data.dealers.map(function (x) { return x.id === j.dealer.id ? j.dealer : x; });
+        codeBox(j.dealer, true); renderDealers(); toast("New code made. Send it to the dealer.");
+      });
+    }
+  });
+  function openDealer(id) {
+    var d = id ? data.dealers.filter(function (x) { return x.id === id; })[0] : null;
+    curDealer = d;
+    dForm.reset();
+    $$(".bad", dForm).forEach(function (el) { el.classList.remove("bad"); });
+    $("[data-dl-err]").hidden = true;
+    $("[data-dl-title]").textContent = d ? d.name : "Add a dealer";
+    $("[data-dl-sub]").textContent = d ? "Added " + new Date(d.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "They get a code to sign in at the dealer portal.";
+    ["name", "ref", "contact", "phone", "email", "city", "state", "gstin", "address", "notes"].forEach(function (k) { dForm[k].value = d ? d[k] || "" : ""; });
+    dForm.active.checked = d ? d.active !== false : true;
+    if (d) codeBox(d, false); else $("[data-dl-code]").hidden = true;
+    $("[data-dl-place]").hidden = !d;
+    if (d) { var s = dealerStats(d.id); $("[data-dl-stats]").textContent = s.total + (s.total === 1 ? " order" : " orders") + (s.open ? ", " + s.open + " open" : ""); } else $("[data-dl-stats]").textContent = "";
+    if (!dDlg.open) dDlg.showModal();
+    if (!d) dForm.name.focus();
+  }
+  dForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = $("[data-dl-err]"); err.hidden = true;
+    $$(".bad", dForm).forEach(function (el) { el.classList.remove("bad"); });
+    var body = {}; ["name", "ref", "contact", "phone", "email", "city", "state", "gstin", "address", "notes"].forEach(function (k) { body[k] = dForm[k].value; });
+    body.active = dForm.active.checked;
+    var btn = $("[data-dl-save]"); btn.disabled = true;
+    var isNew = !curDealer;
+    api({ action: "dealer", id: curDealer ? curDealer.id : undefined, dealer: body }).then(function (j) {
+      if (!j.ok) { err.textContent = j.error; err.hidden = false; if (j.field && dForm[j.field]) { dForm[j.field].classList.add("bad"); dForm[j.field].focus(); } return; }
+      if (isNew) data.dealers.push(j.dealer); else data.dealers = data.dealers.map(function (x) { return x.id === j.dealer.id ? j.dealer : x; });
+      data.dealers.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      curDealer = j.dealer;
+      render();
+      openDealer(j.dealer.id);
+      if (isNew) { codeBox(j.dealer, true); toast(j.dealer.name + " added. Send them their code."); } else toast("Saved.");
+    }).catch(function () { err.textContent = "Couldn't save. Try again."; err.hidden = false; }).then(function () { btn.disabled = false; });
+  });
+  $("[data-dl-place]").addEventListener("click", function () { var id = curDealer && curDealer.id; dDlg.close(); openPlace(id); });
+
+  /* ---------- phone order ---------- */
+  var pDlg = $("[data-place-dlg]"), pQty = {};
+  function loadCatalog() {
+    if (catalog) return Promise.resolve(catalog);
+    return fetch("../trade.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (j) { catalog = j; return j; });
+  }
+  function openPlace(dealerId) {
+    loadCatalog().then(function () {
+      pQty = {};
+      var active = data.dealers.filter(function (d) { return d.active !== false; });
+      $("[data-p-dealer]").innerHTML = '<option value="">Choose the dealer</option>' + active.map(function (d) { return '<option value="' + esc(d.id) + '"' + (d.id === dealerId ? " selected" : "") + ">" + esc(d.name + " · " + d.city + (d.ref ? " · " + d.ref : "")) + "</option>"; }).join("");
+      $("[data-p-q]").value = ""; $("[data-p-extra]").value = ""; $("[data-p-note]").value = ""; $("[data-p-err]").hidden = true;
+      renderPick();
+      if (!pDlg.open) pDlg.showModal();
+      if (!active.length) { $("[data-p-err]").textContent = "Add the dealer first, under Dealers."; $("[data-p-err]").hidden = false; }
+    }).catch(function () { toast("Couldn't load the product list.", true); });
+  }
+  function renderPick() {
+    var pq = $("[data-p-q]").value.trim().toLowerCase();
+    var items = catalog.items.filter(function (it) { return !pq || pq.split(/\s+/).every(function (w) { return (it.name + " " + it.brand + " " + (it.format || "")).toLowerCase().indexOf(w) > -1; }); });
+    var chosen = catalog.items.filter(function (it) { return pQty[it.id]; });
+    var shown = chosen.concat(items.filter(function (it) { return !pQty[it.id]; })).slice(0, 120);
+    $("[data-p-list]").innerHTML = shown.map(function (it) {
+      return '<li class="' + (pQty[it.id] ? "on" : "") + '"><span>' + esc(it.name) + "<small>" + esc(it.brand + " · " + (it.format || "")) + '</small></span><input type="number" min="0" max="10000" placeholder="0" value="' + (pQty[it.id] || "") + '" data-pid="' + esc(it.id) + '" aria-label="Cartons"></li>';
+    }).join("");
+    sumPick();
+  }
+  function sumPick() {
+    var ids = Object.keys(pQty), n = ids.reduce(function (a, id) { return a + pQty[id]; }, 0);
+    $("[data-p-sum]").textContent = ids.length ? ids.length + (ids.length === 1 ? " item, " : " items, ") + n + " cartons." : "No items yet. Type the cartons next to each product.";
+  }
+  var pqT; $("[data-p-q]").addEventListener("input", function () { clearTimeout(pqT); pqT = setTimeout(renderPick, 120); });
+  $("[data-p-list]").addEventListener("input", function (e) {
+    var i = e.target.closest("[data-pid]"); if (!i) return;
+    var v = Math.max(0, Math.floor(Number(i.value) || 0));
+    if (v) pQty[i.getAttribute("data-pid")] = Math.min(10000, v); else delete pQty[i.getAttribute("data-pid")];
+    i.closest("li").classList.toggle("on", v > 0); sumPick();
+  });
+  $("[data-place-open]").addEventListener("click", function () { openPlace(""); });
+  $("[data-p-save]").addEventListener("click", function () {
+    var err = $("[data-p-err]"), btn = $("[data-p-save]"); err.hidden = true;
+    var dealerId = $("[data-p-dealer]").value;
+    if (!dealerId) { err.textContent = "Please choose the dealer."; err.hidden = false; return; }
+    btn.disabled = true;
+    api({ action: "place", dealerId: dealerId, lines: Object.keys(pQty).map(function (id) { return { id: id, qty: pQty[id] }; }), extra: $("[data-p-extra]").value, note: $("[data-p-note]").value })
+      .then(function (j) {
+        if (!j.ok) { err.textContent = j.error; err.hidden = false; return; }
+        data.orders.unshift(j.order); pDlg.close(); view = "board"; render(); toast("Order " + j.order.id + " is on the board under New.");
+      })
+      .catch(function () { err.textContent = "Couldn't save. Try again."; err.hidden = false; })
+      .then(function () { btn.disabled = false; });
+  });
+
+  /* ---------- CSV ---------- */
+  $("[data-csv]").addEventListener("click", function () {
+    var rows = [["Order no.", "Placed on", "Placed by", "Dealer", "Dealer no.", "City", "Stage", "Expected delivery", "Item", "Cartons", "Other items", "Transporter", "Bilty / LR", "Vehicle", "Invoice", "Dispatched on"]];
+    data.orders.filter(matchOrder).forEach(function (o) {
+      var base = [o.id, new Date(o.createdAt).toLocaleString("en-IN"), o.placedBy === "team" ? "Team (phone)" : "Dealer (portal)", o.dealer.name, o.dealer.ref, o.dealer.city, LABEL[o.status], o.eta];
+      var tail = [o.extra, (o.dispatch || {}).transporter, (o.dispatch || {}).lr, (o.dispatch || {}).vehicle, (o.dispatch || {}).invoice, (o.dispatch || {}).date];
+      if (!o.lines.length) rows.push(base.concat(["", ""], tail));
+      o.lines.forEach(function (l) { rows.push(base.concat([l.name, l.qty], tail)); });
+    });
+    var csv = rows.map(function (r) { return r.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv" }));
+    a.download = "dealer-orders-" + new Date().toISOString().slice(0, 10) + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  /* ---------- dialogs ---------- */
+  $$("dialog").forEach(function (d) {
+    d.addEventListener("click", function (e) { if (e.target === d || e.target.closest("[data-close]")) d.close(); });
+  });
+
+  if (pw) load(); else showLogin("");
+})();
+</script>
+</body>
+</html>

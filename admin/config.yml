@@ -113,7 +113,9 @@ collections:
       - { label: Card badge, name: badge, widget: string, required: false, hint: "A short label on the product card, for example Diwali, Holi or New. Leave empty for none." }
       - { label: Featured, name: featured, widget: boolean, default: false, required: false, hint: Featured products are shown first. }
       - { label: Sort order, name: order, widget: number, value_type: int, default: 100, required: false, hint: Lower numbers are shown first. }
-      - { label: Show on the website, name: published, widget: boolean, default: true }
+      - { label: Show in the online shop, name: published, widget: boolean, default: true, hint: "Turn off for trade-only items that dealers can order but customers can't buy online." }
+      - { label: Dealers can order, name: trade, widget: boolean, default: true, required: false, hint: "Shows this product in the dealer order portal (dealers.html). Dealers order by the carton and see no prices." }
+      - { label: Carton size (for dealers), name: carton, widget: string, required: false, hint: "What one carton holds, shown to dealers. For example: 48 boxes of 20 g" }
 
   # ---------------------------------------------------------------- stories
   - name: stories

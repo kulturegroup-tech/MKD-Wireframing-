@@ -57,6 +57,19 @@ Without the PhonePe keys the checkout offers cash on delivery only. Orders are s
 3. Switch `PHONEPE_ENV` to `production` and redeploy.
 4. Point the domain `tirangaagarbatti.com` at Netlify (Domain management). Old store links (`/product/...`, `/shop`, `/cart`, the policy pages) forward to the new pages through `_redirects`.
 
+## The dealer portal
+
+Dealers and distributors order online by the carton instead of on the phone, and follow each order to delivery.
+
+| Where | What |
+| --- | --- |
+| `/dealers.html` | **For dealers.** They sign in with the dealer code you give them, pick products and type the cartons (or paste the list they'd read out on the phone), add items that aren't on the list, and place the order. "My orders" shows each order's stage, the expected delivery date, your message and the bilty number once it ships. No prices are shown; billing stays as it is. Linked from the header ("Dealers"), the footer and the Partner section. |
+| `/admin/trade.html` | **For the team** (same password as the shop orders). A board with New → Confirmed → In production → Ready to dispatch → Dispatched → Delivered: drag a card to move it. Open a card to set the expected delivery date, a message the dealer sees, a team-only note, the transporter, bilty/LR, vehicle and invoice numbers, or to change a quantity. Print an order sheet for the floor, WhatsApp the dealer an update, download a CSV. **Enter a phone order** puts orders that still come in by phone on the same board. |
+| `/admin/trade.html` → **Dealers** | Add each dealer (firm, contact, mobile, city, your own dealer number). Each gets a code like `TK7M-4QPX`; copy it or send the ready-made invite on WhatsApp. **Make a new code** if a code is shared by mistake (the old one stops working at once). Untick "Can sign in and order" to switch a dealer off. |
+| Admin → Products | Every product is on the dealer list unless you untick **Dealers can order**. Add **Carton size** (e.g. "48 boxes of 20 g") so dealers know what a carton holds. For trade-only items such as Tiranga T5, add a product and untick **Show in the online shop**. |
+
+Dealers, codes and dealer orders are kept in Netlify Blobs. Set `DEALER_SECRET` (any long random text) in Netlify; it signs the dealers' sign-in. With `RESEND_API_KEY` and `MAIL_FROM` set, each new dealer order is emailed to the team (`TRADE_EMAIL`, or the Shop settings address) and dealers with an email get their updates by email too. After eight wrong codes from one place, sign-in pauses for 15 minutes.
+
 ## Who can sign in
 
 Anyone with write access to this GitHub repo (GitHub → the repo → Settings → Collaborators). There are two ways to sign in:
