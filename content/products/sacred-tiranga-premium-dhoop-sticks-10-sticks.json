@@ -5,7 +5,10 @@
   "category": "dhoopbatti",
   "format": "Premium dhoop sticks, box of 10",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-tiranga-premium-dhoop-sticks-10-sticks.webp",
+    "/uploads/products/sacred-tiranga-premium-dhoop-sticks-10-sticks-2.webp"
+  ],
   "packshot": true,
   "price": 15,
   "mrp": null,

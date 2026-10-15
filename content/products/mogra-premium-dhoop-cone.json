@@ -5,7 +5,9 @@
   "category": "dhoop-cone",
   "format": "Premium dhoop cones",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/mogra-premium-dhoop-cone.webp"
+  ],
   "packshot": true,
   "price": 75,
   "mrp": null,

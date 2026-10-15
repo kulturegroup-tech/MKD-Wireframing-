@@ -5,7 +5,9 @@
   "category": "wet-dhoop",
   "format": "Wet dhoop, box",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-fantasia-wet-dhoop.webp"
+  ],
   "packshot": true,
   "price": 15,
   "mrp": null,

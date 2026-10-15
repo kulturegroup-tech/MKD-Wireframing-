@@ -5,7 +5,9 @@
   "category": "jar",
   "format": "Premium dhoop sticks, 75 g jar",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-pineapple-premium-dhoop-sticks-jar-75-gram.webp"
+  ],
   "packshot": true,
   "price": 65,
   "mrp": null,

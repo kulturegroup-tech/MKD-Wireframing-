@@ -5,7 +5,9 @@
   "category": "bulk",
   "format": "Wholesale pack of 72 loban cups",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-loban-cup-pack-of-72.webp"
+  ],
   "packshot": true,
   "price": 420,
   "mrp": null,

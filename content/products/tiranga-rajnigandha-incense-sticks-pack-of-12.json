@@ -5,7 +5,12 @@
   "category": "bulk",
   "format": "Wholesale pack of 12 boxes",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-rajnigandha-incense-sticks-pack-of-12.webp",
+    "/uploads/products/tiranga-rajnigandha-incense-sticks-pack-of-12-2.webp",
+    "/uploads/products/tiranga-rajnigandha-incense-sticks-pack-of-12-3.webp",
+    "/uploads/products/tiranga-rajnigandha-incense-sticks-pack-of-12-4.webp"
+  ],
   "packshot": true,
   "price": 180,
   "mrp": null,

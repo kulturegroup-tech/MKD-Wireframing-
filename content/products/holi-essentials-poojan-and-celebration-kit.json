@@ -5,7 +5,13 @@
   "category": "kits",
   "format": "Poojan and celebration kit",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/holi-essentials-poojan-and-celebration-kit.webp",
+    "/uploads/products/holi-essentials-poojan-and-celebration-kit-2.webp",
+    "/uploads/products/holi-essentials-poojan-and-celebration-kit-3.webp",
+    "/uploads/products/holi-essentials-poojan-and-celebration-kit-4.webp",
+    "/uploads/products/holi-essentials-poojan-and-celebration-kit-5.webp"
+  ],
   "packshot": true,
   "price": 799,
   "mrp": 999,

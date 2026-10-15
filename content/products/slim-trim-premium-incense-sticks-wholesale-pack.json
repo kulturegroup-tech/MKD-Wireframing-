@@ -5,7 +5,13 @@
   "category": "bulk",
   "format": "Wholesale pack",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/slim-trim-premium-incense-sticks-wholesale-pack.webp",
+    "/uploads/products/slim-trim-premium-incense-sticks-wholesale-pack-2.webp",
+    "/uploads/products/slim-trim-premium-incense-sticks-wholesale-pack-3.webp",
+    "/uploads/products/slim-trim-premium-incense-sticks-wholesale-pack-4.webp",
+    "/uploads/products/slim-trim-premium-incense-sticks-wholesale-pack-5.webp"
+  ],
   "packshot": true,
   "price": 900,
   "mrp": null,

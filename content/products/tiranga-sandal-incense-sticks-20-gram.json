@@ -5,7 +5,11 @@
   "category": "agarbatti",
   "format": "Agarbatti, 20 g box",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-sandal-incense-sticks-20-gram.webp",
+    "/uploads/products/tiranga-sandal-incense-sticks-20-gram-2.webp",
+    "/uploads/products/tiranga-sandal-incense-sticks-20-gram-3.webp"
+  ],
   "packshot": true,
   "price": 15,
   "mrp": null,

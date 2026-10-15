@@ -5,7 +5,10 @@
   "category": "agarbatti",
   "format": "Agarbatti eco pack, 100 g, with a free pack of dhoop sticks",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-mahbooba-incense-sticks-eco-pack-100-gram.webp",
+    "/uploads/products/sacred-mahbooba-incense-sticks-eco-pack-100-gram-2.webp"
+  ],
   "packshot": true,
   "price": 75,
   "mrp": null,

@@ -5,7 +5,11 @@
   "category": "agarbatti",
   "format": "Agarbatti, 12 sticks or 27 sticks",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-ziyarat-premium-incense-sticks.webp",
+    "/uploads/products/tiranga-ziyarat-premium-incense-sticks-2.webp",
+    "/uploads/products/tiranga-ziyarat-premium-incense-sticks-3.webp"
+  ],
   "packshot": true,
   "price": null,
   "mrp": null,

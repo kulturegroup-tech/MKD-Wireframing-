@@ -5,7 +5,9 @@
   "category": "havan-cup",
   "format": "Havan cups, box of 6",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/archana-sambrani-havan-cup-6-cups.webp"
+  ],
   "packshot": true,
   "price": 35,
   "mrp": null,

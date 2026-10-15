@@ -5,7 +5,10 @@
   "category": "wet-dhoop",
   "format": "Wet dhoop, 36 g",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-great-one-wet-dhoop-36-gram.webp",
+    "/uploads/products/tiranga-great-one-wet-dhoop-36-gram-2.webp"
+  ],
   "packshot": true,
   "price": 15,
   "mrp": null,

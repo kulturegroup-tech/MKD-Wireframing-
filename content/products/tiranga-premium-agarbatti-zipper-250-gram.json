@@ -5,7 +5,9 @@
   "category": "agarbatti",
   "format": "Agarbatti, 250 g zipper pouch",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-premium-agarbatti-zipper-250-gram.webp"
+  ],
   "packshot": true,
   "price": 90,
   "mrp": null,

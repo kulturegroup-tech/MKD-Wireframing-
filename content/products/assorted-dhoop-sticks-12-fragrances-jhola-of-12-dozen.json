@@ -5,7 +5,9 @@
   "category": "bulk",
   "format": "Wholesale jhola, 12 fragrances, 12 dozen boxes",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/assorted-dhoop-sticks-12-fragrances-jhola-of-12-dozen.webp"
+  ],
   "packshot": true,
   "price": 2162,
   "mrp": null,

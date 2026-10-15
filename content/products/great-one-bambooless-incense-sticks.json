@@ -5,7 +5,9 @@
   "category": "bambooless",
   "format": "Bambooless incense sticks",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/great-one-bambooless-incense-sticks.webp"
+  ],
   "packshot": true,
   "price": 78,
   "mrp": null,

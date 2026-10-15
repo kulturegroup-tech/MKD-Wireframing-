@@ -5,7 +5,10 @@
   "category": "agarbatti",
   "format": "Agarbatti, 120 g zipper pouch",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-mogra-premium-agarbatti-zipper-120-gram.webp",
+    "/uploads/products/tiranga-mogra-premium-agarbatti-zipper-120-gram-2.webp"
+  ],
   "packshot": true,
   "price": 65,
   "mrp": null,

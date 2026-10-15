@@ -5,7 +5,10 @@
   "category": "jar",
   "format": "Premium dhoop sticks, 75 g jar",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-lavender-premium-dhoop-sticks-jar-75-gram.webp",
+    "/uploads/products/sacred-lavender-premium-dhoop-sticks-jar-75-gram-2.webp"
+  ],
   "packshot": true,
   "price": 65,
   "mrp": null,

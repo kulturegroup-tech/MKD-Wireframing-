@@ -5,7 +5,11 @@
   "category": "agarbatti",
   "format": "Slim Trim agarbatti, 15 g or 30 g",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/ziyarat-slim-trim-premium-incense-sticks.webp",
+    "/uploads/products/ziyarat-slim-trim-premium-incense-sticks-2.webp",
+    "/uploads/products/ziyarat-slim-trim-premium-incense-sticks-3.webp"
+  ],
   "packshot": true,
   "price": null,
   "mrp": null,

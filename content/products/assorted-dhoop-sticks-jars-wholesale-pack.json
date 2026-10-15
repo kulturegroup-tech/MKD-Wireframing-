@@ -5,7 +5,13 @@
   "category": "bulk",
   "format": "Wholesale pack of assorted dhoop stick jars",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/assorted-dhoop-sticks-jars-wholesale-pack.webp",
+    "/uploads/products/assorted-dhoop-sticks-jars-wholesale-pack-2.webp",
+    "/uploads/products/assorted-dhoop-sticks-jars-wholesale-pack-3.webp",
+    "/uploads/products/assorted-dhoop-sticks-jars-wholesale-pack-4.webp",
+    "/uploads/products/assorted-dhoop-sticks-jars-wholesale-pack-5.webp"
+  ],
   "packshot": true,
   "price": 780,
   "mrp": null,

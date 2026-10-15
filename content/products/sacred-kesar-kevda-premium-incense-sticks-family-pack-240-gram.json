@@ -5,7 +5,11 @@
   "category": "agarbatti",
   "format": "Agarbatti family pack, 240 g",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-kesar-kevda-premium-incense-sticks-family-pack-240-gram.webp",
+    "/uploads/products/sacred-kesar-kevda-premium-incense-sticks-family-pack-240-gram-2.webp",
+    "/uploads/products/sacred-kesar-kevda-premium-incense-sticks-family-pack-240-gram-3.webp"
+  ],
   "packshot": true,
   "price": 105,
   "mrp": null,

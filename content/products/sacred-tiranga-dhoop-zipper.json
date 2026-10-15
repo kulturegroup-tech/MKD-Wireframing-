@@ -5,7 +5,9 @@
   "category": "wet-dhoop",
   "format": "Wet dhoop, resealable zipper pack",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-tiranga-dhoop-zipper.webp"
+  ],
   "packshot": true,
   "price": 30,
   "mrp": null,

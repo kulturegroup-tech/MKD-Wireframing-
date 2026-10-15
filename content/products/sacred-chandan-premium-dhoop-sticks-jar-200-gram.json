@@ -5,7 +5,9 @@
   "category": "jar",
   "format": "Premium dhoop sticks, 200 g jar",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/sacred-chandan-premium-dhoop-sticks-jar-200-gram.webp"
+  ],
   "packshot": true,
   "price": 125,
   "mrp": null,

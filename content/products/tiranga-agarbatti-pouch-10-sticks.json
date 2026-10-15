@@ -5,7 +5,9 @@
   "category": "agarbatti",
   "format": "Agarbatti, pouch of 10 sticks",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-agarbatti-pouch-10-sticks.webp"
+  ],
   "packshot": true,
   "price": 5,
   "mrp": null,

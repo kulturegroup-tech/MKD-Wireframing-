@@ -5,7 +5,12 @@
   "category": "agarbatti",
   "format": "Agarbatti, 18 g box",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/hexa-ziyarat-incense-sticks-18-gram.webp",
+    "/uploads/products/hexa-ziyarat-incense-sticks-18-gram-2.webp",
+    "/uploads/products/hexa-ziyarat-incense-sticks-18-gram-3.webp",
+    "/uploads/products/hexa-ziyarat-incense-sticks-18-gram-4.webp"
+  ],
   "packshot": true,
   "price": 15,
   "mrp": null,

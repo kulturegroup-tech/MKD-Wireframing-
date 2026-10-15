@@ -5,7 +5,10 @@
   "category": "agarbatti",
   "format": "Agarbatti, 50 g pouch",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/tiranga-chandan-premium-agarbatti-pouch-50-gram.webp",
+    "/uploads/products/tiranga-chandan-premium-agarbatti-pouch-50-gram-2.webp"
+  ],
   "packshot": true,
   "price": 25,
   "mrp": null,

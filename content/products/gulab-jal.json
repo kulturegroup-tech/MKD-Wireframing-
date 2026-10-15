@@ -5,7 +5,9 @@
   "category": "gulab-jal",
   "format": "Gulab jal (rose water)",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/gulab-jal.webp"
+  ],
   "packshot": true,
   "price": 35,
   "mrp": null,

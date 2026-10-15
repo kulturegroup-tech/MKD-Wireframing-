@@ -5,7 +5,13 @@
   "category": "bulk",
   "format": "Wholesale pack of assorted havan cups",
   "description": "",
-  "images": [],
+  "images": [
+    "/uploads/products/all-in-1-pack-of-tiranga-havan-cups.webp",
+    "/uploads/products/all-in-1-pack-of-tiranga-havan-cups-2.webp",
+    "/uploads/products/all-in-1-pack-of-tiranga-havan-cups-3.webp",
+    "/uploads/products/all-in-1-pack-of-tiranga-havan-cups-4.webp",
+    "/uploads/products/all-in-1-pack-of-tiranga-havan-cups-5.webp"
+  ],
   "packshot": true,
   "price": 420,
   "mrp": null,
