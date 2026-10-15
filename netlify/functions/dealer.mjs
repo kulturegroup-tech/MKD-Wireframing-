@@ -15,8 +15,15 @@ import { tradeOrderEmails } from "../lib/mail.mjs";
 const ipOf = (req, context) => context?.ip || req.headers.get("x-nf-client-connection-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "local";
 
 export default async (req, context) => {
-  if (!portalReady()) return fail("The dealer portal is being set up. Please call us to place your order for now.", 503);
   const path = new URL(req.url).pathname.replace(/\/$/, "");
+
+  // GET /api/dealer/login: a status check (is the portal set up, can it reach its storage)
+  if (path.endsWith("/login") && req.method === "GET") {
+    let storage = "ok";
+    try { await tooManyTries("status-check"); } catch (e) { storage = "error: " + e.message; }
+    return json({ ok: portalReady() && storage === "ok", ready: portalReady(), storage });
+  }
+  if (!portalReady()) return fail("The dealer portal is being set up. Please call us to place your order for now.", 500, { setup: true });
 
   if (path.endsWith("/login")) {
     if (req.method !== "POST") return fail("Method not allowed", 405);

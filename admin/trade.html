@@ -292,7 +292,7 @@
 
   function api(body) {
     return fetch(API, { method: body ? "POST" : "GET", headers: { Authorization: "Bearer " + pw, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
-      .then(function (r) { return r.json().then(function (j) { j.status = r.status; return j; }); });
+      .then(function (r) { return r.text().then(function (t) { var j = null; try { j = JSON.parse(t); } catch (e) {} if (!j || typeof j !== "object") j = { ok: false, error: r.status >= 500 ? "The server had a problem (" + r.status + "). Try again in a minute." : "Something went wrong (" + r.status + ")." }; j.status = r.status; return j; }); });
   }
   var toastT;
   function toast(msg, bad) {

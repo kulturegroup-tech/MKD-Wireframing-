@@ -18,16 +18,25 @@
 
   var state = { token: store.get(TOKEN), dealer: null, orders: [], catalog: { items: [], categories: [] }, byId: {}, cat: "all", brand: "all", q: "", qty: {}, tab: "new" };
 
+  var PHONE = (function () { var a = document.querySelector('.dp-help a[href^="tel:"]'); return a ? a.textContent : ""; })();
+  /* every reply is read as text first, so a server hiccup shows a clear message instead of "can't reach the server" */
+  function readReply(r) {
+    return r.text().then(function (t) {
+      var j = null; try { j = JSON.parse(t); } catch (e) {}
+      if (!j || typeof j !== "object") j = { ok: false };
+      if (!j.ok && !j.error) j.error = r.status >= 500 ? "The dealer portal is having a problem right now. Please try again in a few minutes" + (PHONE ? ", or call us on " + PHONE : "") + "." : "Something went wrong. Please try again.";
+      j.status = r.status;
+      return j;
+    });
+  }
   function api(path, body) {
     return fetch("api/dealer/" + path, {
       method: body ? "POST" : "GET",
       headers: { "Content-Type": "application/json", Authorization: "Bearer " + (state.token || "") },
       body: body ? JSON.stringify(body) : undefined,
-    }).then(function (r) {
-      return r.json().catch(function () { return { ok: false, error: "Something went wrong. Please try again." }; }).then(function (j) {
-        if (r.status === 401 && j.signin) { signOut("Please sign in again."); throw new Error("signin"); }
-        return j;
-      });
+    }).then(readReply).then(function (j) {
+      if (j.status === 401 && j.signin) { signOut("Please sign in again."); throw new Error("signin"); }
+      return j;
     });
   }
 
@@ -68,14 +77,14 @@
     if (code.replace(/[^a-z0-9]/gi, "").length < 6) { err.textContent = "Please enter the dealer code we gave you."; err.hidden = false; input.focus(); return; }
     btn.disabled = true; btn.textContent = "Signing in";
     fetch("api/dealer/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: code }) })
-      .then(function (r) { return r.json(); })
+      .then(readReply)
       .then(function (j) {
-        if (!j.ok) { err.textContent = j.error || "That didn't work. Please try again."; err.hidden = false; input.closest(".field").classList.add("is-bad"); input.select(); return; }
+        if (!j.ok) { err.textContent = j.error; err.hidden = false; if (j.field) { input.closest(".field").classList.add("is-bad"); input.select(); } return; }
         state.token = j.token; store.set(TOKEN, j.token);
         input.value = "";
         start();
       })
-      .catch(function () { err.textContent = "We couldn't reach the server. Please check your internet and try again."; err.hidden = false; })
+      .catch(function () { err.textContent = navigator.onLine === false ? "You seem to be offline. Please check your internet and try again." : "We couldn't reach the server. Please try again in a moment."; err.hidden = false; })
       .then(function () { btn.disabled = false; btn.textContent = "Sign in"; });
   });
   loginForm.code.addEventListener("input", function () { loginForm.code.closest(".field").classList.remove("is-bad"); $("[data-dp-login-error]").hidden = true; });
