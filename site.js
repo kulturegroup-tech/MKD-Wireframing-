@@ -22,6 +22,16 @@
       $("[data-cd=m]", cd).textContent = String(m).padStart(2, "0");
     }
   }
+  // The day after Lakshmi Puja (India time) the Diwali offer retires by itself:
+  // [data-diwali-only] goes, [data-after-diwali] appears, links and labels switch to their after-Diwali versions.
+  var istDay = function (t) { return new Date(t + 5.5 * 3600 * 1000).toISOString().slice(0, 10); };
+  if (istDay(Date.now()) > istDay(DIWALI)) {
+    doc.classList.add("is-after-diwali");
+    $$("[data-diwali-only]").forEach(function (el) { el.remove(); });
+    $$("[data-after-diwali]").forEach(function (el) { el.hidden = false; });
+    $$("[data-after-diwali-href]").forEach(function (a) { if (/#diwali$/.test(a.getAttribute("href") || "")) a.setAttribute("href", a.getAttribute("data-after-diwali-href")); });
+    $$("[data-after-diwali-text]").forEach(function (el) { el.textContent = el.getAttribute("data-after-diwali-text"); });
+  }
   tickCountdown();
   setInterval(tickCountdown, 30000);
 
@@ -59,6 +69,26 @@
   /* ---------- hero: banner and photo slideshow, a new slide every 4 seconds ---------- */
   var slideBox = $("[data-hero-slides]");
   if (slideBox) {
+    // dated slides: data-until = hide after this day; data-lead-until = after this day, move behind the other slides
+    (function () {
+      var today = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10); // date in India
+      var all = $$("img", slideBox), dotsAll = $$("[data-hero-dots] button");
+      var node = function (img) { return img.parentNode.tagName === "PICTURE" ? img.parentNode : img; };
+      var keep = [], later = [];
+      all.forEach(function (img, k) {
+        var until = img.getAttribute("data-until"), lead = img.getAttribute("data-lead-until");
+        if (until && today > until) { node(img).remove(); if (dotsAll[k]) dotsAll[k].remove(); return; }
+        (lead && today > lead ? later : keep).push([img, dotsAll[k]]);
+      });
+      keep.concat(later).forEach(function (pair, k) {
+        slideBox.appendChild(node(pair[0]));
+        pair[0].classList.toggle("is-active", k === 0);
+        if (pair[0].getAttribute("loading") === "lazy" && k === 0) pair[0].removeAttribute("loading");
+        if (pair[1]) { pair[1].parentNode.appendChild(pair[1]); pair[1].setAttribute("aria-label", "Show slide " + (k + 1)); }
+      });
+      var dotBoxEl = $("[data-hero-dots]");
+      if (dotBoxEl && keep.length + later.length < 2) dotBoxEl.hidden = true;
+    })();
     var slides = $$("img", slideBox), dots = $$("[data-hero-dots] button"), dotBox = $("[data-hero-dots]");
     var cur = 0, timer = null, SLIDE_MS = 4000, heroVisible = true, swapT = null;
     var caption = $("[data-hero-text] span");
@@ -98,6 +128,7 @@
     }
     document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
     if (reduceMotion && dotBox) dotBox.classList.add("is-paused");
+    show(0);
     start();
   }
 

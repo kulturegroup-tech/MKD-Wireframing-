@@ -31,7 +31,7 @@ function lists($, d) {
   if (slides.length) {
     $("[data-hero-slides]").html("\n" + slides.map((s, i) =>
       (s.image_mobile ? `        <picture><source media="(max-width: 640px)" srcset="${esc(rel(s.image_mobile))}">\n  ` : "") +
-      `        <img${cls(s, i)} src="${esc(rel(s.image))}" data-caption="${s.banner ? "" : esc(s.caption || "")}"${s.link ? ` data-link="${esc(rel(s.link))}"` : ""} alt="${esc(s.alt || "")}"` +
+      `        <img${cls(s, i)} src="${esc(rel(s.image))}" data-caption="${s.banner ? "" : esc(s.caption || "")}"${s.link ? ` data-link="${esc(rel(s.link))}"` : ""}${s.until ? ` data-until="${esc(String(s.until).slice(0, 10))}"` : ""}${s.lead_until ? ` data-lead-until="${esc(String(s.lead_until).slice(0, 10))}"` : ""} alt="${esc(s.alt || "")}"` +
       `${!s.banner && FOCUS[s.focus] && s.focus !== "center" ? ` style="object-position:${FOCUS[s.focus]}"` : ""}${i ? ' loading="lazy"' : ' fetchpriority="high"'}>` + (s.image_mobile ? "</picture>" : "")).join("\n") + "\n      ");
     // the first slide decides how the slideshow starts (a banner has no caption or shading)
     $("[data-hero-media]").toggleClass("is-banner", !!slides[0].banner);

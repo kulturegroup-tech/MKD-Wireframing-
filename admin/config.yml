@@ -188,6 +188,8 @@ collections:
                   - { label: Phone image (optional), name: image_mobile, widget: image, required: false, hint: "The version for phones. Best size 1080 × 1350 (portrait). If empty, phones show the main image." }
                   - { label: Designed banner (it has its own text), name: banner, widget: boolean, default: false, required: false, hint: "Shows the whole image with no caption or shading. Turn on for launch and offer banners." }
                   - { label: Link, name: link, widget: string, required: false, hint: "Where a click on this slide goes, for example /product/sacred-tripti-puja-ghee.html. Leave empty for no link." }
+                  - { label: Hide after (date), name: until, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false, hint: "For offers that end, like the Diwali kit. From the next day the slide disappears by itself. Leave empty to always show." }
+                  - { label: Lead until (date), name: lead_until, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false, hint: "Keeps this slide in its place until this date; after it, the slide moves behind the others. Leave empty to keep its place." }
                   - { label: Caption on the photo, name: caption, widget: string, required: false }
                   - { label: What the photo shows, name: alt, widget: string, required: false }
                   - label: Keep this part in view on wide screens

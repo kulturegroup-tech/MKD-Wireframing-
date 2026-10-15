@@ -12,7 +12,9 @@
         "link": "/product/sacred-diwali-poojan-kit.html",
         "caption": "",
         "alt": "Illuminate your Diwali with our Sacred Diwali Poojan Kit: Laxmi-Ganesh-Kuber idols and 121 poojan essentials. Order now.",
-        "focus": "center"
+        "focus": "center",
+        "until": "2026-11-08",
+        "lead_until": ""
       },
       {
         "image": "/uploads/site/tripti-puja-ghee-banner.webp",
@@ -21,7 +23,9 @@
         "link": "/product/sacred-tripti-puja-ghee.html",
         "caption": "",
         "alt": "New launch: Sacred Tripti Puja Ghee, in 180 ml and 450 ml jars",
-        "focus": "center"
+        "focus": "center",
+        "until": "",
+        "lead_until": "2026-11-08"
       },
       {
         "image": "/brand/plant-hero.webp",
@@ -30,7 +34,9 @@
         "link": "",
         "caption": "Thirteen million sticks leave our plants every day.",
         "alt": "Aerial view of the plant in evening light: the Prakash Industries admin block, a solar-panelled factory roof and fields beyond",
-        "focus": "center"
+        "focus": "center",
+        "until": "",
+        "lead_until": ""
       },
       {
         "image": "/brand/plant-two.webp",
@@ -39,7 +45,9 @@
         "link": "",
         "caption": "Ten plants, six of them in Kanpur.",
         "alt": "The second plant from above, with solar panels on the terrace and a truck being loaded at the gate",
-        "focus": "center"
+        "focus": "center",
+        "until": "",
+        "lead_until": ""
       },
       {
         "image": "/brand/sacred-women.webp",
@@ -48,7 +56,9 @@
         "link": "",
         "caption": "More than a thousand women make what we sell.",
         "alt": "The women of Sacred standing together on the steps of the plant entrance",
-        "focus": "lower"
+        "focus": "lower",
+        "until": "",
+        "lead_until": ""
       }
     ]
   },
@@ -97,7 +107,7 @@
       "tagline": "Desh ki khushboo. The everyday agarbatti of north India.",
       "text": "Familiar fragrances at honest prices, on the shelf of the neighbourhood shop in 500+ cities. Loved by rural and middle-income India for three decades.",
       "made_for": "Daily puja",
-      "found_at": "Local retail",
+      "found_at": "Local shops and online",
       "button_label": "Shop Tiranga",
       "image": "/brand/tiranga-daily-editorial.webp",
       "alt": "Three generations of a family lighting incense at a home mandir",
@@ -115,9 +125,9 @@
     },
     "selections": {
       "tagline": "Small-batch incense for homes around the world.",
-      "text": "Charcoal-free sticks, hand-packed in Kanpur in keepsake boxes. Our first collection made for international shelves, and the only one we sell directly online.",
+      "text": "Charcoal-free sticks, hand-packed in Kanpur in keepsake boxes. Our first collection made for international shelves, ordered directly from us for homes in India and abroad.",
       "made_for": "Room and ritual",
-      "found_at": "Online and export",
+      "found_at": "Direct order and export",
       "button_label": "Visit Sacred Selections",
       "image": "/brand/selections-candle-card.webp",
       "alt": "A Sacred Selections candle being lit, in a warm terracotta room",
