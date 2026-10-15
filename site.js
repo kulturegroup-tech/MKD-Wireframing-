@@ -340,14 +340,20 @@
   if (!window.gsap || !window.ScrollTrigger || reduceMotion) return;
   gsap.registerPlugin(ScrollTrigger);
 
+  // Opening animations wait for the preloader (see the script in <head>) to lift, so they are seen.
+  var intro = [];
+  var whenReady = window.mkdReady || function (fn) { fn(); };
+
   // Hero headline: lines rise in once on load.
-  gsap.from(".hero h1 .line > span", { yPercent: 110, duration: 1.1, ease: "power4.out", stagger: 0.12, delay: 0.1 });
-  gsap.from(".hero-side > *", { opacity: 0, y: 18, duration: 0.9, ease: "power3.out", stagger: 0.08, delay: 0.45 });
+  if ($(".hero h1")) {
+    intro.push(gsap.from(".hero h1 .line > span", { yPercent: 110, duration: 1.1, ease: "power4.out", stagger: 0.12, delay: 0.1, paused: true }));
+    intro.push(gsap.from(".hero-side > *", { opacity: 0, y: 18, duration: 0.9, ease: "power3.out", stagger: 0.08, delay: 0.45, paused: true }));
+  }
 
   // Hero slideshow fades in on load.
   var media = $("[data-hero-media]");
   if (media) {
-    gsap.from(media, { opacity: 0, y: 16, duration: 0.9, ease: "power3.out", delay: 0.05 });
+    intro.push(gsap.from(media, { opacity: 0, y: 16, duration: 0.9, ease: "power3.out", delay: 0.05, paused: true }));
   }
 
   var mm = gsap.matchMedia();
@@ -398,14 +404,16 @@
 
   // Sacred Selections: title rises, photographs settle as they pass.
   if ($("[data-sel-title]")) {
-    gsap.from("[data-sel-title]", { y: 40, opacity: 0, duration: 1.1, ease: "power4.out" });
-    gsap.from(".sel-hero p, .sel-tags", { y: 20, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.1, delay: 0.3 });
+    intro.push(gsap.from("[data-sel-title]", { y: 40, opacity: 0, duration: 1.1, ease: "power4.out", paused: true }));
+    intro.push(gsap.from(".sel-hero p, .sel-tags", { y: 20, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.1, delay: 0.3, paused: true }));
     $$(".sel-hero figure img, .sel-split figure img").forEach(function (img) {
       gsap.fromTo(img, { scale: 1.15 }, { scale: 1, ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
     });
     var cta = $(".sel-cta > img");
     if (cta) gsap.fromTo(cta, { yPercent: -8, scale: 1.1 }, { yPercent: 8, ease: "none", scrollTrigger: { trigger: cta.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
   }
+
+  whenReady(function () { intro.forEach(function (t) { t.play(); }); });
 
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 })();

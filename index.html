@@ -20,10 +20,31 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Maa Kamakhya Darbar Fragrances", "legalName": "Maa Kamakhya Darbar Fragrances (India) Pvt. Ltd.", "url": "https://tirangaagarbatti.com/", "logo": "https://tirangaagarbatti.com/brand/tiranga-logo.png", "email": "contact@mkdtiranga.com", "telephone": "+91-6389004433", "address": {"@type": "PostalAddress", "streetAddress": "368, Harris Ganj, Cantt", "addressLocality": "Kanpur", "postalCode": "208004", "addressRegion": "Uttar Pradesh", "addressCountry": "IN"}, "brand": [{"@type": "Brand", "name": "Tiranga", "slogan": "Desh ki Khushboo"}, {"@type": "Brand", "name": "Sacred", "slogan": "Dedicated to God"}, {"@type": "Brand", "name": "Sacred Selections"}], "sameAs": ["https://www.instagram.com/sacred.in/", "https://www.facebook.com/Sacred.in", "https://www.youtube.com/@sacredproduct"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Maa Kamakhya Darbar Fragrances", "legalName": "Maa Kamakhya Darbar Fragrances (India) Pvt. Ltd.", "url": "https://tirangaagarbatti.com/", "logo": "https://tirangaagarbatti.com/brand/mkd-logo.png", "email": "contact@mkdtiranga.com", "telephone": "+91-6389004433", "address": {"@type": "PostalAddress", "streetAddress": "368, Harris Ganj, Cantt", "addressLocality": "Kanpur", "postalCode": "208004", "addressRegion": "Uttar Pradesh", "addressCountry": "IN"}, "brand": [{"@type": "Brand", "name": "Tiranga", "slogan": "Desh ki Khushboo"}, {"@type": "Brand", "name": "Sacred", "slogan": "Dedicated to God"}, {"@type": "Brand", "name": "Sacred Selections"}], "sameAs": ["https://www.instagram.com/sacred.in/", "https://www.facebook.com/Sacred.in", "https://www.youtube.com/@sacredproduct"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&family=Anek+Devanagari:wdth,wght@75..125,300..800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<script>/* Preloader: the MKD mark on the first page of a visit (styles in styles.css, "preloader") */
+(function (h) {
+  var key = "mkd-intro", t0 = Date.now(), done = false;
+  window.mkdReady = function (fn) {
+    if (!h.classList.contains("is-preloading") || h.classList.contains("is-loaded")) fn();
+    else document.addEventListener("mkd:ready", fn, { once: true });
+  };
+  try { if (sessionStorage.getItem(key)) return; } catch (e) { return; }
+  h.classList.add("is-preloading");
+  function go() {
+    if (done) return; done = true;
+    setTimeout(function () {
+      h.classList.add("is-loaded");
+      try { sessionStorage.setItem(key, "1"); } catch (e) {}
+      document.dispatchEvent(new Event("mkd:ready"));
+    }, Math.max(0, 1000 - (Date.now() - t0)));
+  }
+  addEventListener("load", go);
+  setTimeout(go, 2600);
+})(document.documentElement);
+</script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -36,7 +57,7 @@
 <header class="nav" id="top">
   <div class="wrap nav-inner">
     <a class="nav-logo" href="index.html" aria-label="Maa Kamakhya Darbar Fragrances home">
-      <img src="brand/tiranga-logo.png" alt="Tiranga Agarbatti">
+      <img src="brand/mkd-mark.svg" alt="MKD" width="47" height="46">
       <span>Maa Kamakhya Darbar Fragrances</span>
     </a>
     <nav class="nav-links" aria-label="Main">
@@ -517,7 +538,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="brand/tiranga-logo.png" alt="Tiranga Agarbatti">
+        <img src="brand/mkd-logo-light.svg" alt="MKD, an ISO 9001:2008 certified company" width="94" height="99">
         <p>Maa Kamakhya Darbar Fragrances makes incense by hand in Kanpur for homes across India and the world.</p>
       </div>
       <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#leadership">Leadership</a></li><li><a href="#making">How it's made</a></li><li><a href="stories.html">The Sacred Thought</a></li><li><a href="#awards">Awards and media</a></li><li><a href="#partner">Partner with us</a></li></ul></div>

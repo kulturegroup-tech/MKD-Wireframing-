@@ -108,7 +108,7 @@ ${deep ? deeper(footer) : footer}
     const coverUrl = s.cover ? (/^https?:/.test(s.cover) ? s.cover : `${DOMAIN}/${rel(s.cover)}`) : `${DOMAIN}/brand/share.jpg`;
     const ld = {
       "@context": "https://schema.org", "@type": "Article", headline: s.title, description: s.excerpt, datePublished: s.date, image: coverUrl,
-      publisher: { "@type": "Organization", name: "Maa Kamakhya Darbar Fragrances", logo: { "@type": "ImageObject", url: `${DOMAIN}/brand/tiranga-logo.png` } },
+      publisher: { "@type": "Organization", name: "Maa Kamakhya Darbar Fragrances", logo: { "@type": "ImageObject", url: `${DOMAIN}/brand/mkd-logo.png` } },
       mainEntityOfPage: `${DOMAIN}/stories/${s.slug}.html`,
     };
     const body = `<main class="post">

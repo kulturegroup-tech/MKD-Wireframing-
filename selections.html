@@ -23,6 +23,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&family=Anek+Devanagari:wdth,wght@75..125,300..800&family=Cormorant+Garamond:wght@500;600&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<script>/* Preloader: the MKD mark on the first page of a visit (styles in styles.css, "preloader") */
+(function (h) {
+  var key = "mkd-intro", t0 = Date.now(), done = false;
+  window.mkdReady = function (fn) {
+    if (!h.classList.contains("is-preloading") || h.classList.contains("is-loaded")) fn();
+    else document.addEventListener("mkd:ready", fn, { once: true });
+  };
+  try { if (sessionStorage.getItem(key)) return; } catch (e) { return; }
+  h.classList.add("is-preloading");
+  function go() {
+    if (done) return; done = true;
+    setTimeout(function () {
+      h.classList.add("is-loaded");
+      try { sessionStorage.setItem(key, "1"); } catch (e) {}
+      document.dispatchEvent(new Event("mkd:ready"));
+    }, Math.max(0, 1000 - (Date.now() - t0)));
+  }
+  addEventListener("load", go);
+  setTimeout(go, 2600);
+})(document.documentElement);
+</script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="sel">
