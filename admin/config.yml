@@ -114,8 +114,17 @@ collections:
       - { label: Featured, name: featured, widget: boolean, default: false, required: false, hint: Featured products are shown first. }
       - { label: Sort order, name: order, widget: number, value_type: int, default: 100, required: false, hint: Lower numbers are shown first. }
       - { label: Show in the online shop, name: published, widget: boolean, default: true, hint: "Turn off for trade-only items that dealers can order but customers can't buy online." }
-      - { label: Dealers can order, name: trade, widget: boolean, default: true, required: false, hint: "Shows this product in the dealer order portal (dealers.html). Dealers order by the carton and see no prices." }
-      - { label: Carton size (for dealers), name: carton, widget: string, required: false, hint: "What one carton holds, shown to dealers. For example: 48 boxes of 20 g" }
+      - { label: Dealers can order, name: trade, widget: boolean, default: true, required: false, hint: "Shows this product in the dealer order portal (dealers.html). Dealers order by the carton or jhola and see no prices." }
+      - label: Packed in (for dealers)
+        name: unit
+        widget: select
+        required: false
+        default: carton
+        options:
+          - { label: Cartons, value: carton }
+          - { label: Jholas (bags), value: jhola }
+        hint: "How this product ships to dealers. Dealers order it in this unit, and it fills the truck by the truck's carton or jhola numbers (Site → Dealer portal)."
+      - { label: Carton or jhola size (for dealers), name: carton, widget: string, required: false, hint: "What one carton or jhola holds, shown to dealers. For example: 48 boxes of 20 g" }
 
   # ---------------------------------------------------------------- stories
   - name: stories
@@ -465,6 +474,23 @@ collections:
           - { label: Dispatch line, name: dispatch_note, widget: string }
           - { label: Delivery line, name: delivery_note, widget: string }
           - { label: Made by (on product pages), name: manufacturer, widget: string }
+      - name: dealers
+        label: Dealer portal
+        file: content/site/dealers.json
+        format: json
+        fields:
+          - label: Trucks
+            name: trucks
+            widget: list
+            summary: "{{fields.name}}: {{fields.cartons}} cartons or {{fields.jholas}} jholas"
+            hint: "The trucks dealers can pick when they order a full load. A truck's load is worked out from both numbers, so a mix of cartons and jholas fills it in proportion: 600 cartons in a truck that takes 1,200 is half full, and 300 jholas in a truck that takes 600 jholas fills the other half."
+            fields:
+              - { label: Name, name: name, widget: string, hint: "For example: 14-tyre truck" }
+              - { label: Short code, name: id, widget: string, pattern: ["^[a-z0-9-]+$", "Small letters, numbers and dashes only, for example 14-tyre"], hint: "Don't change it once dealers have used it." }
+              - { label: Tyres, name: tyres, widget: select, options: ["6", "10", "12", "14", "16", "18", "22"], default: "14", hint: "Sets the drawing: length of the body and number of axles." }
+              - { label: Cartons it holds (full load of cartons only), name: cartons, widget: number, value_type: int, min: 1 }
+              - { label: Jholas it holds (full load of jholas only), name: jholas, widget: number, value_type: int, min: 1 }
+              - { label: Note, name: note, widget: string, required: false, hint: "Shown under the truck, for example: 32 ft body, up to 25 t" }
 
   # ---------------------------------------------------------------- help pages
   - name: pages

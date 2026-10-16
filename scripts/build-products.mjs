@@ -79,7 +79,29 @@ function normalise(p, id) {
     published: p.published !== false,
     trade: p.trade === undefined || p.trade === null || p.trade === "" ? category !== "bulk" : yes(p.trade),
     carton: String(p.carton || "").trim(),
+    unit: p.unit === "jhola" ? "jhola" : "carton",
   };
+}
+
+/** Trucks dealers can pick for a full load (Site → Dealer portal). */
+export const TRUCK_DEFAULTS = [
+  { id: "10-tyre", name: "10-tyre truck", tyres: 10, cartons: 900, jholas: 450, note: "" },
+  { id: "12-tyre", name: "12-tyre truck", tyres: 12, cartons: 1050, jholas: 525, note: "" },
+  { id: "14-tyre", name: "14-tyre truck", tyres: 14, cartons: 1200, jholas: 600, note: "" },
+  { id: "16-tyre", name: "16-tyre truck", tyres: 16, cartons: 1450, jholas: 725, note: "" },
+];
+export function readTrucks() {
+  const j = readJson(join(CONTENT, "site", "dealers.json"), {}) || {};
+  const list = (Array.isArray(j.trucks) && j.trucks.length ? j.trucks : TRUCK_DEFAULTS).map((t, i) => ({
+    id: String(t.id || `truck-${i + 1}`).toLowerCase().replace(/[^a-z0-9-]+/g, "-"),
+    name: String(t.name || `${t.tyres || ""}-tyre truck`).trim(),
+    tyres: Math.max(4, Math.min(22, parseInt(t.tyres, 10) || 14)),
+    cartons: Math.max(1, Math.round(num(t.cartons) || 1)),
+    jholas: Math.max(1, Math.round(num(t.jholas) || num(t.cartons) || 1)),
+    note: String(t.note || "").trim(),
+  }));
+  const seen = new Set();
+  return list.filter((t) => !seen.has(t.id) && seen.add(t.id)).sort((a, b) => a.cartons - b.cartons);
 }
 
 /** Every product file, including trade-only items that are not in the online shop. */
@@ -224,7 +246,7 @@ export function buildProducts() {
     phone: shop.phone, whatsapp: shop.whatsapp, dispatch_note: shop.dispatch_note, delivery_note: shop.delivery_note,
     order_email: shop.order_email,
   };
-  const out = products.map(({ oldUrl, order, published, trade, carton, ...p }) => p);
+  const out = products.map(({ oldUrl, order, published, trade, carton, unit, ...p }) => p);
   writeFileSync(join(DIST, "products.json"), JSON.stringify({ source: "cms", updated: new Date().toISOString(), categories: CATEGORIES, products: out }, null, 2));
   writeFileSync(join(DIST, "shop.json"), JSON.stringify(publicShop, null, 2));
 
@@ -232,9 +254,9 @@ export function buildProducts() {
   const catIndex = (s) => CATEGORIES.findIndex((c) => c.slug === s);
   const trade = readAllProducts().filter((p) => p.trade)
     .sort((a, b) => (catIndex(a.category) - catIndex(b.category)) || ((a.brand === "Tiranga" ? 0 : 1) - (b.brand === "Tiranga" ? 0 : 1)) || a.name.localeCompare(b.name))
-    .map((p) => ({ id: p.id, name: p.name, hindi: p.hindi, brand: p.brand, category: p.category, format: p.format, carton: p.carton, image: p.image }));
+    .map((p) => ({ id: p.id, name: p.name, hindi: p.hindi, brand: p.brand, category: p.category, format: p.format, carton: p.carton, unit: p.unit, image: p.image }));
   const usedCats = new Set(trade.map((t) => t.category));
-  writeFileSync(join(DIST, "trade.json"), JSON.stringify({ updated: new Date().toISOString(), categories: CATEGORIES.filter((c) => usedCats.has(c.slug)), items: trade }));
+  writeFileSync(join(DIST, "trade.json"), JSON.stringify({ updated: new Date().toISOString(), categories: CATEGORIES.filter((c) => usedCats.has(c.slug)), trucks: readTrucks(), items: trade }));
 
   // one page per product
   const shell = pageShell();

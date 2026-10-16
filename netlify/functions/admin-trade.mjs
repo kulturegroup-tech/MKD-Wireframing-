@@ -7,7 +7,7 @@
 import { json, fail, originOf, same } from "../lib/http.mjs";
 import {
   STATUSES, LABELS, clean, listAllTradeOrders, listDealers, getTradeOrder, saveTradeOrder, addTradeHistory, checkDealer, saveDealer, newCode,
-  getDealer, loadTradeCatalog, checkLines, createTradeOrder,
+  getDealer, loadTradeCatalog, checkLines, createTradeOrder, truckLoad, pickTruck,
 } from "../lib/trade.mjs";
 import { loadCatalog } from "../lib/shop.mjs";
 import { tradeOrderEmails, tradeUpdateEmail, mailReady } from "../lib/mail.mjs";
@@ -46,9 +46,9 @@ export default async (req) => {
   if (body.action === "place") {
     const dealer = await getDealer(String(body.dealerId || ""));
     if (!dealer) return fail("Please choose the dealer.", 400, { field: "dealer" });
-    let byId;
-    try { byId = await loadTradeCatalog(origin); } catch { return fail("Couldn't load the product list. Try again in a minute.", 503); }
-    const checked = checkLines(body, byId);
+    let cat;
+    try { cat = await loadTradeCatalog(origin); } catch { return fail("Couldn't load the product list. Try again in a minute.", 500); }
+    const checked = checkLines(body, cat);
     if (checked.error) return fail(checked.error);
     const o = createTradeOrder(dealer, checked, "team");
     await saveTradeOrder(o);
@@ -91,18 +91,27 @@ export default async (req) => {
         changes.push("Dispatch details updated");
       }
     }
+    if (body.truck !== undefined && String(body.truck || "") !== String(o.truck?.id || "")) {
+      let cat;
+      try { cat = await loadTradeCatalog(origin); } catch { return fail("Couldn't load the truck sizes. Try again in a minute.", 500); }
+      const t = pickTruck(body.truck, cat.trucks);
+      if (t.error) return fail(t.error);
+      o.truck = t.truck;
+      changes.push(o.truck ? `Truck set to ${o.truck.name}` : "Truck removed (part load)");
+    }
     if (Array.isArray(body.lines)) {
       const byLine = Object.fromEntries(body.lines.map((l) => [String(l.id), Math.floor(Number(l.qty))]));
       for (const l of o.lines) {
         const q = byLine[l.id];
         if (q !== undefined && q >= 0 && q <= 10000 && q !== l.qty) {
-          changes.push(`${l.name}: ${l.qty} → ${q} cartons`);
+          changes.push(`${l.name}: ${l.qty} → ${q} ${l.unit === "jhola" ? "jholas" : "cartons"}`);
           if (l.ordered === undefined) l.ordered = l.qty;
           l.qty = q;
         }
       }
     }
     if (!changes.length && !touched) return json({ ok: true, order: o, unchanged: true });
+    o.load = truckLoad(o.lines, o.truck);
     for (const c of changes) addTradeHistory(o, "team", c);
     await saveTradeOrder(o);
     if (o.status !== was.status || o.eta !== was.eta || (o.message && o.message !== was.message) || o.dispatch?.lr !== was.lr) await tradeUpdateEmail(o, origin);

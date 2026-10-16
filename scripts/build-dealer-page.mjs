@@ -19,7 +19,7 @@ export function buildDealerPage() {
     <div class="dp-gate-copy">
       <p class="kicker">For our dealers and distributors</p>
       <h1 id="dp-gate-title">Place your orders online</h1>
-      <p class="lede">Order by the carton at any hour, without waiting on a call. Follow every order from confirmation to production to dispatch, with the date it should reach you.</p>
+      <p class="lede">Order by the carton or jhola, or fill a whole truck, at any hour, without waiting on a call. Follow every order from confirmation to production to dispatch, with the date it should reach you.</p>
       <ul class="dp-points">
         <li><b>Order in a minute</b><span>Pick from the full Tiranga and Sacred range, or paste the list you would read out on the phone.</span></li>
         <li><b>Know where it is</b><span>Each order shows its stage, the expected delivery date and the bilty number once it ships.</span></li>
@@ -73,6 +73,17 @@ export function buildDealerPage() {
         </div>
 
         <aside class="dp-cart" data-dp-cart aria-labelledby="dp-cart-title">
+          <section class="tl" data-tl aria-labelledby="tl-title" hidden>
+            <div class="tl-head">
+              <div><h2 id="tl-title">Truck load</h2><p class="tl-sub" data-tl-sub></p></div>
+              <p class="tl-pct" data-tl-pct aria-live="polite"><b>0</b><small>%</small></p>
+            </div>
+            <div class="tl-stage" data-tl-stage></div>
+            <div class="tl-meter" data-tl-meter aria-hidden="true"><i class="c"></i><i class="j"></i></div>
+            <p class="tl-note" data-tl-note></p>
+            <div class="tl-pick" role="radiogroup" aria-label="Truck size" data-tl-pick></div>
+            <p class="tl-legend"><span class="c">Cartons</span><span class="j">Jholas</span><span class="tl-other" data-tl-other hidden>Other items aren't counted in the load</span></p>
+          </section>
           <h2 id="dp-cart-title">Your order</h2>
           <p class="dp-cart-empty" data-dp-cart-empty>Add cartons from the list, or paste your usual order.</p>
           <ul class="dp-lines" data-dp-lines></ul>
@@ -85,7 +96,7 @@ export function buildDealerPage() {
           <p class="co-legal">No payment now. Our team confirms your order and bills you as usual.</p>
         </aside>
       </div>
-      <div class="dp-mbar" data-dp-mbar hidden><span data-dp-mbar-text></span><button class="btn btn-primary" type="button" data-dp-review>Review order</button></div>
+      <div class="dp-mbar" data-dp-mbar hidden><span class="dp-mbar-truck" data-dp-mbar-truck hidden></span><span data-dp-mbar-text></span><button class="btn btn-primary" type="button" data-dp-review>Review order</button></div>
     </div>
 
     <div class="wrap dp-panel" data-dp-panel="orders" role="tabpanel" hidden>
@@ -108,6 +119,6 @@ export function buildDealerPage() {
   writeFileSync(join(DIST, "dealers.html"), shell({
     title: "Dealer orders | Maa Kamakhya Darbar Fragrances",
     description: "Dealers and distributors of Tiranga and Sacred: place your orders online by the carton and follow them to delivery.",
-    path: "dealers.html", body, current: "dealers.html", scripts: ["dealers.js"],
+    path: "dealers.html", body, current: "dealers.html", scripts: ["truck.js", "dealers.js"],
   }));
 }

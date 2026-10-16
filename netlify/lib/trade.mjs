@@ -157,18 +157,35 @@ export const clearTries = (ip) => attempts().delete(ipKey(ip));
 
 /* ---------------- the dealer list (built from the products) ---------------- */
 let cache = null;
+/** -> { byId, trucks } from trade.json on the live site (cached for a minute). */
 export async function loadTradeCatalog(origin) {
-  if (cache && cache.origin === origin && Date.now() - cache.at < 60_000) return cache.byId;
+  if (cache && cache.origin === origin && Date.now() - cache.at < 60_000) return cache.data;
   const r = await fetch(`${origin}/trade.json`, { headers: { "Cache-Control": "no-cache" } });
   if (!r.ok) throw new Error(`trade.json ${r.status}`);
   const j = await r.json();
-  const byId = Object.fromEntries(j.items.map((x) => [x.id, x]));
-  cache = { origin, at: Date.now(), byId };
-  return byId;
+  const data = { byId: Object.fromEntries(j.items.map((x) => [x.id, x])), trucks: Array.isArray(j.trucks) ? j.trucks : [] };
+  cache = { origin, at: Date.now(), data };
+  return data;
+}
+
+export const unitOf = (l) => (l.unit === "jhola" ? "jhola" : "carton");
+/** How full a truck is: cartons against what it takes in cartons, plus jholas against what it takes in jholas (1 = full). */
+export function truckLoad(lines, truck) {
+  if (!truck) return null;
+  let c = 0, j = 0;
+  for (const l of lines) (unitOf(l) === "jhola" ? (j += l.qty) : (c += l.qty));
+  return Math.round((c / (truck.cartons || 1) + j / (truck.jholas || truck.cartons || 1)) * 1000) / 1000;
+}
+export function pickTruck(id, trucks) {
+  if (!id) return { truck: null };
+  const t = trucks.find((x) => x.id === String(id));
+  if (!t) return { error: "That truck size is no longer offered. Please pick another.", refresh: true };
+  return { truck: { id: t.id, name: t.name, tyres: t.tyres, cartons: t.cartons, jholas: t.jholas } };
 }
 
 /** Checks an order from a dealer (or from the team on a dealer's behalf). */
-export function checkLines(body, byId) {
+export function checkLines(body, cat) {
+  const byId = cat.byId;
   const items = Array.isArray(body?.lines) ? body.lines : [];
   if (items.length > 150) return { error: "That's more than 150 different items. Please split it into two orders." };
   const lines = [], seen = new Set();
@@ -176,14 +193,16 @@ export function checkLines(body, byId) {
     const p = byId[String(it?.id || "")];
     const qty = Math.floor(Number(it?.qty));
     if (!p) return { error: "One of the items is no longer on the list. Please remove it and try again.", refresh: true };
-    if (!(qty >= 1 && qty <= 10000)) return { error: `Please enter between 1 and 10,000 cartons for ${p.name}.` };
+    if (!(qty >= 1 && qty <= 10000)) return { error: `Please enter between 1 and 10,000 ${p.unit === "jhola" ? "jholas" : "cartons"} for ${p.name}.` };
     if (seen.has(p.id)) continue;
     seen.add(p.id);
-    lines.push({ id: p.id, name: p.name, brand: p.brand, format: p.format || "", carton: p.carton || "", image: p.image || "", qty });
+    lines.push({ id: p.id, name: p.name, brand: p.brand, format: p.format || "", carton: p.carton || "", unit: p.unit === "jhola" ? "jhola" : "carton", image: p.image || "", qty });
   }
   const extra = clean(body?.extra, 1500);
   if (!lines.length && !extra) return { error: "Please add at least one item to the order." };
-  return { lines, extra, note: clean(body?.note, 800), poRef: oneLine(body?.poRef, 40) };
+  const t = pickTruck(body?.truck, cat.trucks || []);
+  if (t.error) return t;
+  return { lines, extra, note: clean(body?.note, 800), poRef: oneLine(body?.poRef, 40), truck: t.truck, load: truckLoad(lines, t.truck) };
 }
 
 /* ---------------- orders ---------------- */
@@ -222,6 +241,7 @@ export function createTradeOrder(dealer, checked, by) {
     id: newTradeOrderId(), dealerId: dealer.id,
     dealer: { name: dealer.name, contact: dealer.contact || "", city: dealer.city || "", state: dealer.state || "", ref: dealer.ref || "", phone: dealer.phone || "", email: dealer.email || "" },
     lines: checked.lines, extra: checked.extra, note: checked.note, poRef: checked.poRef,
+    truck: checked.truck || null, load: checked.load ?? null,
     status: "new", eta: "", message: "", internal: "", dispatch: { transporter: "", lr: "", vehicle: "", invoice: "", date: "" },
     placedBy: by, createdAt: now, history: [],
   };

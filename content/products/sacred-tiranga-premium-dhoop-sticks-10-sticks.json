@@ -19,5 +19,6 @@
   "badge": "",
   "featured": false,
   "order": 100,
-  "published": true
+  "published": true,
+  "unit": "jhola"
 }

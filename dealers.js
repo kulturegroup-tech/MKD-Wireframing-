@@ -16,7 +16,18 @@
   var STAGES = ["new", "confirmed", "production", "ready", "dispatched", "delivered"];
   var LABEL = { new: "Received", confirmed: "Confirmed", production: "In production", ready: "Ready to dispatch", dispatched: "Dispatched", delivered: "Delivered", cancelled: "Cancelled" };
 
-  var state = { token: store.get(TOKEN), dealer: null, orders: [], catalog: { items: [], categories: [] }, byId: {}, cat: "all", brand: "all", q: "", qty: {}, tab: "new" };
+  var state = { token: store.get(TOKEN), dealer: null, orders: [], catalog: { items: [], categories: [], trucks: [] }, byId: {}, cat: "all", brand: "all", q: "", qty: {}, tab: "new", truck: "" };
+  var fmt = function (n) { return Number(n).toLocaleString("en-IN"); };
+  var UNIT = { carton: ["carton", "cartons", "ctn"], jhola: ["jhola", "jholas", "jhola"] };
+  function unitOf(x) { return x && x.unit === "jhola" ? "jhola" : "carton"; }
+  function unitWord(u, n) { return n === 1 ? UNIT[u][0] : UNIT[u][1]; }
+  function amounts(t) {
+    var parts = [];
+    if (t.c) parts.push(fmt(t.c) + " " + unitWord("carton", t.c));
+    if (t.j) parts.push(fmt(t.j) + " " + unitWord("jhola", t.j));
+    return parts.join(" + ") || "0 cartons";
+  }
+  function lineTotals(ls) { var t = { c: 0, j: 0 }; ls.forEach(function (l) { if (unitOf(l.item || l) === "jhola") t.j += l.qty; else t.c += l.qty; }); return t; }
 
   var PHONE = (function () { var a = document.querySelector('.dp-help a[href^="tel:"]'); return a ? a.textContent : ""; })();
   /* every reply is read as text first, so a server hiccup shows a clear message instead of "can't reach the server" */
@@ -99,7 +110,7 @@
   /* ---------- start ---------- */
   function draftKey() { return "mkd-dealer-draft-" + (state.dealer ? state.dealer.id : ""); }
   function saveDraft() {
-    store.set(draftKey(), JSON.stringify({ qty: state.qty, extra: $("[data-dp-extra]").value, po: $("[data-dp-po]").value, note: $("[data-dp-note]").value }));
+    store.set(draftKey(), JSON.stringify({ qty: state.qty, truck: state.truck, extra: $("[data-dp-extra]").value, po: $("[data-dp-po]").value, note: $("[data-dp-note]").value }));
   }
   function loadDraft() {
     var d; try { d = JSON.parse(store.get(draftKey()) || "null"); } catch (e) { d = null; }
@@ -108,6 +119,10 @@
     $("[data-dp-extra]").value = (d && d.extra) || "";
     $("[data-dp-po]").value = (d && d.po) || "";
     $("[data-dp-note]").value = (d && d.note) || "";
+    // the truck: what they picked last time on this device, else the truck on their last order
+    var last = state.orders.filter(function (o) { return o.truck; })[0];
+    var want = d && d.truck !== undefined ? d.truck : last ? last.truck.id : "";
+    state.truck = (state.catalog.trucks || []).some(function (t) { return t.id === want; }) ? want : "";
   }
 
   function start() {
@@ -124,7 +139,7 @@
       state.catalog.items.forEach(function (it) { state.byId[it.id] = it; });
       fillWho();
       loadDraft();
-      renderCats(); renderList(); renderCart(); renderOrders();
+      renderCats(); renderList(); renderCart(false); renderOrders();
       show("app");
       var active = state.orders.filter(function (o) { return o.status !== "delivered" && o.status !== "cancelled"; });
       setTab(location.hash === "#orders" || (active.length && !Object.keys(state.qty).length && location.hash !== "#new") ? "orders" : "new");
@@ -188,13 +203,14 @@
   }
   function itemRow(it) {
     var q = state.qty[it.id] || 0;
-    var sub = [it.format || CAT_NAME(it.category), it.carton ? "Carton: " + it.carton : ""].filter(Boolean).join(" · ");
+    var u = unitOf(it);
+    var sub = [it.format || CAT_NAME(it.category), it.carton ? (u === "jhola" ? "Jhola: " : "Carton: ") + it.carton : ""].filter(Boolean).join(" · ");
     return '<li class="dp-item' + (q ? " is-on" : "") + '" data-id="' + esc(it.id) + '">' +
       '<span class="dp-thumb">' + (it.image ? '<img src="' + esc(it.image) + '" alt="" loading="lazy">' : "") + "</span>" +
       '<span class="dp-item-name"><b>' + esc(it.name) + "</b><small>" + esc(it.brand) + " · " + esc(sub) + "</small></span>" +
-      '<span class="dp-qty"><span class="qty qty-sm"><button type="button" data-step="-1" aria-label="One carton less">−</button>' +
-      '<input type="number" inputmode="numeric" min="0" max="10000" value="' + (q || "") + '" placeholder="0" aria-label="Cartons of ' + esc(it.name) + '">' +
-      '<button type="button" data-step="1" aria-label="One carton more">+</button></span><small>cartons</small></span></li>';
+      '<span class="dp-qty u-' + u + '"><span class="qty qty-sm"><button type="button" data-step="-1" aria-label="One ' + u + ' less">−</button>' +
+      '<input type="number" inputmode="numeric" min="0" max="10000" value="' + (q || "") + '" placeholder="0" aria-label="' + (u === "jhola" ? "Jholas" : "Cartons") + " of " + esc(it.name) + '">' +
+      '<button type="button" data-step="1" aria-label="One ' + u + ' more">+</button></span><small>' + unitWord(u, 2) + "</small></span></li>";
   }
   function renderList() {
     var list = state.catalog.items.filter(matches);
@@ -226,24 +242,30 @@
   function lines() {
     return Object.keys(state.qty).filter(function (id) { return state.byId[id]; }).map(function (id) { return { id: id, qty: state.qty[id], item: state.byId[id] }; });
   }
-  function totalCartons() { return lines().reduce(function (a, l) { return a + l.qty; }, 0); }
-  function renderCart() {
+  function totals() { return lineTotals(lines()); }
+  function renderCart(animate) {
     var ls = lines();
     $("[data-dp-lines]").innerHTML = ls.map(function (l) {
       return '<li data-id="' + esc(l.id) + '"><span class="dp-line-name">' + esc(l.item.name) + "<small>" + esc(l.item.brand) + (l.item.carton ? " · " + esc(l.item.carton) : "") + "</small></span>" +
-        '<input type="number" inputmode="numeric" min="0" max="10000" value="' + l.qty + '" aria-label="Cartons of ' + esc(l.item.name) + '"><span class="dp-ctn">ctn</span>' +
+        '<input type="number" inputmode="numeric" min="0" max="10000" value="' + l.qty + '" aria-label="' + (unitOf(l.item) === "jhola" ? "Jholas" : "Cartons") + " of " + esc(l.item.name) + '"><span class="dp-ctn">' + UNIT[unitOf(l.item)][2] + "</span>" +
         '<button type="button" class="dp-rm" aria-label="Remove ' + esc(l.item.name) + '">×</button></li>';
     }).join("");
     $("[data-dp-cart-empty]").hidden = ls.length > 0;
-    var n = totalCartons();
-    $("[data-dp-total]").textContent = n.toLocaleString("en-IN") + (n === 1 ? " carton" : " cartons") + (ls.length ? " · " + ls.length + (ls.length === 1 ? " item" : " items") : "");
+    $("[data-dp-total]").textContent = amounts(totals()) + (ls.length ? " · " + ls.length + (ls.length === 1 ? " item" : " items") : "");
+    renderTruck(animate !== false);
     updateBar();
   }
   function updateBar() {
-    var ls = lines(), n = totalCartons();
+    var ls = lines();
     var bar = $("[data-dp-mbar]");
     bar.hidden = state.tab !== "new" || !ls.length;
-    $("[data-dp-mbar-text]").textContent = ls.length + (ls.length === 1 ? " item · " : " items · ") + n.toLocaleString("en-IN") + " cartons";
+    $("[data-dp-mbar-text]").textContent = ls.length + (ls.length === 1 ? " item · " : " items · ") + amounts(totals());
+    var tr = chosenTruck(), mt = $("[data-dp-mbar-truck]");
+    if (tr) {
+      var f = MKDTruck.load(totals(), tr);
+      mt.innerHTML = MKDTruck.icon(tr.tyres) + "<b>" + Math.round(f * 100) + "%</b><i style=\"--f:" + Math.min(1, f) + '"></i>';
+      mt.classList.toggle("is-over", f > 1.0001); mt.hidden = false;
+    } else mt.hidden = true;
   }
   $("[data-dp-lines]").addEventListener("input", function (e) {
     if (!e.target.matches("input")) return;
@@ -251,14 +273,74 @@
     var q = Math.max(0, Math.floor(Number(e.target.value) || 0));
     if (q) state.qty[id] = Math.min(q, 10000);
     var row = $('.dp-item[data-id="' + id + '"] input'); if (row) row.value = q || "";
-    var n = totalCartons(), ls = lines();
-    $("[data-dp-total]").textContent = n.toLocaleString("en-IN") + " cartons · " + ls.length + " items";
-    saveDraft(); updateBar();
+    var ls = lines();
+    $("[data-dp-total]").textContent = amounts(totals()) + " · " + ls.length + (ls.length === 1 ? " item" : " items");
+    renderTruck(true); saveDraft(); updateBar();
   });
   $("[data-dp-lines]").addEventListener("change", function (e) { if (e.target.matches("input")) setQty(e.target.closest("li").getAttribute("data-id"), e.target.value); });
   $("[data-dp-lines]").addEventListener("click", function (e) { var b = e.target.closest(".dp-rm"); if (b) setQty(b.closest("li").getAttribute("data-id"), 0); });
   ["[data-dp-extra]", "[data-dp-po]", "[data-dp-note]"].forEach(function (s) { $(s).addEventListener("input", saveDraft); });
   $("[data-dp-review]").addEventListener("click", function () { $("[data-dp-cart]").scrollIntoView({ behavior: "smooth", block: "start" }); });
+
+  /* ---------- the truck ---------- */
+  var truckView = window.MKDTruck ? MKDTruck.mount($("[data-tl-stage]")) : null;
+  var pctShown = 0, pctRaf = 0;
+  function chosenTruck() { return (state.catalog.trucks || []).filter(function (t) { return t.id === state.truck; })[0] || null; }
+  function shortName(t) { return t.name.replace(/\s*truck$/i, ""); }
+  function countTo(target) {
+    var el = $("[data-tl-pct] b"), from = pctShown, t0 = performance.now();
+    cancelAnimationFrame(pctRaf);
+    (function tick(now) {
+      var k = Math.min(1, (now - t0) / 450), v = Math.round(from + (target - from) * (1 - Math.pow(1 - k, 3)));
+      el.textContent = v; pctShown = v;
+      if (k < 1) pctRaf = requestAnimationFrame(tick);
+    })(t0);
+  }
+  function renderTruck(animate) {
+    var card = $("[data-tl]"), trucks = state.catalog.trucks || [];
+    if (!truckView || !trucks.length) { card.hidden = true; return; }
+    card.hidden = false;
+    var t = totals(), chosen = chosenTruck(), has = t.c + t.j > 0;
+    var biggest = trucks[trucks.length - 1], suggested = MKDTruck.fit(t, trucks);
+    var shown = chosen || suggested || biggest;
+    var f = MKDTruck.load(t, shown), pct = Math.round(f * 100);
+    truckView.set(shown, t, { ghost: !chosen, animate: animate });
+    card.classList.toggle("is-ghost", !chosen);
+    card.classList.toggle("is-over", !!chosen && f > 1.0001);
+    card.classList.toggle("is-full", !!chosen && f >= 0.98 && f <= 1.0001);
+    countTo(pct);
+    $("[data-tl-pct]").style.visibility = !chosen && !has ? "hidden" : "";
+    var cw = Math.min(1, t.c / (shown.cartons || 1)), jw = Math.min(1 - cw, t.j / (shown.jholas || 1));
+    $("[data-tl-meter] .c").style.width = (cw * 100) + "%";
+    $("[data-tl-meter] .j").style.width = (Math.max(0, jw) * 100) + "%";
+    $("[data-tl-sub]").textContent = chosen ? chosen.name + (chosen.note ? " · " + chosen.note : "") : has ? "Part load. No truck chosen." : "Ordering a full truck? Pick its size.";
+    var note = "";
+    if (!has) note = chosen ? "Holds " + fmt(chosen.cartons) + " cartons, or " + fmt(chosen.jholas) + " jholas, or a mix of both." : "Add items and watch the truck fill up.";
+    else if (!chosen) note = suggested
+      ? "This would fill <b>" + pct + "%</b> of a " + esc(shortName(suggested)) + " truck. <button type=\"button\" class=\"tl-act\" data-truck=\"" + esc(suggested.id) + "\">Fill a " + esc(shortName(suggested)) + "</button>"
+      : "More than a " + esc(shortName(biggest)) + " truck holds. Pick a truck and our team will plan the loads.";
+    else if (f > 1.0001) {
+      var bigger = MKDTruck.fit(t, trucks);
+      note = "Over by about <b>" + fmt(Math.ceil((f - 1) * chosen.cartons)) + " cartons</b>. " + (bigger
+        ? "<button type=\"button\" class=\"tl-act\" data-truck=\"" + esc(bigger.id) + "\">Switch to " + esc(shortName(bigger)) + "</button>"
+        : "That's more than one truck: remove some items, or place it and our team will plan two loads.");
+    } else if (f >= 0.98) note = "<b>Full truck.</b> Ready to go.";
+    else note = "Room for <b>" + fmt(Math.floor((1 - f) * chosen.cartons)) + " more cartons</b> or " + fmt(Math.floor((1 - f) * chosen.jholas)) + " jholas.";
+    $("[data-tl-note]").innerHTML = note;
+    $("[data-tl-other]").hidden = !$("[data-dp-extra]").value.trim();
+    $("[data-tl-pick]").innerHTML = ['<button type="button" role="radio" aria-checked="' + !chosen + '" data-truck=""><span class="tl-none">—</span><b>No truck</b><small>Part load</small></button>']
+      .concat(trucks.map(function (tr) {
+        var lf = MKDTruck.load(t, tr);
+        return '<button type="button" role="radio" aria-checked="' + (tr === chosen) + '" data-truck="' + esc(tr.id) + '"' + (has && lf > 1.0001 ? ' class="is-small"' : "") + ">" + MKDTruck.icon(tr.tyres) +
+          "<b>" + esc(shortName(tr)) + "</b><small>" + fmt(tr.cartons) + " ctn</small></button>";
+      })).join("");
+  }
+  $("[data-tl]").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-truck]"); if (!b) return;
+    state.truck = b.getAttribute("data-truck");
+    saveDraft(); renderTruck(true); updateBar();
+  });
+  $("[data-dp-extra]").addEventListener("input", function () { $("[data-tl-other]").hidden = !$("[data-dp-extra]").value.trim(); });
 
   var placeBtn = $("[data-dp-place]");
   placeBtn.addEventListener("click", function () {
@@ -266,16 +348,23 @@
     var ls = lines(), extra = $("[data-dp-extra]").value.trim();
     if (!ls.length && !extra) { err.textContent = "Please add at least one item: cartons from the list, or a line under Other items."; err.hidden = false; return; }
     placeBtn.disabled = true; placeBtn.textContent = "Placing your order";
-    api("orders", { lines: ls.map(function (l) { return { id: l.id, qty: l.qty }; }), extra: extra, poRef: $("[data-dp-po]").value.trim(), note: $("[data-dp-note]").value.trim() })
+    api("orders", { lines: ls.map(function (l) { return { id: l.id, qty: l.qty }; }), truck: state.truck, extra: extra, poRef: $("[data-dp-po]").value.trim(), note: $("[data-dp-note]").value.trim() })
       .then(function (j) {
         if (!j.ok) { err.textContent = j.error || "That didn't go through. Please try again."; err.hidden = false; if (j.refresh) start(); return; }
-        state.orders.unshift(j.order);
-        state.qty = {};
-        $("[data-dp-extra]").value = ""; $("[data-dp-po]").value = ""; $("[data-dp-note]").value = "";
-        store.del(draftKey());
-        renderList(); renderCart(); renderOrders();
-        setTab("orders");
-        flash("<b>Order " + esc(j.order.id) + " is placed.</b> Our team will confirm it and share the expected delivery date here.");
+        var done = function () {
+          state.orders.unshift(j.order);
+          state.qty = {};
+          $("[data-dp-extra]").value = ""; $("[data-dp-po]").value = ""; $("[data-dp-note]").value = "";
+          store.del(draftKey());
+          renderList(); renderCart(false); renderOrders();
+          setTab("orders");
+          flash("<b>Order " + esc(j.order.id) + " is placed.</b> Our team will confirm it and share the expected delivery date here.");
+        };
+        // a full truck drives off before the order list shows
+        if (j.order.truck && truckView && !$("[data-tl]").hidden) {
+          $("[data-tl]").scrollIntoView({ behavior: "smooth", block: "nearest" });
+          setTimeout(function () { truckView.drive(done); }, 420);
+        } else done();
       })
       .catch(function (e) { if (e && e.message !== "signin") { err.textContent = "We couldn't reach the server. Your order is saved on this device; please try again."; err.hidden = false; } })
       .then(function () { placeBtn.disabled = false; placeBtn.textContent = "Place order"; });
@@ -283,7 +372,12 @@
 
   /* ---------- my orders ---------- */
   function isActive(o) { return o.status !== "delivered" && o.status !== "cancelled"; }
-  function cartons(o) { return o.lines.reduce(function (a, l) { return a + l.qty; }, 0); }
+  function cartons(o) { return amounts(lineTotals(o.lines)); }
+  function truckLine(o) {
+    if (!o.truck || !window.MKDTruck) return "";
+    var f = o.load != null ? o.load : MKDTruck.load(lineTotals(o.lines), o.truck);
+    return '<div class="dp-truckline' + (f > 1.0001 ? " is-over" : "") + '">' + MKDTruck.icon(o.truck.tyres) + "<span>" + esc(o.truck.name) + " · <b>" + Math.round(f * 100) + "% full</b></span><i style=\"--f:" + Math.min(1, f) + '"></i></div>';
+  }
   function track(o) {
     if (o.status === "cancelled") return "";
     var at = STAGES.indexOf(o.status);
@@ -306,9 +400,10 @@
   }
   function itemsHtml(o) {
     var rows = o.lines.map(function (l) {
-      return "<tr><td>" + esc(l.name) + (l.ordered !== undefined && l.ordered !== l.qty ? '<small>You ordered ' + l.ordered + ", confirmed " + l.qty + "</small>" : "") + '</td><td class="num">' + l.qty + " ctn</td></tr>";
+      var u = unitOf(l);
+      return "<tr><td>" + esc(l.name) + (l.ordered !== undefined && l.ordered !== l.qty ? '<small>You ordered ' + l.ordered + ", confirmed " + l.qty + "</small>" : "") + '</td><td class="num">' + l.qty + " " + UNIT[u][2] + "</td></tr>";
     }).join("");
-    return '<details class="dp-items"' + (o.lines.length <= 4 ? " open" : "") + "><summary>" + o.lines.length + (o.lines.length === 1 ? " item" : " items") + " · " + cartons(o).toLocaleString("en-IN") + " cartons</summary>" +
+    return '<details class="dp-items"' + (o.lines.length <= 4 ? " open" : "") + "><summary>" + o.lines.length + (o.lines.length === 1 ? " item" : " items") + " · " + cartons(o) + "</summary>" +
       (rows ? '<table><tbody>' + rows + "</tbody></table>" : "") +
       (o.extra ? '<p class="dp-extra"><b>Other items</b>' + esc(o.extra) + "</p>" : "") +
       (o.note ? '<p class="dp-extra"><b>Your note</b>' + esc(o.note) + "</p>" : "") + "</details>";
@@ -317,14 +412,14 @@
     return '<article class="dp-order s-' + esc(o.status) + '" data-order="' + esc(o.id) + '">' +
       '<header><div><h3>Order ' + esc(o.id) + "</h3><p>Placed " + esc(when(o.createdAt)) + (o.placedBy === "team" ? " by our team" : "") + (o.poRef ? " · Your ref. " + esc(o.poRef) : "") + "</p></div>" +
       '<span class="dp-pill s-' + esc(o.status) + '">' + LABEL[o.status] + "</span></header>" +
-      track(o) + etaHtml(o) +
+      track(o) + etaHtml(o) + truckLine(o) +
       (o.message ? '<p class="dp-msg"><b>From our team</b>' + esc(o.message) + "</p>" : "") +
       dispatchHtml(o) + itemsHtml(o) +
       '<div class="dp-order-actions"><button class="btn btn-ghost" type="button" data-again="' + esc(o.id) + '">Order these again</button>' +
       (o.status === "new" ? '<button class="dp-cancel" type="button" data-cancel="' + esc(o.id) + '">Cancel order</button>' : "") + "</div></article>";
   }
   function pastRow(o) {
-    return '<li><span><b>' + esc(o.id) + "</b><small>" + esc(when(o.createdAt)) + " · " + cartons(o).toLocaleString("en-IN") + " cartons</small></span>" +
+    return '<li><span><b>' + esc(o.id) + "</b><small>" + esc(when(o.createdAt)) + " · " + cartons(o) + "</small></span>" +
       '<span class="dp-pill s-' + esc(o.status) + '">' + LABEL[o.status] + "</span>" +
       '<button class="link" type="button" data-again="' + esc(o.id) + '">Order again</button></li>';
   }
@@ -347,6 +442,7 @@
       if (!o) return;
       var missing = 0;
       o.lines.forEach(function (l) { if (state.byId[l.id]) state.qty[l.id] = (state.qty[l.id] || 0) + (l.ordered !== undefined ? l.ordered : l.qty); else missing++; });
+      if (o.truck && (state.catalog.trucks || []).some(function (t) { return t.id === o.truck.id; })) state.truck = o.truck.id;
       if (o.extra && $("[data-dp-extra]").value.indexOf(o.extra) < 0) $("[data-dp-extra]").value = ($("[data-dp-extra]").value ? $("[data-dp-extra]").value + "\n" : "") + o.extra;
       saveDraft(); renderList(); renderCart(); setTab("new");
       flash("Added the items from order " + esc(o.id) + ". Change any quantity, then place the order." + (missing ? " " + missing + " item" + (missing === 1 ? " is" : "s are") + " no longer on the list." : ""));
@@ -365,7 +461,7 @@
   });
 
   /* ---------- paste a list ---------- */
-  var SYN = { dhup: "dhoop", dhoopbatti: "dhoop", lobaan: "loban", lobhan: "loban", guggal: "gugal", gugul: "gugal", kewda: "kevda", kewra: "kevda", kevra: "kevda", mogara: "mogra", rose: "gulab", sandalwood: "sandal", chandan: "chandan", genda: "genda", gainda: "genda", fool: "phool", gm: "gram", grams: "gram", g: "gram", agarbatti: "", incense: "", sticks: "", stick: "", premium: "", pack: "", packet: "", box: "", boxes: "", of: "", the: "", and: "", ctn: "", ctns: "", carton: "", cartons: "", pcs: "", nos: "", x: "" };
+  var SYN = { dhup: "dhoop", dhoopbatti: "dhoop", lobaan: "loban", lobhan: "loban", guggal: "gugal", gugul: "gugal", kewda: "kevda", kewra: "kevda", kevra: "kevda", mogara: "mogra", rose: "gulab", sandalwood: "sandal", chandan: "chandan", genda: "genda", gainda: "genda", fool: "phool", gm: "gram", grams: "gram", g: "gram", agarbatti: "", incense: "", sticks: "", stick: "", premium: "", pack: "", packet: "", box: "", boxes: "", of: "", the: "", and: "", ctn: "", ctns: "", carton: "", cartons: "", jhola: "", jholas: "", bag: "", bags: "", pcs: "", nos: "", x: "" };
   function syn(w) { return Object.prototype.hasOwnProperty.call(SYN, w) ? SYN[w] : w; }
   function words(s) { return String(s).toLowerCase().replace(/(\d+)\s*(g|gm|gram|grams|ml)\b/g, "$1gram").split(/[^a-z0-9]+/).map(syn).filter(Boolean); }
   var TYPE = { dhoop: 1, cone: 1, jar: 1, bambooless: 1, havan: 1, cup: 1, wet: 1, slim: 1, trim: 1, zipper: 1, pouch: 1, family: 1, eco: 1, tiranga: 1, sacred: 1 };
@@ -381,8 +477,8 @@
     if (!raw) return null;
     // the number of cartons: one at the end ("- 50", "x 20", "50 ctn") or at the start ("50 ctn mogra")
     var qty = null, m;
-    if ((m = raw.match(/(?:[-–:x×=*]|\s)\s*(\d{1,5})\s*(?:ctns?|cartons?|c|pcs|nos|box(?:es)?|peti)?\s*\.?$/i)) && !/\d\s*(g|gm|gram|grams|ml)\s*$/i.test(raw)) { qty = +m[1]; raw = raw.slice(0, m.index); }
-    else if ((m = raw.match(/^\s*(\d{1,5})\s*(?:ctns?|cartons?|c|pcs|nos|box(?:es)?|peti)\b\s*/i))) { qty = +m[1]; raw = raw.slice(m[0].length); }
+    if ((m = raw.match(/(?:[-–:x×=*]|\s)\s*(\d{1,5})\s*(?:ctns?|cartons?|c|jholas?|bags?|pcs|nos|box(?:es)?|peti)?\s*\.?$/i)) && !/\d\s*(g|gm|gram|grams|ml)\s*$/i.test(raw)) { qty = +m[1]; raw = raw.slice(0, m.index); }
+    else if ((m = raw.match(/^\s*(\d{1,5})\s*(?:ctns?|cartons?|c|jholas?|bags?|pcs|nos|box(?:es)?|peti)\b\s*/i))) { qty = +m[1]; raw = raw.slice(m[0].length); }
     var q = words(raw);
     if (!q.length) return null;
     if (!index) buildIndex();
@@ -410,7 +506,7 @@
         ? '<select data-i="' + i + '">' + p.options.map(function (o, j) { return '<option value="' + esc(o.id) + '"' + (j === 0 ? " selected" : "") + ">" + esc(o.name) + "</option>"; }).join("") + '<option value="">None of these: add under Other items</option></select>'
         : '<span class="dp-nomatch">Not on the list: goes under Other items</span>';
       return '<li><span class="dp-said">“' + esc(p.text) + '”</span>' + sel +
-        '<label class="dp-mqty"><input type="number" min="0" max="10000" inputmode="numeric" data-q="' + i + '" value="' + (p.qty || "") + '" placeholder="0"> ctn</label></li>';
+        '<label class="dp-mqty"><input type="number" min="0" max="10000" inputmode="numeric" data-q="' + i + '" value="' + (p.qty || "") + '" placeholder="0"> qty</label></li>';
     }).join("") + "</ul>";
     box.hidden = false; $("[data-dp-paste-foot]").hidden = false;
   });

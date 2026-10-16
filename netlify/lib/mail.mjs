@@ -55,23 +55,25 @@ export async function orderShippedEmail(o, settings, origin) {
 const LABEL = { new: "Received", confirmed: "Confirmed", production: "In production", ready: "Ready to dispatch", dispatched: "Dispatched", delivered: "Delivered", cancelled: "Cancelled" };
 const day = (d) => (d ? new Date(d + "T00:00:00Z").toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }) : "");
 function tradeTable(o) {
-  const rows = o.lines.map((l) => `<tr><td style="padding:6px 0;border-bottom:1px solid #eee">${esc(l.name)}</td><td style="padding:6px 0;border-bottom:1px solid #eee;text-align:right"><b>${l.qty}</b> ctn</td></tr>`).join("");
+  const rows = o.lines.map((l) => `<tr><td style="padding:6px 0;border-bottom:1px solid #eee">${esc(l.name)}</td><td style="padding:6px 0;border-bottom:1px solid #eee;text-align:right"><b>${l.qty}</b> ${l.unit === "jhola" ? "jhola" : "ctn"}</td></tr>`).join("");
+  const truck = o.truck ? `<p><b>Truck:</b> ${esc(o.truck.name)}${o.load != null ? `, ${Math.round(o.load * 100)}% full` : ""}</p>` : "";
   const extra = o.extra ? `<p style="white-space:pre-line"><b>Other items:</b><br>${esc(o.extra)}</p>` : "";
-  return `<table style="width:100%;max-width:560px;border-collapse:collapse;font:15px/1.5 Arial,sans-serif">${rows}</table>${extra}${o.note ? `<p><b>Note:</b> ${esc(o.note)}</p>` : ""}`;
+  return `${truck}<table style="width:100%;max-width:560px;border-collapse:collapse;font:15px/1.5 Arial,sans-serif">${rows}</table>${extra}${o.note ? `<p><b>Note:</b> ${esc(o.note)}</p>` : ""}`;
 }
-const cartons = (o) => o.lines.reduce((a, l) => a + l.qty, 0);
+const sumUnit = (o, u) => o.lines.reduce((a, l) => a + ((l.unit === "jhola" ? "jhola" : "carton") === u ? l.qty : 0), 0);
+const cartons = (o) => { const c = sumUnit(o, "carton"), j = sumUnit(o, "jhola"); return [c ? `${c} cartons` : "", j ? `${j} jholas` : ""].filter(Boolean).join(" + ") || "other items"; };
 
 /** A new dealer order: to the team (and a copy to the dealer if they have an email). */
 export async function tradeOrderEmails(o, settings, origin, { team = true } = {}) {
   const to = process.env.TRADE_EMAIL || settings.order_email;
   const d = o.dealer;
-  if (team) await send(to, `Dealer order ${o.id}: ${d.name}, ${d.city} (${cartons(o)} cartons)`,
+  if (team) await send(to, `Dealer order ${o.id}: ${d.name}, ${d.city} (${cartons(o)})`,
     `<div style="font:15px/1.5 Arial,sans-serif;color:#2a1d15"><h2 style="margin:0 0 8px">New dealer order ${esc(o.id)}</h2>
 <p><b>${esc(d.name)}</b>${d.ref ? ` (${esc(d.ref)})` : ""}, ${esc(d.city)}${d.phone ? ` · +91 ${esc(d.phone)}` : ""}${o.poRef ? `<br>Their reference: ${esc(o.poRef)}` : ""}</p>
 ${tradeTable(o)}<p><a href="${origin}/admin/trade.html">Open the dealer orders board</a></p></div>`, d.email || undefined);
   if (d.email) await send(d.email, `Order ${o.id} received`,
     `<div style="font:15px/1.5 Arial,sans-serif;color:#2a1d15"><h2 style="margin:0 0 8px">Thank you, we have your order.</h2>
-<p>Order <b>${esc(o.id)}</b> for ${cartons(o)} cartons is with our team. You can follow it, and see the expected delivery date once it's confirmed, on <a href="${origin}/dealers.html">the dealer portal</a>.</p>${tradeTable(o)}</div>`, to);
+<p>Order <b>${esc(o.id)}</b> for ${cartons(o)} is with our team. You can follow it, and see the expected delivery date once it's confirmed, on <a href="${origin}/dealers.html">the dealer portal</a>.</p>${tradeTable(o)}</div>`, to);
 }
 
 /** The team moved the order on, set a date, sent a message or dispatched it: tell the dealer (if they have an email). */

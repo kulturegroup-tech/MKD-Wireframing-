@@ -1,0 +1,36 @@
+{
+  "trucks": [
+    {
+      "id": "10-tyre",
+      "name": "10-tyre truck",
+      "tyres": 10,
+      "cartons": 900,
+      "jholas": 450,
+      "note": ""
+    },
+    {
+      "id": "12-tyre",
+      "name": "12-tyre truck",
+      "tyres": 12,
+      "cartons": 1050,
+      "jholas": 525,
+      "note": ""
+    },
+    {
+      "id": "14-tyre",
+      "name": "14-tyre truck",
+      "tyres": 14,
+      "cartons": 1200,
+      "jholas": 600,
+      "note": ""
+    },
+    {
+      "id": "16-tyre",
+      "name": "16-tyre truck",
+      "tyres": 16,
+      "cartons": 1450,
+      "jholas": 725,
+      "note": ""
+    }
+  ]
+}

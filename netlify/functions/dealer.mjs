@@ -66,9 +66,9 @@ export default async (req, context) => {
     }
 
     const origin = originOf(req);
-    let byId;
-    try { byId = await loadTradeCatalog(origin); } catch { return fail("We couldn't load the product list. Please try again in a minute.", 503); }
-    const checked = checkLines(body, byId);
+    let cat;
+    try { cat = await loadTradeCatalog(origin); } catch { return fail("We couldn't load the product list. Please try again in a minute.", 500); }
+    const checked = checkLines(body, cat);
     if (checked.error) return fail(checked.error, 400, checked.refresh ? { refresh: true } : {});
     const o = createTradeOrder(dealer, checked, "dealer");
     await saveTradeOrder(o);

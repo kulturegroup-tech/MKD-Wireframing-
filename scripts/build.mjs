@@ -15,7 +15,7 @@ import { readProducts } from "./build-products.mjs";
 
 const COPY = [
   "index.html", "products.html", "selections.html", "404.html",
-  "styles.css", "site.js", "products.js", "cart.js", "checkout.js", "dealers.js",
+  "styles.css", "site.js", "products.js", "cart.js", "checkout.js", "dealers.js", "truck.js",
   "favicon.svg", "favicon-32.png", "apple-touch-icon.png", "icon-512.png", "robots.txt",
   "brand", "uploads", "admin",
 ];

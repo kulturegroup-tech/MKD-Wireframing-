@@ -45,7 +45,8 @@
   .col-head { display: flex; align-items: baseline; gap: 8px; padding: 12px 14px 8px; position: sticky; top: 0; }
   .col-head h2 { font-size: 16px; font-family: var(--text); font-weight: 600; }
   .col-head .n { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 99px; background: #fff; font-size: 12.5px; font-weight: 600; }
-  .col-head small { margin-left: auto; font-size: 12.5px; color: var(--muted); }
+  .col-head { flex-wrap: wrap; row-gap: 2px; }
+  .col-head small { flex-basis: 100%; font-size: 12.5px; color: var(--muted); }
   .col-body { display: grid; gap: 8px; padding: 4px 10px 12px; align-content: start; flex: 1; }
   .col[data-stage="new"] .col-head h2::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%; background: #e0a100; vertical-align: 1px; }
   .card { display: grid; gap: 4px; padding: 12px 13px; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(42,29,21,.08); cursor: grab; border-left: 4px solid transparent; text-align: left; }
@@ -128,6 +129,19 @@
   ul { margin: 0; padding: 0; list-style: none; }
   .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; padding: 12px 18px; border-radius: 12px; background: var(--ink); color: #fff; font-size: 14.5px; box-shadow: 0 10px 30px rgba(0,0,0,.25); max-width: calc(100% - 32px); }
   .toast.err { background: #8e1820; }
+  .c-truck { display: inline-flex; align-items: center; gap: 6px; justify-self: start; margin-top: 2px; padding: 2px 9px 2px 7px; border-radius: 99px; background: #fff3e3; font-size: 12px; font-weight: 600; }
+  .c-truck .tk-icon { height: 11px; width: auto; color: var(--kumkum); }
+  .c-truck.over { background: #fbe9ea; color: #8e1820; }
+  .otruck { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(200px, 1fr); gap: 18px; align-items: center; padding: 14px 16px; border-radius: 14px; background: #fff8ee; }
+  .otruck-side { display: grid; gap: 8px; }
+  .otruck select { min-height: 42px; padding: 8px 12px; border: 1.5px solid var(--rule); border-radius: 10px; background: #fff; }
+  .otruck-load { font-size: 14px; }
+  .otruck-load b { font-family: var(--display); font-size: 26px; font-weight: 600; margin-right: 6px; }
+  .otruck-load.over b { color: var(--kumkum); }
+  .otruck-pic:empty::before { content: "Part load: no truck chosen"; color: var(--muted); font-size: 14px; }
+  .unit { margin-left: 6px; font-size: 12.5px; color: var(--muted); }
+  .unit.j { color: #b5600d; font-weight: 600; }
+  @media (max-width: 860px) { .otruck { grid-template-columns: 1fr; } }
   .print-sheet { display: none; }
   @media (max-width: 860px) {
     main { padding: 12px; } .top { padding: 10px 12px; }
@@ -200,6 +214,9 @@
       <label class="two">Message to the dealer <small>they see this on their portal</small><textarea rows="2" maxlength="600" data-o-message placeholder="For example: Confirmed, dispatching by Thursday"></textarea></label>
       <label class="wide">Internal note <small>only the team sees this</small><textarea rows="2" maxlength="1000" data-o-internal></textarea></label>
     </div>
+    <section><h3>Truck</h3>
+      <div class="otruck"><div class="otruck-pic" data-o-truck-pic></div><div class="otruck-side"><select data-o-truck aria-label="Truck"></select><p class="otruck-load" data-o-truck-load></p></div></div>
+    </section>
     <section><h3>Dispatch</h3>
       <div class="form">
         <label>Transporter<input maxlength="80" data-o-d="transporter"></label>
@@ -210,7 +227,7 @@
       </div>
     </section>
     <section><h3>Items <small class="hint" style="text-transform:none;letter-spacing:0;font-weight:400">change a quantity if you're sending a different number</small></h3>
-      <table class="items"><thead><tr><th>Item</th><th class="num">Cartons</th></tr></thead><tbody data-o-lines></tbody></table>
+      <table class="items"><thead><tr><th>Item</th><th class="num">Quantity</th></tr></thead><tbody data-o-lines></tbody></table>
       <div data-o-extra></div>
     </section>
     <p class="msg" data-o-err hidden></p>
@@ -262,6 +279,7 @@
       <ul class="pick-list" data-p-list></ul>
       <p class="hint" data-p-sum>No items yet.</p>
     </div>
+    <div class="form"><label>Truck<select data-p-truck></select></label><p class="hint two" data-p-load style="align-self:end"></p></div>
     <div class="form">
       <label class="wide">Other items <small>not on the list</small><textarea rows="2" maxlength="1500" data-p-extra></textarea></label>
       <label class="wide">Note<textarea rows="2" maxlength="800" data-p-note></textarea></label>
@@ -274,6 +292,7 @@
 <div class="toast" data-toast hidden></div>
 <div class="print-sheet" data-print></div>
 
+<script src="../truck.js"></script>
 <script>
 (function () {
   "use strict";
@@ -305,7 +324,17 @@
   function age(ts) { var h = (Date.now() - new Date(ts)) / 3600000; return h < 1 ? "just now" : h < 24 ? Math.floor(h) + " h" : Math.floor(h / 24) + " d"; }
   function today() { var t = new Date(); t.setHours(0, 0, 0, 0); return t; }
   function late(o) { return o.eta && ["delivered", "cancelled"].indexOf(o.status) < 0 && new Date(o.eta + "T00:00:00") < today(); }
-  function cartons(o) { return o.lines.reduce(function (a, l) { return a + l.qty; }, 0); }
+  function unitOf(l) { return l && l.unit === "jhola" ? "jhola" : "carton"; }
+  function totalsOf(lines) { var t = { c: 0, j: 0 }; lines.forEach(function (l) { if (unitOf(l) === "jhola") t.j += l.qty; else t.c += l.qty; }); return t; }
+  function amounts(t, short) {
+    var p = [];
+    if (t.c) p.push(t.c.toLocaleString("en-IN") + (short ? " ctn" : t.c === 1 ? " carton" : " cartons"));
+    if (t.j) p.push(t.j.toLocaleString("en-IN") + (short ? " jhola" : t.j === 1 ? " jhola" : " jholas"));
+    return p.join(" + ") || (short ? "0 ctn" : "0 cartons");
+  }
+  function cartons(o) { return amounts(totalsOf(o.lines), true); }
+  function shortTruck(t) { return t.name.replace(/\s*truck$/i, ""); }
+  function loadOf(o) { return o.truck && window.MKDTruck ? (o.load != null ? o.load : MKDTruck.load(totalsOf(o.lines), o.truck)) : null; }
   function keyOf(o) { return o.dealerId + "/" + o.id; }
   function find(key) { return data.orders.filter(function (o) { return keyOf(o) === key; })[0]; }
 
@@ -323,6 +352,7 @@
     return api().then(function (j) {
       if (!j.ok) { if (j.status === 401) { try { sessionStorage.removeItem(KEY); } catch (e) {} } showLogin(j.error); return; }
       data.orders = j.orders; data.dealers = j.dealers;
+      loadCatalog().catch(function () {});
       $("[data-login]").hidden = true; $("[data-app]").hidden = false; $("[data-refresh]").hidden = false; $("[data-logout]").hidden = false;
       var n = [];
       if (!j.setup.email) n.push("Order emails are off. Add RESEND_API_KEY and MAIL_FROM in Netlify to get an email for each dealer order and to email dealers their updates.");
@@ -362,7 +392,8 @@
     return '<article class="card s-' + o.status + (late(o) ? " is-late" : "") + '" draggable="true" tabindex="0" data-key="' + esc(keyOf(o)) + '">' +
       '<div class="c-top"><b>' + esc(o.dealer.name) + '</b><span class="c-age">' + age(o.createdAt) + "</span></div>" +
       '<div class="c-sub">' + esc([o.dealer.city, o.dealer.ref].filter(Boolean).join(" · ")) + (o.placedBy === "team" ? ' · <span class="c-tag">phone</span>' : "") + "</div>" +
-      '<div class="c-meta"><b>' + cartons(o).toLocaleString("en-IN") + " ctn</b> · " + o.lines.length + (o.lines.length === 1 ? " item" : " items") + (o.extra ? " + other items" : "") + "</div>" +
+      '<div class="c-meta"><b>' + cartons(o) + "</b> · " + o.lines.length + (o.lines.length === 1 ? " item" : " items") + (o.extra ? " + other items" : "") + "</div>" +
+      (o.truck && window.MKDTruck ? '<span class="c-truck' + (loadOf(o) > 1.0001 ? " over" : "") + '">' + MKDTruck.icon(o.truck.tyres) + esc(shortTruck(o.truck)) + " · " + Math.round(loadOf(o) * 100) + "%</span>" : "") +
       '<div class="c-foot">' + eta + '<span class="c-id">' + esc(o.id) + "</span></div></article>";
   }
   function renderBoard() {
@@ -379,8 +410,8 @@
       var here = list.filter(function (o) { return o.status === s; });
       if (s === "new") here.sort(function (a, b) { return a.createdAt < b.createdAt ? -1 : 1; });
       else here.sort(function (a, b) { return (a.eta || "9999") < (b.eta || "9999") ? -1 : 1; });
-      var ctn = here.reduce(function (a, o) { return a + cartons(o); }, 0);
-      return '<section class="col" data-stage="' + s + '"><div class="col-head"><h2>' + LABEL[s] + '</h2><span class="n">' + here.length + "</span>" + (ctn ? "<small>" + ctn.toLocaleString("en-IN") + " ctn</small>" : "") + "</div>" +
+      var sum = here.reduce(function (a, o) { var t = totalsOf(o.lines); a.c += t.c; a.j += t.j; return a; }, { c: 0, j: 0 });
+      return '<section class="col" data-stage="' + s + '"><div class="col-head"><h2>' + LABEL[s] + '</h2><span class="n">' + here.length + "</span>" + (sum.c + sum.j ? "<small>" + amounts(sum, true) + "</small>" : "") + "</div>" +
         '<div class="col-body">' + (here.length ? here.map(card).join("") : '<p class="col-empty">' + (s === "new" ? "No new orders" : "Drop orders here") + "</p>") + "</div></section>";
     }).join("");
   }
@@ -440,16 +471,37 @@
     $$("[data-o-d]").forEach(function (i) { i.value = (o.dispatch || {})[i.getAttribute("data-o-d")] || ""; });
     $("[data-o-lines]").innerHTML = o.lines.length ? o.lines.map(function (l) {
       return "<tr><td>" + esc(l.name) + (l.carton ? "<br><small style=\"color:var(--muted)\">Carton: " + esc(l.carton) + "</small>" : "") + (l.ordered !== undefined && l.ordered !== l.qty ? "<br><small>Dealer ordered " + l.ordered + "</small>" : "") +
-        '</td><td class="num"><input type="number" min="0" max="10000" value="' + l.qty + '" data-line="' + esc(l.id) + '"></td></tr>';
+        '</td><td class="num"><input type="number" min="0" max="10000" value="' + l.qty + '" data-line="' + esc(l.id) + '" data-unit="' + unitOf(l) + '"><span class="unit' + (unitOf(l) === "jhola" ? " j" : "") + '">' + (unitOf(l) === "jhola" ? "jhola" : "ctn") + "</span></td></tr>";
     }).join("") : '<tr><td colspan="2" class="hint">No items from the list.</td></tr>';
     $("[data-o-extra]").innerHTML = (o.extra ? '<h3 style="margin-top:14px">Other items</h3><p class="plain">' + esc(o.extra) + "</p>" : "") + (o.note ? '<h3 style="margin-top:14px">Dealer\'s note</h3><p class="plain">' + esc(o.note) + "</p>" : "");
     $("[data-o-history]").innerHTML = (o.history || []).slice().reverse().map(function (h) { return "<div>" + esc(when(h.at)) + " · " + (h.by === "dealer" ? "Dealer" : "Team") + ": " + esc(h.text) + (h.private ? " (team only)" : "") + "</div>"; }).join("");
     $("[data-o-err]").hidden = true; $("[data-o-saved]").textContent = "";
     updateWa();
+    var trucks = (catalog && catalog.trucks) || [];
+    if (o.truck && !trucks.some(function (t) { return t.id === o.truck.id; })) trucks = trucks.concat([o.truck]);
+    $("[data-o-truck]").innerHTML = '<option value="">No truck (part load)</option>' + trucks.map(function (t) { return '<option value="' + esc(t.id) + '"' + (o.truck && o.truck.id === t.id ? " selected" : "") + ">" + esc(t.name) + " · " + t.cartons.toLocaleString("en-IN") + " ctn / " + t.jholas.toLocaleString("en-IN") + " jhola</option>"; }).join("");
+    oTrucks = trucks;
+    updateOTruck(false);
     if (!oDlg.open) oDlg.showModal();
     if (focus === "eta") { $("[data-o-eta]").focus(); $("[data-o-saved]").textContent = "Confirmed. Set the expected delivery date for the dealer."; }
     if (focus === "lr") { $('[data-o-d="lr"]').focus(); $("[data-o-saved]").textContent = "Dispatched. Add the bilty / LR number so the dealer can track it."; if (!$('[data-o-d="date"]').value) $('[data-o-d="date"]').value = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10); }
   }
+  var oTrucks = [], oView = null;
+  function updateOTruck(animate) {
+    if (!window.MKDTruck) return;
+    var id = $("[data-o-truck]").value, t = oTrucks.filter(function (x) { return x.id === id; })[0] || null;
+    var tot = { c: 0, j: 0 };
+    $$("[data-line]").forEach(function (i) { var q = Math.max(0, Math.floor(Number(i.value) || 0)); if (i.getAttribute("data-unit") === "jhola") tot.j += q; else tot.c += q; });
+    var pic = $("[data-o-truck-pic]"), out = $("[data-o-truck-load]");
+    if (!t) { pic.innerHTML = ""; oView = null; out.className = "otruck-load"; out.innerHTML = amounts(tot) + " on this order."; return; }
+    if (!oView) { pic.innerHTML = ""; oView = MKDTruck.mount(pic); }
+    oView.set(t, tot, { animate: animate });
+    var f = MKDTruck.load(tot, t);
+    out.className = "otruck-load" + (f > 1.0001 ? " over" : "");
+    out.innerHTML = "<b>" + Math.round(f * 100) + "%</b>" + (f > 1.0001 ? "over: more than one " + esc(shortTruck(t)) + " truck" : f >= 0.98 ? "full truck" : "full · room for " + Math.floor((1 - f) * t.cartons).toLocaleString("en-IN") + " more cartons");
+  }
+  $("[data-o-truck]").addEventListener("change", function () { updateOTruck(true); });
+  $("[data-o-lines]").addEventListener("input", function () { updateOTruck(true); });
   function renderStages() {
     $("[data-o-stages]").innerHTML = STAGES.concat(["cancelled"]).map(function (s) { return '<button type="button" data-s="' + s + '" aria-pressed="' + (pendingStage === s) + '">' + LABEL[s] + "</button>"; }).join("");
   }
@@ -478,7 +530,7 @@
     var disp = {}; $$("[data-o-d]").forEach(function (i) { disp[i.getAttribute("data-o-d")] = i.value.trim(); });
     var lines = $$("[data-line]").map(function (i) { return { id: i.getAttribute("data-line"), qty: Math.max(0, Math.floor(Number(i.value) || 0)) }; });
     btn.disabled = true;
-    api({ action: "order", dealerId: o.dealerId, id: o.id, status: pendingStage, eta: $("[data-o-eta]").value, message: $("[data-o-message]").value, internal: $("[data-o-internal]").value, dispatch: disp, lines: lines })
+    api({ action: "order", dealerId: o.dealerId, id: o.id, status: pendingStage, truck: $("[data-o-truck]").value, eta: $("[data-o-eta]").value, message: $("[data-o-message]").value, internal: $("[data-o-internal]").value, dispatch: disp, lines: lines })
       .then(function (j) {
         if (!j.ok) { err.textContent = j.error; err.hidden = false; return; }
         replace(j.order); renderBoard();
@@ -495,8 +547,9 @@
     $("[data-print]").innerHTML = '<p style="margin:0 0 2px">Maa Kamakhya Darbar Fragrances (India) Pvt. Ltd. · 368, Harris Ganj, Cantt, Kanpur 208004</p>' +
       "<h1>Dealer order " + esc(o.id) + "</h1><p>Placed " + esc(when(o.createdAt)) + (o.poRef ? " · Dealer's ref. " + esc(o.poRef) : "") + " · Stage: " + LABEL[o.status] + (o.eta ? " · Expected delivery: " + esc(longDay(o.eta)) : "") + "</p>" +
       '<p style="margin:12px 0"><b>' + esc(d.name) + "</b>" + (d.ref ? " (" + esc(d.ref) + ")" : "") + "<br>" + esc([d.contact, d.city, d.state].filter(Boolean).join(", ")) + (d.phone ? " · +91 " + esc(d.phone) : "") + "</p>" +
-      '<table><thead><tr><th style="width:40px">#</th><th>Item</th><th>Carton</th><th style="width:110px">Cartons</th><th style="width:110px">Packed</th></tr></thead><tbody>' +
-      o.lines.map(function (l, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(l.name) + "</td><td>" + esc(l.carton || "") + '</td><td style="text-align:right"><b>' + l.qty + "</b></td><td></td></tr>"; }).join("") +
+      (o.truck ? '<p style="margin:0 0 10px"><b>Truck:</b> ' + esc(o.truck.name) + " · " + Math.round(loadOf(o) * 100) + "% full</p>" : "") +
+      '<table><thead><tr><th style="width:40px">#</th><th>Item</th><th>Pack</th><th style="width:110px">Quantity</th><th style="width:110px">Packed</th></tr></thead><tbody>' +
+      o.lines.map(function (l, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(l.name) + "</td><td>" + esc(l.carton || "") + '</td><td style="text-align:right"><b>' + l.qty + "</b> " + (unitOf(l) === "jhola" ? "jhola" : "ctn") + "</td><td></td></tr>"; }).join("") +
       '<tr><td></td><td colspan="2"><b>Total</b></td><td style="text-align:right"><b>' + cartons(o) + "</b></td><td></td></tr></tbody></table>" +
       (o.extra ? '<p style="margin-top:12px;white-space:pre-line"><b>Other items:</b><br>' + esc(o.extra) + "</p>" : "") +
       (o.note ? "<p><b>Dealer's note:</b> " + esc(o.note) + "</p>" : "") +
@@ -612,6 +665,7 @@
       var active = data.dealers.filter(function (d) { return d.active !== false; });
       $("[data-p-dealer]").innerHTML = '<option value="">Choose the dealer</option>' + active.map(function (d) { return '<option value="' + esc(d.id) + '"' + (d.id === dealerId ? " selected" : "") + ">" + esc(d.name + " · " + d.city + (d.ref ? " · " + d.ref : "")) + "</option>"; }).join("");
       $("[data-p-q]").value = ""; $("[data-p-extra]").value = ""; $("[data-p-note]").value = ""; $("[data-p-err]").hidden = true;
+      $("[data-p-truck]").innerHTML = '<option value="">No truck (part load)</option>' + (catalog.trucks || []).map(function (t) { return '<option value="' + esc(t.id) + '">' + esc(t.name) + "</option>"; }).join("");
       renderPick();
       if (!pDlg.open) pDlg.showModal();
       if (!active.length) { $("[data-p-err]").textContent = "Add the dealer first, under Dealers."; $("[data-p-err]").hidden = false; }
@@ -623,14 +677,21 @@
     var chosen = catalog.items.filter(function (it) { return pQty[it.id]; });
     var shown = chosen.concat(items.filter(function (it) { return !pQty[it.id]; })).slice(0, 120);
     $("[data-p-list]").innerHTML = shown.map(function (it) {
-      return '<li class="' + (pQty[it.id] ? "on" : "") + '"><span>' + esc(it.name) + "<small>" + esc(it.brand + " · " + (it.format || "")) + '</small></span><input type="number" min="0" max="10000" placeholder="0" value="' + (pQty[it.id] || "") + '" data-pid="' + esc(it.id) + '" aria-label="Cartons"></li>';
+      return '<li class="' + (pQty[it.id] ? "on" : "") + '"><span>' + esc(it.name) + "<small>" + esc(it.brand + " · " + (it.format || "")) + (it.unit === "jhola" ? ' · <b style="color:#b5600d">jholas</b>' : "") + '</small></span><input type="number" min="0" max="10000" placeholder="0" value="' + (pQty[it.id] || "") + '" data-pid="' + esc(it.id) + '" aria-label="' + (it.unit === "jhola" ? "Jholas" : "Cartons") + '"></li>';
     }).join("");
     sumPick();
   }
-  function sumPick() {
-    var ids = Object.keys(pQty), n = ids.reduce(function (a, id) { return a + pQty[id]; }, 0);
-    $("[data-p-sum]").textContent = ids.length ? ids.length + (ids.length === 1 ? " item, " : " items, ") + n + " cartons." : "No items yet. Type the cartons next to each product.";
+  function pTotals() {
+    var byId = {}; catalog.items.forEach(function (it) { byId[it.id] = it; });
+    return totalsOf(Object.keys(pQty).map(function (id) { return { qty: pQty[id], unit: byId[id] && byId[id].unit }; }));
   }
+  function sumPick() {
+    var ids = Object.keys(pQty), t = pTotals();
+    $("[data-p-sum]").textContent = ids.length ? ids.length + (ids.length === 1 ? " item, " : " items, ") + amounts(t) + "." : "No items yet. Type the cartons or jholas next to each product.";
+    var tr = (catalog.trucks || []).filter(function (x) { return x.id === $("[data-p-truck]").value; })[0];
+    $("[data-p-load]").textContent = tr && window.MKDTruck ? Math.round(MKDTruck.load(t, tr) * 100) + "% of a " + tr.name : "";
+  }
+  $("[data-p-truck]").addEventListener("change", sumPick);
   var pqT; $("[data-p-q]").addEventListener("input", function () { clearTimeout(pqT); pqT = setTimeout(renderPick, 120); });
   $("[data-p-list]").addEventListener("input", function (e) {
     var i = e.target.closest("[data-pid]"); if (!i) return;
@@ -644,7 +705,7 @@
     var dealerId = $("[data-p-dealer]").value;
     if (!dealerId) { err.textContent = "Please choose the dealer."; err.hidden = false; return; }
     btn.disabled = true;
-    api({ action: "place", dealerId: dealerId, lines: Object.keys(pQty).map(function (id) { return { id: id, qty: pQty[id] }; }), extra: $("[data-p-extra]").value, note: $("[data-p-note]").value })
+    api({ action: "place", dealerId: dealerId, truck: $("[data-p-truck]").value, lines: Object.keys(pQty).map(function (id) { return { id: id, qty: pQty[id] }; }), extra: $("[data-p-extra]").value, note: $("[data-p-note]").value })
       .then(function (j) {
         if (!j.ok) { err.textContent = j.error; err.hidden = false; return; }
         data.orders.unshift(j.order); pDlg.close(); view = "board"; render(); toast("Order " + j.order.id + " is on the board under New.");
@@ -655,12 +716,12 @@
 
   /* ---------- CSV ---------- */
   $("[data-csv]").addEventListener("click", function () {
-    var rows = [["Order no.", "Placed on", "Placed by", "Dealer", "Dealer no.", "City", "Stage", "Expected delivery", "Item", "Cartons", "Other items", "Transporter", "Bilty / LR", "Vehicle", "Invoice", "Dispatched on"]];
+    var rows = [["Order no.", "Placed on", "Placed by", "Dealer", "Dealer no.", "City", "Stage", "Expected delivery", "Truck", "Truck load %", "Item", "Quantity", "Unit", "Other items", "Transporter", "Bilty / LR", "Vehicle", "Invoice", "Dispatched on"]];
     data.orders.filter(matchOrder).forEach(function (o) {
-      var base = [o.id, new Date(o.createdAt).toLocaleString("en-IN"), o.placedBy === "team" ? "Team (phone)" : "Dealer (portal)", o.dealer.name, o.dealer.ref, o.dealer.city, LABEL[o.status], o.eta];
+      var base = [o.id, new Date(o.createdAt).toLocaleString("en-IN"), o.placedBy === "team" ? "Team (phone)" : "Dealer (portal)", o.dealer.name, o.dealer.ref, o.dealer.city, LABEL[o.status], o.eta, o.truck ? o.truck.name : "", o.truck ? Math.round(loadOf(o) * 100) : ""];
       var tail = [o.extra, (o.dispatch || {}).transporter, (o.dispatch || {}).lr, (o.dispatch || {}).vehicle, (o.dispatch || {}).invoice, (o.dispatch || {}).date];
-      if (!o.lines.length) rows.push(base.concat(["", ""], tail));
-      o.lines.forEach(function (l) { rows.push(base.concat([l.name, l.qty], tail)); });
+      if (!o.lines.length) rows.push(base.concat(["", "", ""], tail));
+      o.lines.forEach(function (l) { rows.push(base.concat([l.name, l.qty, unitOf(l) === "jhola" ? "jhola" : "carton"], tail)); });
     });
     var csv = rows.map(function (r) { return r.map(function (v) { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\n");
     var a = document.createElement("a");
